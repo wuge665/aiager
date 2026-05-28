@@ -65,6 +65,15 @@
         <option value="student">🎓 学习研究者</option>
       </select>
     </div>
+
+    <!-- Auth -->
+    <div class="auth-bar">
+      <button class="auth-btn" id="loginBtn" onclick="openAuthModal('login')">登录</button>
+      <div class="user-menu" id="userMenu" style="display:none">
+        <span class="user-name" id="userName"></span>
+        <button class="auth-btn auth-outline" onclick="signOut()">退出</button>
+      </div>
+    </div>
   </header>
 
   <!-- Main content -->
@@ -160,13 +169,72 @@
     </div>
   </div>
 
+  <!-- Auth Modal -->
+  <div class="modal-overlay" id="authModal" hidden>
+    <div class="modal modal-auth" role="dialog" aria-label="登录/注册">
+      <div class="modal-header">
+        <div class="auth-tabs">
+          <button class="auth-tab active" data-tab="login" onclick="switchAuthTab('login')">登录</button>
+          <button class="auth-tab" data-tab="signup" onclick="switchAuthTab('signup')">注册</button>
+        </div>
+        <button class="modal-close" onclick="closeAuthModal()" aria-label="关闭">✕</button>
+      </div>
+
+      <form id="form-login" class="auth-form" onsubmit="handleAuthSubmit(event,'login')">
+        <div class="form-group">
+          <label for="loginEmail">邮箱</label>
+          <input type="email" id="loginEmail" name="email" required placeholder="you@example.com" />
+        </div>
+        <div class="form-group">
+          <label for="loginPassword">密码</label>
+          <input type="password" id="loginPassword" name="password" required minlength="6" placeholder="至少6位密码" />
+        </div>
+        <div class="auth-msg" style="display:none"></div>
+        <button type="submit" class="submit-btn auth-submit">登录</button>
+        <p class="auth-hint">注册后可收藏工具、使用全部功能</p>
+      </form>
+
+      <form id="form-signup" class="auth-form" style="display:none" onsubmit="handleAuthSubmit(event,'signup')">
+        <div class="form-group">
+          <label for="signupEmail">邮箱</label>
+          <input type="email" id="signupEmail" name="email" required placeholder="you@example.com" />
+        </div>
+        <div class="form-group">
+          <label for="signupPassword">密码</label>
+          <input type="password" id="signupPassword" name="password" required minlength="6" placeholder="至少6位密码" />
+        </div>
+        <div class="form-group">
+          <label for="signupConfirm">确认密码</label>
+          <input type="password" id="signupConfirm" oninput="this.setCustomValidity(this.value!==this.form.password.value?'密码不一致':'')" required placeholder="再次输入密码" />
+        </div>
+        <div class="auth-msg" style="display:none"></div>
+        <button type="submit" class="submit-btn auth-submit">注册</button>
+        <p class="auth-hint">注册即表示同意使用条款，邮箱仅用于登录</p>
+      </form>
+    </div>
+  </div>
+
+  <!-- Auth guard overlay -->
+  <div class="auth-guard" id="authGuard" hidden>
+    <div class="auth-guard-box">
+      <div class="auth-guard-icon">🔒</div>
+      <h2>登录后使用全部工具</h2>
+      <p>免费注册，解锁全部 64+ AI 工具</p>
+      <button class="submit-btn" onclick="openAuthModal('login')" style="width:auto;padding:0.6rem 2rem">登录</button>
+      <button class="auth-link-btn" onclick="openAuthModal('signup')">没有账号？去注册</button>
+    </div>
+  </div>
+
   <!-- Footer -->
   <footer role="contentinfo">
     <p>© 2026 AI 百宝箱 · 为创作者赋能 · <a href="#" id="submitToolBtn">提交工具</a> · <a href="privacy.html" target="_blank">隐私政策</a></p>
   </footer>
 
   <!-- Scripts -->
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script src="js/auth-config.example.js"></script>
   <script src="js/data.js"></script>
+  <script src="js/auth.js"></script>
   <script src="js/main.js"></script>
   <script src="js/wechat.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js" defer></script>

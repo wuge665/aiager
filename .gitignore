@@ -6,3 +6,6 @@ node_modules/
 Thumbs.db
 
 .vercel
+
+# Supabase auth config (user-specific keys)
+js/auth-config.js
