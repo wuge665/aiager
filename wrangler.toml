@@ -1,2 +1,2 @@
 pages_build_command = ""
-pages_output_dir = "/"
+pages_build_command_output_dir = "/"
