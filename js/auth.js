@@ -24,7 +24,6 @@ async function initAuth() {
       }).then(r => r.json());
       if (data && data.id) {
         currentUser = data;
-        document.body.classList.remove('auth-required');
       }
     } catch(e) {}
   }
