@@ -215,6 +215,20 @@
     </div>
   </div>
 
+  <!-- Article Reader Modal -->
+  <div class="modal-overlay" id="articleOverlay" hidden>
+    <div class="modal modal-article" role="dialog" aria-label="文章阅读">
+      <div class="modal-header">
+        <h3 id="articleTitle">加载中...</h3>
+        <button class="modal-close" onclick="closeArticle()" aria-label="关闭">✕</button>
+      </div>
+      <div class="article-body">
+        <div id="articleLoading" class="article-loading">📡 加载中...</div>
+        <div id="articleContent" class="article-content"></div>
+      </div>
+    </div>
+  </div>
+
   <!-- Background Music -->
   <button class="music-toggle" id="musicToggle" aria-label="背景音乐" onclick="toggleMusic()">🎵</button>
 

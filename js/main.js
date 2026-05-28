@@ -90,6 +90,32 @@ async function fetchNews() {
   } catch {}
 }
 
+window.readArticle = async function (url) {
+  const overlay = document.getElementById('articleOverlay');
+  const content = document.getElementById('articleContent');
+  const loading = document.getElementById('articleLoading');
+  overlay.hidden = false;
+  loading.hidden = false;
+  content.textContent = '';
+  document.body.style.overflow = 'hidden';
+  try {
+    const res = await fetch('/api/fetch-article?url=' + encodeURIComponent(url));
+    if (!res.ok) throw new Error('获取失败');
+    const data = await res.json();
+    loading.hidden = true;
+    content.textContent = data.content || '暂无内容';
+    document.getElementById('articleTitle').textContent = data.title || '';
+  } catch (e) {
+    loading.hidden = true;
+    content.textContent = '⚠️ 内容加载失败，请稍后重试';
+  }
+};
+
+window.closeArticle = function () {
+  document.getElementById('articleOverlay').hidden = true;
+  document.body.style.overflow = '';
+};
+
 function renderNews() {
   const grid = document.getElementById('toolsGrid');
   if (!NEWS_DATA || NEWS_DATA.length === 0) {
@@ -98,10 +124,7 @@ function renderNews() {
   }
   grid.innerHTML = '';
   NEWS_DATA.forEach((item, i) => {
-    const card = document.createElement('a');
-    card.href = item.url;
-    card.target = '_blank';
-    card.rel = 'noopener';
+    const card = document.createElement('div');
     card.className = 'news-card';
     card.style.animationDelay = `${i * 0.08}s`;
     card.innerHTML = `
@@ -110,9 +133,10 @@ function renderNews() {
       <div class="news-desc">${escapeHtml(item.desc || '').slice(0, 120)}</div>
       <div class="news-footer">
         <span class="news-date">${item.date || ''}</span>
-        <span class="news-read">阅读 →</span>
+        <span class="news-read">展开阅读 →</span>
       </div>
     `;
+    card.addEventListener('click', () => readArticle(item.url));
     grid.appendChild(card);
   });
   document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
