@@ -518,7 +518,7 @@ function stopMusic() {
 
 window.toggleMusic = function () {
   const btn = document.getElementById('musicToggle');
-  if (musicStarted) {
+  if (musicCtx) {
     stopMusic();
     btn.textContent = '🎵';
     btn.classList.remove('playing');
@@ -531,9 +531,9 @@ window.toggleMusic = function () {
 // First click starts music if previously playing
 document.addEventListener('click', function startMusic() {
   if (musicStarted) return;
-  musicStarted = true;
   document.removeEventListener('click', startMusic);
   if (localStorage.getItem('bgMusic') === 'playing') {
     playWebAudioMelody();
   }
+  musicStarted = true;
 }, { once: true });
