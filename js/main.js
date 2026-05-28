@@ -562,17 +562,19 @@ function bindEvents() {
 
 // ===== Background Music =====
 let musicStarted = false;
-let currentTrack = Math.floor(Math.random() * 6);
+let currentTrack = Math.floor(Math.random() * 8);
 const audio = document.getElementById('bgAudio');
 audio.volume = 1.0;
 
 const TRACKS = [
-  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
-  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
+  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-16.mp3',
+  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3',
+  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3',
+  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-13.mp3',
   'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
-  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3',
-  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3',
-  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3'
+  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-18.mp3',
+  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-19.mp3',
+  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3'
 ];
 
 audio.addEventListener('ended', () => {

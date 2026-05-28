@@ -35,7 +35,11 @@ async function initAuth() {
 async function signUp(email, password) {
   if (!SB_READY) throw new Error('认证系统未配置');
   const data = await sbFetch('signup', { email, password });
-  if (data.error || data.error_code) throw new Error(data.error_description || data.msg || data.error || '注册失败');
+  if (data.error || data.error_code) {
+    const msg = (data.error_description || data.msg || data.error || '').toLowerCase();
+    if (msg.includes('rate_limit') || msg.includes('rate limit') || msg.includes('email rate')) throw new Error('注册太频繁，请稍后再试');
+    throw new Error(msg || '注册失败');
+  }
   if (data.access_token && data.user) {
     localStorage.setItem('sb_token', data.access_token);
     currentUser = data.user;
