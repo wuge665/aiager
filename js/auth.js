@@ -6,8 +6,14 @@ if (!SUPABASE_READY) {
   console.warn('[Auth] Supabase 未配置，参考 js/auth-config.example.js 设置');
 }
 
-const { createClient } = supabase;
-const supabaseClient = SUPABASE_READY ? createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+let supabaseClient = null;
+try {
+  if (typeof supabase !== 'undefined' && SUPABASE_READY) {
+    supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  }
+} catch(e) {
+  console.warn('[Auth] Supabase init failed:', e.message);
+}
 
 let currentUser = null;
 
