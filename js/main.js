@@ -471,7 +471,6 @@ function bindEvents() {
 let musicStarted = false;
 let musicCtx = null;
 let musicInterval = null;
-let audioEl = null;
 let useWebAudio = false;
 
 function playWebAudioMelody() {
@@ -511,7 +510,6 @@ function playWebAudioMelody() {
 }
 
 function stopMusic() {
-  if (audioEl) { audioEl.pause(); audioEl.src = ''; }
   if (musicInterval) { clearInterval(musicInterval); musicInterval = null; }
   if (musicCtx) { musicCtx.close(); musicCtx = null; }
   useWebAudio = false;
