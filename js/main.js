@@ -554,12 +554,17 @@ function bindEvents() {
 }
 
 // ===== Background Music =====
-const MUSIC_TRACKS = [
-  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
-  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
-  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
-  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3',
-];
+const MUSIC_TRACKS = (() => {
+  const tracks = [];
+  for (let i = 1; i <= 16; i++) tracks.push(`https://www.soundhelix.com/examples/mp3/SoundHelix-Song-${i}.mp3`);
+  tracks.push(
+    'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
+    'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3',
+    'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-11.mp3',
+    'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-14.mp3'
+  );
+  return tracks;
+})();
 
 let musicStarted = false;
 let musicPlayer = null;
