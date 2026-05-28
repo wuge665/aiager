@@ -206,6 +206,23 @@ img { max-width: 100%; height: auto; }
   transform: translateY(-2px);
 }
 
+.launch-btn {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  margin-top: 0.6rem; padding: 0.4rem 1.2rem;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  border: none; border-radius: 20px;
+  color: #fff; font-size: 0.85rem; font-weight: 600;
+  cursor: pointer; text-decoration: none;
+  transition: var(--transition);
+}
+.launch-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--glow);
+}
+@media (max-width: 600px) {
+  .launch-btn { margin-left: 0; }
+}
+
 /* ===== Categories ===== */
 .categories {
   display: flex; gap: 0.4rem;
