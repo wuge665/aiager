@@ -477,6 +477,7 @@ function playWebAudioMelody() {
   if (musicCtx) return;
   try {
     musicCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (musicCtx.state === 'suspended') musicCtx.resume();
     const gain = musicCtx.createGain();
     gain.gain.value = 0.08;
     gain.connect(musicCtx.destination);
