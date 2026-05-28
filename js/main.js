@@ -2,6 +2,8 @@
 let currentTools = TOOLS_DATA;
 let searchTimeout = null;
 let SITE_CONFIG = {};
+let NEWS_DATA = [];
+let currentMode = 'tools'; // 'tools' | 'news'
 
 // ===== Init =====
 document.addEventListener('DOMContentLoaded', async () => {
@@ -14,6 +16,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   initParticles();
   renderScenes();
   renderTools(TOOLS_DATA);
+  fetchNews();
   bindEvents();
   initScrollTop();
 
@@ -77,6 +80,54 @@ function applyConfig(config) {
   if (site.keywords) {
     document.querySelector('meta[name="keywords"]')?.setAttribute('content', site.keywords);
   }
+}
+
+// ===== News Mode =====
+async function fetchNews() {
+  try {
+    const res = await fetch('data/news.json?_t=' + Date.now());
+    if (res.ok) { NEWS_DATA = await res.json(); }
+  } catch {}
+}
+
+function renderNews() {
+  const grid = document.getElementById('toolsGrid');
+  if (!NEWS_DATA || NEWS_DATA.length === 0) {
+    grid.innerHTML = `<div class="empty-state"><h3>📰 AI 资讯</h3><p>暂无资讯，请稍后再来查看</p></div>`;
+    return;
+  }
+  grid.innerHTML = '';
+  NEWS_DATA.forEach((item, i) => {
+    const card = document.createElement('a');
+    card.href = item.url;
+    card.target = '_blank';
+    card.rel = 'noopener';
+    card.className = 'news-card';
+    card.style.animationDelay = `${i * 0.08}s`;
+    card.innerHTML = `
+      <div class="news-source">${escapeHtml(item.source || '')}</div>
+      <div class="news-title">${escapeHtml(item.title)}</div>
+      <div class="news-desc">${escapeHtml(item.desc || '').slice(0, 120)}</div>
+      <div class="news-footer">
+        <span class="news-date">${item.date || ''}</span>
+        <span class="news-read">阅读 →</span>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector('.cat-btn[data-cat="news"]')?.classList.add('active');
+}
+
+function showNewsMode() {
+  currentMode = 'news';
+  document.getElementById('sceneTags').closest('.scenes').style.display = 'none';
+  renderNews();
+}
+
+function showToolsMode() {
+  currentMode = 'tools';
+  document.getElementById('sceneTags').closest('.scenes').style.display = '';
 }
 
 // ===== Particles =====
@@ -185,10 +236,16 @@ function filterByScene(sceneId, el) {
 // ===== Category Filter =====
 document.querySelectorAll('.cat-btn').forEach(btn => {
   btn.addEventListener('click', function (e) {
+    const cat = this.dataset.cat;
+    if (cat === 'news') {
+      showNewsMode();
+      return;
+    }
+    showToolsMode();
     document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
     this.classList.add('active');
+    document.querySelectorAll('.scene-tag').forEach(t => t.classList.remove('active'));
 
-    const cat = this.dataset.cat;
     const filtered = cat === 'all' ? TOOLS_DATA : TOOLS_DATA.filter(t => t.category === cat);
     renderTools(filtered);
   });
@@ -235,6 +292,8 @@ searchInput.addEventListener('keydown', function (e) {
     const keyword = this.value.toLowerCase().trim();
     if (keyword.length < 1) return;
 
+    showToolsMode();
+    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
     const filtered = TOOLS_DATA.filter(t =>
       t.name.toLowerCase().includes(keyword) ||
       t.desc.toLowerCase().includes(keyword) ||
@@ -307,6 +366,8 @@ window.closeRelations = function () {
 document.addEventListener('click', function (e) {
   const tagEl = e.target.closest('[data-tag]');
   if (tagEl) {
+    showToolsMode();
+    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
     const tag = tagEl.dataset.tag;
     const filtered = TOOLS_DATA.filter(t => t.tags.includes(tag));
     renderTools(filtered);
@@ -315,6 +376,7 @@ document.addEventListener('click', function (e) {
 
 // ===== Reset All =====
 window.resetAll = function () {
+  showToolsMode();
   document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
   document.querySelector('.cat-btn[data-cat="all"]')?.classList.add('active');
   document.querySelectorAll('.scene-tag').forEach(t => t.classList.remove('active'));
