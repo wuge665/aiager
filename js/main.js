@@ -562,21 +562,38 @@ function bindEvents() {
 
 // ===== Background Music =====
 let musicStarted = false;
+let currentTrack = Math.floor(Math.random() * 6);
+const audio = document.getElementById('bgAudio');
+audio.volume = 1.0;
+
+const TRACKS = [
+  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
+  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
+  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
+  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3',
+  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3',
+  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3'
+];
+
+audio.addEventListener('ended', () => {
+  if (!musicStarted) return;
+  currentTrack = (currentTrack + 1) % TRACKS.length;
+  audio.src = TRACKS[currentTrack];
+  audio.play().catch(() => {});
+});
 
 function playMusic() {
-  const p = document.getElementById('neteasePlayer');
-  p.style.display = 'block';
-  p.querySelector('iframe').src = 'https://music.163.com/outchain/player?type=2&id=5166118187&auto=1&height=66';
-  document.getElementById('musicToggle').textContent = '🔊';
-  document.getElementById('musicToggle').classList.add('playing');
-  musicStarted = true;
-  localStorage.setItem('bgMusic', 'playing');
+  audio.src = TRACKS[currentTrack];
+  audio.play().then(() => {
+    document.getElementById('musicToggle').textContent = '🔊';
+    document.getElementById('musicToggle').classList.add('playing');
+    musicStarted = true;
+    localStorage.setItem('bgMusic', 'playing');
+  }).catch(() => {});
 }
 
 function stopMusic() {
-  const p = document.getElementById('neteasePlayer');
-  p.style.display = 'none';
-  p.querySelector('iframe').src = 'https://music.163.com/outchain/player?type=2&id=5166118187&auto=0&height=66';
+  audio.pause();
   document.getElementById('musicToggle').textContent = '🎵';
   document.getElementById('musicToggle').classList.remove('playing');
   musicStarted = false;

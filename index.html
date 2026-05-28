@@ -193,7 +193,7 @@
         </div>
         <div class="auth-msg" style="display:none"></div>
         <button type="submit" class="submit-btn auth-submit">登录</button>
-        <p class="auth-hint">注册后可收藏工具、使用全部功能</p>
+        <p class="auth-hint"><a href="#" onclick="resetPassword()" style="color:var(--accent);text-decoration:none;font-size:0.85rem">忘记密码？</a></p>
       </form>
 
       <form id="form-signup" class="auth-form" style="display:none" onsubmit="handleAuthSubmit(event,'signup')">
@@ -216,10 +216,8 @@
     </div>
   </div>
 
-  <!-- NetEase Cloud Music Player -->
-  <div class="netease-player" id="neteasePlayer" style="display:none">
-    <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="https://music.163.com/outchain/player?type=2&id=5166118187&auto=1&height=66"></iframe>
-  </div>
+  <!-- Background Audio -->
+  <audio id="bgAudio" preload="none"></audio>
 
   <!-- Article Reader Modal -->
   <div class="modal-overlay" id="articleOverlay" hidden>
@@ -246,9 +244,9 @@
   <!-- Scripts -->
   <script src="js/auth-config.js"></script>
   <script src="js/data.js"></script>
+  <script src="js/wechat.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/main.js"></script>
-  <script src="js/wechat.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js" defer></script>
   <script>
     document.getElementById('loader').style.display = 'none';

@@ -758,7 +758,7 @@ footer {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   box-shadow: var(--glow);
-  z-index: 300;
+  z-index: 999;
   animation: fadeInUp 0.3s ease;
   font-size: 0.9rem;
   pointer-events: none;
@@ -793,26 +793,9 @@ footer {
   word-break: break-word;
 }
 
-/* ===== NetEase Music Player ===== */
-.netease-player {
-  position: fixed;
-  bottom: 4.5rem;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 250;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 4px 30px rgba(0,0,0,0.5);
-  animation: fadeInUp 0.3s ease;
-}
-
-.netease-player iframe {
-  display: block;
-}
-
-@media (max-width: 600px) {
-  .netease-player { bottom: 3.5rem; }
-  .netease-player iframe { width: 300px; height: 80px; }
+/* ===== Background Audio ===== */
+#bgAudio {
+  display: none;
 }
 
 /* ===== Responsive ===== */

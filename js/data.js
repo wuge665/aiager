@@ -1061,6 +1061,17 @@ const TOOLS_DATA = [
       { id: 'mubert', reason: '配乐对比' },
       { id: 'suno', reason: '生成对比' }
     ]
+  },
+  {
+    id: 'thbe',
+    name: 'THBE 按键工具集',
+    desc: '在线按键工具集合，提供多种实用按键功能与自动化操作',
+    icon: '🖱️',
+    category: 'productivity',
+    tags: ['效率', '自动化', '在线工具'],
+    url: 'https://thbe.netlify.app',
+    roles: ['operator', 'developer'],
+    relations: []
   }
 ];
 
