@@ -1069,7 +1069,7 @@ const TOOLS_DATA = [
     icon: '🖱️',
     category: 'productivity',
     tags: ['效率', '自动化', '在线工具'],
-    url: 'https://thbe.netlify.app',
+    url: 'https://thbe.pages.dev',
     roles: ['operator', 'developer'],
     relations: []
   }
