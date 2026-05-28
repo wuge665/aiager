@@ -42,16 +42,6 @@ function applyConfig(config) {
       adInterval: ads.adInterval || 4
     };
     window.__ADS_ENABLED = true;
-
-    // Dynamically load AdSense with correct publisher ID
-    const existing = document.getElementById('adsenseScript');
-    if (existing) existing.remove();
-
-    const script = document.createElement('script');
-    script.async = true;
-    script.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ads.adsensePublisherId}`;
-    script.crossOrigin = 'anonymous';
-    document.head.appendChild(script);
   }
 
   const wechat = config.wechat || {};
