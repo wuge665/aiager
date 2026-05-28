@@ -111,6 +111,34 @@ async function main() {
 
   const top5 = deduped.slice(0, 5);
 
+  // Fetch article content for each news item
+  for (const item of top5) {
+    try {
+      const res = await fetch(item.url, {
+        headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' },
+        signal: AbortSignal.timeout(8000),
+      });
+      if (res.ok) {
+        const html = await res.text();
+        const body = html.match(/<body[^>]*>([\s\S]*)<\/body>/i);
+        const bodyHtml = body ? body[1] : html;
+        item.content = bodyHtml
+          .replace(/<script[\s\S]*?<\/script>/gi, '')
+          .replace(/<style[\s\S]*?<\/style>/gi, '')
+          .replace(/<nav[\s\S]*?<\/nav>/gi, '')
+          .replace(/<header[\s\S]*?<\/header>/gi, '')
+          .replace(/<footer[\s\S]*?<\/footer>/gi, '')
+          .replace(/<[^>]+>/g, ' ')
+          .replace(/&[^;]+;/g, ' ')
+          .replace(/\s+/g, ' ')
+          .trim()
+          .slice(0, 2000);
+      }
+    } catch (e) {
+      console.warn(`[content] failed for ${item.title.slice(0, 30)}: ${e.message}`);
+    }
+  }
+
   const outputPath = path.join(__dirname, '..', 'data', 'news.json');
   fs.mkdirSync(path.dirname(outputPath), { recursive: true });
   fs.writeFileSync(outputPath, JSON.stringify(top5, null, 2), 'utf-8');

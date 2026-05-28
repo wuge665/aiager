@@ -98,6 +98,15 @@ window.readArticle = async function (url) {
   loading.hidden = false;
   content.textContent = '';
   document.body.style.overflow = 'hidden';
+
+  const item = NEWS_DATA.find(function(n) { return n.url === url; });
+  if (item && item.content) {
+    loading.hidden = true;
+    content.textContent = item.content;
+    document.getElementById('articleTitle').textContent = item.title || '';
+    return;
+  }
+
   try {
     const res = await fetch('/api/fetch-article?url=' + encodeURIComponent(url));
     if (!res.ok) throw new Error('获取失败');
