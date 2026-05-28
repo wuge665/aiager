@@ -469,35 +469,73 @@ function bindEvents() {
 
 // ===== Background Music =====
 let musicStarted = false;
+let musicCtx = null;
+let musicInterval = null;
+let audioEl = null;
+let useWebAudio = false;
+
+function playWebAudioMelody() {
+  if (musicCtx) return;
+  try {
+    musicCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const gain = musicCtx.createGain();
+    gain.gain.value = 0.08;
+    gain.connect(musicCtx.destination);
+
+    const notes = [523, 587, 659, 784, 659, 587, 523, 659, 784, 880, 784, 659, 523, 587, 659, 523];
+    let noteIdx = 0;
+
+    musicInterval = setInterval(() => {
+      if (!musicCtx) return;
+      const osc = musicCtx.createOscillator();
+      osc.type = 'sine';
+      osc.frequency.value = notes[noteIdx % notes.length];
+      const ng = musicCtx.createGain();
+      ng.gain.setValueAtTime(0.08, musicCtx.currentTime);
+      ng.gain.exponentialRampToValueAtTime(0.001, musicCtx.currentTime + 0.4);
+      osc.connect(ng);
+      ng.connect(gain);
+      osc.start();
+      osc.stop(musicCtx.currentTime + 0.4);
+      noteIdx++;
+    }, 500);
+
+    document.getElementById('musicToggle').textContent = '🔊';
+    document.getElementById('musicToggle').classList.add('playing');
+    musicStarted = true;
+    useWebAudio = true;
+    localStorage.setItem('bgMusic', 'playing');
+  } catch(e) {
+    console.warn('[Music] Web Audio not supported');
+  }
+}
+
+function stopMusic() {
+  if (audioEl) { audioEl.pause(); audioEl.src = ''; }
+  if (musicInterval) { clearInterval(musicInterval); musicInterval = null; }
+  if (musicCtx) { musicCtx.close(); musicCtx = null; }
+  useWebAudio = false;
+  musicStarted = false;
+}
+
 window.toggleMusic = function () {
-  const audio = document.getElementById('bgMusic');
   const btn = document.getElementById('musicToggle');
-  if (!audio) return;
-  if (audio.paused) {
-    audio.play().then(() => {
-      btn.textContent = '🔊';
-      btn.classList.add('playing');
-      localStorage.setItem('bgMusic', 'playing');
-    }).catch(() => {});
-  } else {
-    audio.pause();
+  if (musicStarted) {
+    stopMusic();
     btn.textContent = '🎵';
     btn.classList.remove('playing');
     localStorage.setItem('bgMusic', 'paused');
+  } else {
+    playWebAudioMelody();
   }
 };
 
+// First click starts music if previously playing
 document.addEventListener('click', function startMusic() {
   if (musicStarted) return;
-  const audio = document.getElementById('bgMusic');
-  const btn = document.getElementById('musicToggle');
-  if (!audio) return;
-  const state = localStorage.getItem('bgMusic');
-  if (state === 'playing') {
-    audio.play().then(() => {
-      if (btn) { btn.textContent = '🔊'; btn.classList.add('playing'); }
-    }).catch(() => {});
-  }
   musicStarted = true;
   document.removeEventListener('click', startMusic);
+  if (localStorage.getItem('bgMusic') === 'playing') {
+    playWebAudioMelody();
+  }
 }, { once: true });
