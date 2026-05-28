@@ -3,7 +3,7 @@ let currentTools = TOOLS_DATA;
 let searchTimeout = null;
 let SITE_CONFIG = {};
 let NEWS_DATA = [];
-let currentMode = 'tools'; // 'tools' | 'news'
+let currentMode = 'tools';
 
 // ===== Init =====
 document.addEventListener('DOMContentLoaded', async () => {
@@ -119,14 +119,14 @@ window.closeArticle = function () {
 function renderNews() {
   const grid = document.getElementById('toolsGrid');
   if (!NEWS_DATA || NEWS_DATA.length === 0) {
-    grid.innerHTML = `<div class="empty-state"><h3>📰 AI 资讯</h3><p>暂无资讯，请稍后再来查看</p></div>`;
+    grid.innerHTML = '<div class="empty-state"><h3>📰 AI 资讯</h3><p>暂无资讯，请稍后再来查看</p></div>';
     return;
   }
   grid.innerHTML = '';
   NEWS_DATA.forEach((item, i) => {
     const card = document.createElement('div');
     card.className = 'news-card';
-    card.style.animationDelay = `${i * 0.08}s`;
+    card.style.animationDelay = i * 0.08 + 's';
     card.innerHTML = `
       <div class="news-source">${escapeHtml(item.source || '')}</div>
       <div class="news-title">${escapeHtml(item.title)}</div>
@@ -134,8 +134,7 @@ function renderNews() {
       <div class="news-footer">
         <span class="news-date">${item.date || ''}</span>
         <span class="news-read">展开阅读 →</span>
-      </div>
-    `;
+      </div>`;
     card.addEventListener('click', () => readArticle(item.url));
     grid.appendChild(card);
   });
@@ -269,7 +268,6 @@ document.querySelectorAll('.cat-btn').forEach(btn => {
     document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
     this.classList.add('active');
     document.querySelectorAll('.scene-tag').forEach(t => t.classList.remove('active'));
-
     const filtered = cat === 'all' ? TOOLS_DATA : TOOLS_DATA.filter(t => t.category === cat);
     renderTools(filtered);
   });
@@ -555,15 +553,15 @@ function bindEvents() {
 
 // ===== Background Music =====
 const MUSIC_TRACKS = (() => {
-  const tracks = [];
-  for (let i = 1; i <= 16; i++) tracks.push(`https://www.soundhelix.com/examples/mp3/SoundHelix-Song-${i}.mp3`);
-  tracks.push(
+  const t = [];
+  for (let i = 1; i <= 16; i++) t.push('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-' + i + '.mp3');
+  t.push(
     'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
     'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3',
     'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-11.mp3',
     'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-14.mp3'
   );
-  return tracks;
+  return t;
 })();
 
 let musicStarted = false;
@@ -578,7 +576,7 @@ function playMusic() {
     musicPlayer.addEventListener('ended', nextTrack);
   }
   musicPlayer.src = MUSIC_TRACKS[musicTrackIdx % MUSIC_TRACKS.length];
-  musicPlayer.play().catch(() => {});
+  musicPlayer.play().catch(function(){});
   document.getElementById('musicToggle').textContent = '🔊';
   document.getElementById('musicToggle').classList.add('playing');
   musicStarted = true;
@@ -589,7 +587,7 @@ function nextTrack() {
   musicTrackIdx++;
   if (musicPlayer) {
     musicPlayer.src = MUSIC_TRACKS[musicTrackIdx % MUSIC_TRACKS.length];
-    musicPlayer.play().catch(() => {});
+    musicPlayer.play().catch(function(){});
   }
 }
 
@@ -612,7 +610,6 @@ window.toggleMusic = function () {
   }
 };
 
-// First click starts music if previously playing
 document.addEventListener('click', function startMusic() {
   if (musicStarted) return;
   document.removeEventListener('click', startMusic);
