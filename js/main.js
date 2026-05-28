@@ -552,50 +552,22 @@ function bindEvents() {
 }
 
 // ===== Background Music =====
-const MUSIC_TRACKS = (() => {
-  const t = [];
-  for (let i = 1; i <= 16; i++) t.push('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-' + i + '.mp3');
-  t.push(
-    'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
-    'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3',
-    'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-11.mp3',
-    'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-14.mp3'
-  );
-  return t;
-})();
-
 let musicStarted = false;
-let musicPlayer = null;
-let musicTrackIdx = 0;
 
 function playMusic() {
-  if (musicPlayer && !musicPlayer.paused) return;
-  if (!musicPlayer) {
-    musicPlayer = document.createElement('audio');
-    musicPlayer.volume = 0.5;
-    musicPlayer.addEventListener('ended', nextTrack);
-  }
-  musicPlayer.src = MUSIC_TRACKS[musicTrackIdx % MUSIC_TRACKS.length];
-  musicPlayer.play().catch(function(){});
+  const p = document.getElementById('neteasePlayer');
+  p.style.display = 'block';
+  p.querySelector('iframe').src = 'https://music.163.com/outchain/player?type=2&id=5166118187&auto=1&height=66';
   document.getElementById('musicToggle').textContent = '🔊';
   document.getElementById('musicToggle').classList.add('playing');
   musicStarted = true;
   localStorage.setItem('bgMusic', 'playing');
 }
 
-function nextTrack() {
-  musicTrackIdx++;
-  if (musicPlayer) {
-    musicPlayer.src = MUSIC_TRACKS[musicTrackIdx % MUSIC_TRACKS.length];
-    musicPlayer.play().catch(function(){});
-  }
-}
-
 function stopMusic() {
-  if (musicPlayer) {
-    musicPlayer.pause();
-    musicPlayer.currentTime = 0;
-  }
+  const p = document.getElementById('neteasePlayer');
+  p.style.display = 'none';
+  p.querySelector('iframe').src = 'https://music.163.com/outchain/player?type=2&id=5166118187&auto=0&height=66';
   document.getElementById('musicToggle').textContent = '🎵';
   document.getElementById('musicToggle').classList.remove('playing');
   musicStarted = false;
@@ -603,7 +575,7 @@ function stopMusic() {
 }
 
 window.toggleMusic = function () {
-  if (musicPlayer && !musicPlayer.paused) {
+  if (musicStarted) {
     stopMusic();
   } else {
     playMusic();
