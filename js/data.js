@@ -192,7 +192,7 @@ const TOOLS_DATA = [
     roles: ['operator', 'developer'],
     relations: [
       { id: 'dify', reason: '平台对比' },
-      { id: 'wechat-api', reason: '公众号接入' }
+      { id: 'doubao', reason: '字节生态' }
     ]
   },
   {
@@ -387,7 +387,7 @@ const TOOLS_DATA = [
     roles: ['operator', 'developer'],
     relations: [
       { id: 'n8n', reason: '开源替代' },
-      { id: 'wechat-api', reason: '公众号自动化' }
+      { id: 'coze', reason: '公众号自动化' }
     ]
   },
   {
@@ -736,21 +736,175 @@ const TOOLS_DATA = [
     relations: [
       { id: 'motion', reason: '免费替代' }
     ]
+  },
+  {
+    id: 'deepseek',
+    name: 'DeepSeek',
+    desc: '国产顶级AI大模型，推理能力强+超长上下文，性价比极高',
+    icon: '🔮',
+    category: 'agent',
+    tags: ['AI助手', '国产', '免费', '推理'],
+    url: 'https://chat.deepseek.com',
+    roles: ['all'],
+    relations: [
+      { id: 'kimi', reason: '国产AI对比' },
+      { id: 'chatgpt', reason: '推理对比' }
+    ]
+  },
+  {
+    id: 'gemini',
+    name: 'Gemini',
+    desc: 'Google多模态AI，原生图像理解+超长上下文100万token',
+    icon: '♊',
+    category: 'agent',
+    tags: ['AI助手', '多模态', '免费'],
+    url: 'https://gemini.google.com',
+    roles: ['all'],
+    relations: [
+      { id: 'chatgpt', reason: '模型对比' },
+      { id: 'deepseek', reason: '推理对比' }
+    ]
+  },
+  {
+    id: 'grok',
+    name: 'Grok',
+    desc: 'xAI出品，实时联网+幽默风格+深度推理',
+    icon: '🤖',
+    category: 'agent',
+    tags: ['AI助手', '实时', '付费'],
+    url: 'https://grok.com',
+    roles: ['all'],
+    relations: [
+      { id: 'perplexity', reason: '实时信息' },
+      { id: 'chatgpt', reason: '模型对比' }
+    ]
+  },
+  {
+    id: 'manus',
+    name: 'Manus',
+    desc: 'AI智能体平台，自动完成复杂任务（调研/分析/报告生成）',
+    icon: '🦾',
+    category: 'agent',
+    tags: ['智能体', '自动化', '国产'],
+    url: 'https://manus.im',
+    roles: ['developer', 'operator', 'student'],
+    relations: [
+      { id: 'dify', reason: '工作流对比' },
+      { id: 'deepseek', reason: '推理引擎' }
+    ]
+  },
+  {
+    id: 'windsurf',
+    name: 'Windsurf',
+    desc: 'AI原生IDE，智能代码补全+多文件编辑+Agent模式',
+    icon: '🏄',
+    category: 'code',
+    tags: ['开发', '编辑器', 'AI'],
+    url: 'https://codeium.com/windsurf',
+    roles: ['developer'],
+    relations: [
+      { id: 'cursor', reason: '编辑器对比' },
+      { id: 'trae', reason: '国产替代' }
+    ]
+  },
+  {
+    id: 'bolt',
+    name: 'Bolt.new',
+    desc: 'AI全栈Web应用生成，对话即可构建可部署应用',
+    icon: '⚡',
+    category: 'code',
+    tags: ['开发', '全栈', 'AI生成'],
+    url: 'https://bolt.new',
+    roles: ['developer', 'designer'],
+    relations: [
+      { id: 'v0', reason: '前端对比' },
+      { id: 'trae', reason: '国产替代' }
+    ]
+  },
+  {
+    id: 'cline',
+    name: 'Cline',
+    desc: 'VS Code AI编程助手，自主编码+终端操作+文件管理',
+    icon: '🧩',
+    category: 'code',
+    tags: ['开发', '编辑器', '开源'],
+    url: 'https://cline.bot',
+    roles: ['developer'],
+    relations: [
+      { id: 'windsurf', reason: 'Agent模式对比' },
+      { id: 'cursor', reason: '功能对比' }
+    ]
+  },
+  {
+    id: 'napkin',
+    name: 'Napkin AI',
+    desc: '文字一键转图表/流程图/信息图，适合PPT和公众号配图',
+    icon: '📊',
+    category: 'productivity',
+    tags: ['图表', '可视化', '效率'],
+    url: 'https://napkin.ai',
+    roles: ['all'],
+    relations: [
+      { id: 'gamma', reason: '演示联动' },
+      { id: 'canva', reason: '设计搭配' }
+    ]
+  },
+  {
+    id: 'monica',
+    name: 'Monica AI',
+    desc: '浏览器AI助手，集成搜索+写作+翻译+ChatGPT',
+    icon: '🔍',
+    category: 'productivity',
+    tags: ['AI助手', '浏览器', '免费'],
+    url: 'https://monica.im',
+    roles: ['all'],
+    relations: [
+      { id: 'perplexity', reason: '搜索对比' },
+      { id: 'deepl', reason: '翻译联动' }
+    ]
+  },
+  {
+    id: 'douyin-ai',
+    name: '抖音即创',
+    desc: '字节旗下AI视频创作工具，脚本文案+数字人+剪辑一体',
+    icon: '🎵',
+    category: 'video',
+    tags: ['短视频', '数字人', '免费', '国产'],
+    url: 'https://jichuang.bytedance.com',
+    roles: ['operator', 'designer'],
+    relations: [
+      { id: 'capcut', reason: '剪辑联动' },
+      { id: 'coze', reason: '字节生态' }
+    ]
+  },
+  {
+    id: 'minimax',
+    name: 'MiniMax海螺AI',
+    desc: '国产AI语音+视频生成，角色扮演+语音对话',
+    icon: '🐚',
+    category: 'agent',
+    tags: ['AI助手', '语音', '国产'],
+    url: 'https://hailuoai.com',
+    roles: ['all'],
+    relations: [
+      { id: 'doubao', reason: '国产AI对比' },
+      { id: 'suno', reason: '音频生成' }
+    ]
   }
 ];
 
 // ===== Scene Config =====
 const SCENES = [
-  { id: 'wechat-article', label: '📰 公众号推文', tools: ['jiying-ai', '135editor', 'metaso', 'kimi', 'quantum', 'deepl'] },
-  { id: 'ai-video', label: '🎬 AI短视频', tools: ['libtv', 'jimeng', 'kling', 'capcut', 'runway', 'pika', 'heygen', 'suno', 'tts'] },
-  { id: 'auto-workflow', label: '🔄 自动化工作流', tools: ['n8n', 'zapier', 'dify', 'coze', 'fastgpt'] },
-  { id: 'ai-coding', label: '💻 AI编程', tools: ['trae', 'cursor', 'github-copilot', 'codeium', 'tabnine', 'v0', 'replit', 'huggingface', 'dify'] },
-  { id: 'design-creative', label: '🎨 创意设计', tools: ['mj', 'jimeng', 'leonardo', 'stability', 'adobe-firefly', 'canva', 'removebg', 'gamma'] },
-  { id: 'research-study', label: '📚 学习研究', tools: ['kimi', 'metaso', 'perplexity', 'doubao', 'tongyi', 'zhipu', 'spark', 'notion-ai'] },
-  { id: 'podcast-audio', label: '🎵 音频创作', tools: ['suno', 'elevenlabs', 'riffusion', 'tts', 'capcut'] },
-  { id: 'wechat-bot', label: '🤖 公众号Bot', tools: ['coze', 'dify', 'fastgpt', 'n8n', 'zapier'] },
-  { id: 'english-writing', label: '🌍 英文写作', tools: ['grammarly', 'deepl', 'chatgpt', 'claude', 'perplexity'] },
-  { id: 'meeting-notes', label: '📝 会议纪要', tools: ['otter', 'notion-ai', 'kimi', 'mem', 'reclaim'] }
+  { id: 'wechat-article', label: '📰 公众号推文', tools: ['jiying-ai', '135editor', 'metaso', 'kimi', 'quantum', 'deepl', 'deepseek'] },
+  { id: 'ai-video', label: '🎬 AI短视频', tools: ['libtv', 'jimeng', 'kling', 'capcut', 'runway', 'pika', 'heygen', 'suno', 'tts', 'douyin-ai'] },
+  { id: 'auto-workflow', label: '🔄 自动化工作流', tools: ['n8n', 'zapier', 'dify', 'coze', 'fastgpt', 'manus'] },
+  { id: 'ai-coding', label: '💻 AI编程', tools: ['trae', 'cursor', 'github-copilot', 'codeium', 'tabnine', 'v0', 'replit', 'huggingface', 'dify', 'windsurf', 'bolt', 'cline'] },
+  { id: 'design-creative', label: '🎨 创意设计', tools: ['mj', 'jimeng', 'leonardo', 'stability', 'adobe-firefly', 'canva', 'removebg', 'gamma', 'napkin'] },
+  { id: 'research-study', label: '📚 学习研究', tools: ['kimi', 'metaso', 'perplexity', 'doubao', 'tongyi', 'zhipu', 'spark', 'notion-ai', 'deepseek', 'gemini', 'grok'] },
+  { id: 'podcast-audio', label: '🎵 音频创作', tools: ['suno', 'elevenlabs', 'riffusion', 'tts', 'capcut', 'minimax'] },
+  { id: 'wechat-bot', label: '🤖 公众号Bot', tools: ['coze', 'dify', 'fastgpt', 'n8n', 'zapier', 'manus'] },
+  { id: 'english-writing', label: '🌍 英文写作', tools: ['grammarly', 'deepl', 'chatgpt', 'claude', 'perplexity', 'gemini'] },
+  { id: 'meeting-notes', label: '📝 会议纪要', tools: ['otter', 'notion-ai', 'kimi', 'mem', 'reclaim', 'monica'] }
 ];
 
 // ===== Tag Relations (搜索联想) =====
@@ -764,5 +918,8 @@ const TAG_RELATIONS = {
   '英文': ['翻译', '写作', '语法', '润色', '校对'],
   '开源': ['免费', '自部署', '社区', 'GitHub', '模型'],
   '语音': ['配音', '克隆', '朗读', '播客', '字幕'],
-  '效率': ['自动化', '日程', '笔记', '会议', '工作流']
+  '效率': ['自动化', '日程', '笔记', '会议', '工作流'],
+  '国产': ['免费', 'AI助手', '大模型', '中文', 'DeepSeek'],
+  '推理': ['逻辑', '数学', '代码', '深度思考', '分析'],
+  '多模态': ['图像', '视频', '语音', '文档', '识别']
 };

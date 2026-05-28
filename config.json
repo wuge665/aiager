@@ -3,19 +3,19 @@
     "title": "AI 百宝箱",
     "description": "精选AI工具导航 — 写作/编程/设计/视频全收录",
     "keywords": "AI工具,人工智能,AI导航,效率工具,写作,编程,设计",
-    "url": "https://aiager.ccwu.cc",
+    "url": "https://aiager.top",
     "lang": "zh-CN"
   },
   "wechat": {
-    "name": "您的公众号名称",
+    "name": "有越干货",
     "qr": "assets/images/wechat-qr.png",
     "autoReply": true,
-    "enabled": false
+    "enabled": true
   },
   "ads": {
-    "enabled": false,
+    "enabled": true,
     "network": "adsense",
-    "adsensePublisherId": "ca-pub-XXXXXXXXXXXXXXXX",
+    "adsensePublisherId": "ca-pub-5148253505955374",
     "adsenseSlot": {
       "inContent": "",
       "banner": ""
@@ -34,7 +34,7 @@
     "serviceWorker": false
   },
   "deploy": {
-    "platform": "vercel",
-    "domain": "aiager.ccwu.cc"
+    "platform": "netlify",
+    "domain": "aiager.top"
   }
 }
