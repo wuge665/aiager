@@ -1,43 +1,54 @@
-const SUPABASE_URL = typeof AUTH_CONFIG !== 'undefined' ? AUTH_CONFIG.supabaseUrl : '';
-const SUPABASE_ANON_KEY = typeof AUTH_CONFIG !== 'undefined' ? AUTH_CONFIG.supabaseAnonKey : '';
-const SUPABASE_READY = SUPABASE_URL && SUPABASE_ANON_KEY;
+const SB_URL = typeof AUTH_CONFIG !== 'undefined' ? AUTH_CONFIG.supabaseUrl : '';
+const SB_KEY = typeof AUTH_CONFIG !== 'undefined' ? AUTH_CONFIG.supabaseAnonKey : '';
+const SB_READY = SB_URL && SB_KEY;
 
-if (!SUPABASE_READY) {
-  console.warn('[Auth] Supabase 未配置，参考 js/auth-config.example.js 设置');
-}
-
-let supabaseClient = null;
-try {
-  if (typeof supabase !== 'undefined' && SUPABASE_READY) {
-    supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-  }
-} catch(e) {
-  console.warn('[Auth] Supabase init failed:', e.message);
+function sbFetch(path, body) {
+  return fetch(SB_URL + '/auth/v1/' + path, {
+    headers: {
+      'apikey': SB_KEY,
+      'Content-Type': 'application/json'
+    },
+    body: body ? JSON.stringify(body) : undefined,
+    method: body ? 'POST' : 'GET'
+  }).then(r => r.json());
 }
 
 let currentUser = null;
 
 async function initAuth() {
-  if (!supabaseClient) {
-    document.getElementById('authGuard')?.remove();
-    return;
+  const token = localStorage.getItem('sb_token');
+  if (token && SB_READY) {
+    try {
+      const data = await fetch(SB_URL + '/auth/v1/user', {
+        headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + token }
+      }).then(r => r.json());
+      if (data && data.id) {
+        currentUser = data;
+        document.body.classList.remove('auth-required');
+      }
+    } catch(e) {}
   }
-  const { data: { session } } = await supabaseClient.auth.getSession();
-  currentUser = session?.user || null;
   updateAuthUI();
 }
 
 async function signUp(email, password) {
-  if (!supabaseClient) throw new Error('认证系统未配置');
-  const { data, error } = await supabaseClient.auth.signUp({ email, password });
-  if (error) throw error;
+  if (!SB_READY) throw new Error('认证系统未配置');
+  const data = await sbFetch('signup', { email, password });
+  if (data.error) throw new Error(data.error_description || data.msg || '注册失败');
+  if (data.access_token) {
+    localStorage.setItem('sb_token', data.access_token);
+    currentUser = data.user;
+    updateAuthUI();
+    closeAuthModal();
+  }
   return data;
 }
 
 async function signIn(email, password) {
-  if (!supabaseClient) throw new Error('认证系统未配置');
-  const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-  if (error) throw error;
+  if (!SB_READY) throw new Error('认证系统未配置');
+  const data = await sbFetch('token?grant_type=password', { email, password });
+  if (data.error) throw new Error(data.error_description || data.msg || '登录失败');
+  localStorage.setItem('sb_token', data.access_token);
   currentUser = data.user;
   updateAuthUI();
   closeAuthModal();
@@ -45,8 +56,7 @@ async function signIn(email, password) {
 }
 
 async function signOut() {
-  if (!supabaseClient) return;
-  await supabaseClient.auth.signOut();
+  localStorage.removeItem('sb_token');
   currentUser = null;
   updateAuthUI();
   showTip('已退出登录');
@@ -56,6 +66,7 @@ function updateAuthUI() {
   const loginBtn = document.getElementById('loginBtn');
   const userMenu = document.getElementById('userMenu');
   const userName = document.getElementById('userName');
+  if (!loginBtn || !userMenu) return;
   if (currentUser) {
     loginBtn.style.display = 'none';
     userMenu.style.display = 'flex';
@@ -80,8 +91,8 @@ function closeAuthModal() {
 function switchAuthTab(tab) {
   document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.auth-form').forEach(f => f.style.display = 'none');
-  document.querySelector(`.auth-tab[data-tab="${tab}"]`).classList.add('active');
-  document.getElementById(`form-${tab}`).style.display = 'block';
+  document.querySelector('.auth-tab[data-tab="' + tab + '"]').classList.add('active');
+  document.getElementById('form-' + tab).style.display = 'block';
 }
 
 async function handleAuthSubmit(e, type) {
@@ -91,46 +102,33 @@ async function handleAuthSubmit(e, type) {
   const password = form.password.value.trim();
   const btn = form.querySelector('button[type="submit"]');
   const msg = form.querySelector('.auth-msg');
-
   if (!email || password.length < 6) {
-    msg.textContent = '邮箱必填，密码至少6位';
-    msg.style.display = 'block';
-    return;
+    msg.innerHTML = '邮箱必填，密码至少6位';
+    msg.style.display = 'block'; return;
   }
-
   btn.disabled = true;
   btn.textContent = type === 'login' ? '登录中...' : '注册中...';
   msg.style.display = 'none';
-
   try {
     if (type === 'login') {
       await signIn(email, password);
       showTip('✅ 登录成功');
     } else {
-      const data = await signUp(email, password);
-      if (data?.user?.identities?.length === 0) {
-        showTip('该邮箱已注册，请直接登录');
-      } else {
-        showTip('✅ 注册成功！已自动登录');
-      }
-      document.body.classList.remove('auth-required');
-      closeAuthModal();
+      await signUp(email, password);
+      showTip('✅ 注册成功');
     }
   } catch (err) {
-    msg.textContent = type === 'login' ? '登录失败：' + err.message : '注册失败：' + err.message;
+    msg.innerHTML = err.message;
     msg.style.display = 'block';
-  } finally {
-    btn.disabled = false;
-    btn.textContent = type === 'login' ? '登录' : '注册';
   }
+  btn.disabled = false;
+  btn.textContent = type === 'login' ? '登录' : '注册';
 }
 
 document.addEventListener('DOMContentLoaded', initAuth);
-
 document.getElementById('authModal')?.addEventListener('click', function (e) {
   if (e.target === this) closeAuthModal();
 });
-
 document.addEventListener('keydown', function (e) {
   if (e.key === 'Escape') closeAuthModal();
 });
