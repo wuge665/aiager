@@ -1,1 +1,47 @@
-[]
+[
+  {
+    "id": "seed-deepseek-r2",
+    "title": "DeepSeek R2 发布：国产大模型性能全面对标 GPT-4o",
+    "desc": "DeepSeek 发布新一代大语言模型 R2，在推理、编程和多模态能力上全面对标 GPT-4o，API 价格仅为 OpenAI 的十分之一。",
+    "url": "https://deepseek.com",
+    "source": "36氪",
+    "date": "2026-05-28",
+    "tags": ["AI", "大模型", "DeepSeek"]
+  },
+  {
+    "id": "seed-manus-ai-agent",
+    "title": "Manus AI 智能体爆火：通用型 AI Agent 实现复杂任务自动化",
+    "desc": "Manus 作为新一代 AI 智能体引发广泛关注，能够自主完成简历筛选、房产分析、股票研究等复杂多步骤任务。",
+    "url": "https://manus.im",
+    "source": "量子位",
+    "date": "2026-05-27",
+    "tags": ["AI", "Agent", "智能体"]
+  },
+  {
+    "id": "seed-gemini-live",
+    "title": "Google Gemini 2.5 重大更新：实时语音对话与多模态推理",
+    "desc": "Google 发布 Gemini 2.5 系列更新，支持实时语音交互、更长上下文窗口（1M tokens），在多项基准测试中超越 GPT-4o。",
+    "url": "https://gemini.google.com",
+    "source": "TechCrunch",
+    "date": "2026-05-26",
+    "tags": ["AI", "Gemini", "Google"]
+  },
+  {
+    "id": "seed-claude-code",
+    "title": "Anthropic 推出 Claude Code：AI 编程助手全面升级",
+    "desc": "Anthropic 发布 Claude Code，支持命令行交互式编程、自动代码审查和项目级重构，开发者可用自然语言编写和调试代码。",
+    "url": "https://anthropic.com",
+    "source": "ArsTechnica",
+    "date": "2026-05-25",
+    "tags": ["AI", "编程", "Claude"]
+  },
+  {
+    "id": "seed-ai-video-sora",
+    "title": "Sora 正式开放使用：OpenAI 视频生成模型迎来全面升级",
+    "desc": "OpenAI 向全体用户开放 Sora 视频生成功能，支持 1080p 高清输出、多种风格模板和更精准的文本理解能力。",
+    "url": "https://sora.com",
+    "source": "Hacker News",
+    "date": "2026-05-24",
+    "tags": ["AI", "视频", "Sora"]
+  }
+]
