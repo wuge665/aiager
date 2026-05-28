@@ -88,15 +88,14 @@ function initParticles() {
       number: { value: isMobile ? 25 : 50, density: { enable: true, value_area: isMobile ? 1200 : 800 } },
       color: { value: '#6366f1' },
       shape: { type: 'circle' },
-      opacity: { value: 0.25, random: true, anim: { enable: true, speed: 0.5, opacity_min: 0.1 } },
-      size: { value: 2.5, random: true },
-      line_linked: { enable: true, distance: 150, color: '#06b6d4', opacity: 0.15, width: 1 },
-      move: { enable: true, speed: 1.5, direction: 'none', random: true, straight: false }
+      opacity: { value: 0.2, random: false, anim: { enable: false } },
+      size: { value: 2, random: false },
+      line_linked: { enable: true, distance: 150, color: '#06b6d4', opacity: 0.1, width: 1 },
+      move: { enable: true, speed: 0.8, direction: 'none', random: false, straight: false }
     },
     interactivity: {
       detect_on: 'canvas',
-      events: { onhover: { enable: true, mode: 'grab' }, onclick: { enable: true, mode: 'push' } },
-      modes: { grab: { distance: 140, line_linked: { opacity: 0.3 } }, push: { particles_nb: 3 } }
+      events: { onhover: { enable: false }, onclick: { enable: false } }
     },
     retina_detect: true
   });
@@ -139,7 +138,7 @@ function renderTools(tools) {
         ${tool.tags.map(t => `<span class="tag" data-tag="${escapeHtml(t)}">${escapeHtml(t)}</span>`).join('')}
       </div>
       <div class="tool-footer">
-        <a href="${tool.url}" target="_blank" rel="noopener noreferrer" class="tool-link">立即使用 →</a>
+        <span class="tool-link" onclick="handleToolClick(event, '${tool.id}', '${escapeHtml(tool.url)}')">立即使用 →</span>
         ${tool.relations?.length
           ? `<span class="tool-relation" onclick="event.stopPropagation();showRelations('${tool.id}')">🔗 关联</span>`
           : ''}
@@ -147,9 +146,8 @@ function renderTools(tools) {
     `;
 
     card.addEventListener('click', (e) => {
-      if (!e.target.closest('a') && !e.target.closest('.tool-relation') && !e.target.closest('.tag')) {
-        window.open(tool.url, '_blank');
-        trackClick(tool.id, 'card');
+      if (!e.target.closest('a') && !e.target.closest('.tool-relation') && !e.target.closest('.tag') && !e.target.closest('.tool-link')) {
+        handleToolClick(e, tool.id, tool.url);
       }
     });
 
@@ -401,6 +399,19 @@ function escapeHtml(str) {
   return div.innerHTML;
 }
 
+// ===== Tool Click Guard =====
+window.handleToolClick = function (e, toolId, toolUrl) {
+  e.preventDefault();
+  e.stopPropagation();
+  const tool = TOOLS_DATA.find(t => t.id === toolId);
+  if (!tool?.login || currentUser) {
+    window.open(toolUrl, '_blank');
+    trackClick(toolId, 'card');
+  } else {
+    openAuthModal('login');
+  }
+};
+
 // ===== Submit Tool Modal =====
 document.getElementById('submitToolBtn')?.addEventListener('click', function (e) {
   e.preventDefault();
@@ -455,3 +466,38 @@ function bindEvents() {
     }
   });
 }
+
+// ===== Background Music =====
+let musicStarted = false;
+window.toggleMusic = function () {
+  const audio = document.getElementById('bgMusic');
+  const btn = document.getElementById('musicToggle');
+  if (!audio) return;
+  if (audio.paused) {
+    audio.play().then(() => {
+      btn.textContent = '🔊';
+      btn.classList.add('playing');
+      localStorage.setItem('bgMusic', 'playing');
+    }).catch(() => {});
+  } else {
+    audio.pause();
+    btn.textContent = '🎵';
+    btn.classList.remove('playing');
+    localStorage.setItem('bgMusic', 'paused');
+  }
+};
+
+document.addEventListener('click', function startMusic() {
+  if (musicStarted) return;
+  const audio = document.getElementById('bgMusic');
+  const btn = document.getElementById('musicToggle');
+  if (!audio) return;
+  const state = localStorage.getItem('bgMusic');
+  if (state === 'playing') {
+    audio.play().then(() => {
+      if (btn) { btn.textContent = '🔊'; btn.classList.add('playing'); }
+    }).catch(() => {});
+  }
+  musicStarted = true;
+  document.removeEventListener('click', startMusic);
+}, { once: true });

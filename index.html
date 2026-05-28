@@ -214,16 +214,11 @@
     </div>
   </div>
 
-  <!-- Auth guard overlay -->
-  <div class="auth-guard" id="authGuard" hidden>
-    <div class="auth-guard-box">
-      <div class="auth-guard-icon">🔒</div>
-      <h2>登录后使用全部工具</h2>
-      <p>免费注册，解锁全部 64+ AI 工具</p>
-      <button class="submit-btn" onclick="openAuthModal('login')" style="width:auto;padding:0.6rem 2rem">登录</button>
-      <button class="auth-link-btn" onclick="openAuthModal('signup')">没有账号？去注册</button>
-    </div>
-  </div>
+  <!-- Background Music -->
+  <audio id="bgMusic" loop preload="none">
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+  </audio>
+  <button class="music-toggle" id="musicToggle" aria-label="背景音乐" onclick="toggleMusic()">🎵</button>
 
   <!-- Footer -->
   <footer role="contentinfo">
@@ -232,7 +227,7 @@
 
   <!-- Scripts -->
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-  <script src="js/auth-config.example.js"></script>
+  <script src="js/auth-config.js"></script>
   <script src="js/data.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/main.js"></script>

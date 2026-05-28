@@ -14,17 +14,11 @@ let currentUser = null;
 async function initAuth() {
   if (!supabaseClient) {
     document.getElementById('authGuard')?.remove();
-    document.body.classList.remove('auth-required');
     return;
   }
   const { data: { session } } = await supabaseClient.auth.getSession();
   currentUser = session?.user || null;
   updateAuthUI();
-  if (currentUser) {
-    document.body.classList.remove('auth-required');
-  } else {
-    document.body.classList.add('auth-required');
-  }
 }
 
 async function signUp(email, password) {
@@ -39,10 +33,8 @@ async function signIn(email, password) {
   const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
   if (error) throw error;
   currentUser = data.user;
-  document.body.classList.remove('auth-required');
   updateAuthUI();
   closeAuthModal();
-  renderTools(TOOLS_DATA);
   return data;
 }
 
@@ -50,9 +42,8 @@ async function signOut() {
   if (!supabaseClient) return;
   await supabaseClient.auth.signOut();
   currentUser = null;
-  document.body.classList.add('auth-required');
   updateAuthUI();
-  renderTools(TOOLS_DATA);
+  showTip('已退出登录');
 }
 
 function updateAuthUI() {

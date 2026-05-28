@@ -721,6 +721,42 @@ footer {
   .toast { right: 1rem; left: 1rem; bottom: 1rem; text-align: center; }
 }
 
+/* ===== Music Toggle ===== */
+.music-toggle {
+  position: fixed;
+  bottom: 2rem; left: 50%;
+  transform: translateX(-50%);
+  width: 40px; height: 40px;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: var(--bg-card);
+  font-size: 1.1rem;
+  cursor: pointer;
+  z-index: 150;
+  backdrop-filter: blur(8px);
+  transition: var(--transition);
+  display: flex; align-items: center; justify-content: center;
+}
+
+.music-toggle:hover {
+  border-color: var(--accent);
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.3);
+}
+
+.music-toggle.playing {
+  border-color: var(--accent);
+  animation: musicPulse 2s ease-in-out infinite;
+}
+
+@keyframes musicPulse {
+  0%, 100% { box-shadow: 0 0 10px rgba(6, 182, 212, 0.2); }
+  50% { box-shadow: 0 0 25px rgba(6, 182, 212, 0.5); }
+}
+
+@media (max-width: 600px) {
+  .music-toggle { bottom: 1rem; width: 36px; height: 36px; font-size: 1rem; }
+}
+
 @media (max-width: 480px) {
   .glass-nav { padding: 0.5rem 0.75rem; }
   .logo span { font-size: 0.95rem; }
@@ -789,35 +825,6 @@ footer {
 }
 
 .auth-link-btn:hover { color: var(--accent); }
-
-/* ===== Auth Guard ===== */
-.auth-guard {
-  position: fixed; inset: 0; z-index: 1000;
-  background: rgba(10, 14, 23, 0.95);
-  backdrop-filter: blur(8px);
-  display: flex; align-items: center; justify-content: center;
-  animation: fadeIn 0.3s ease;
-}
-
-.auth-guard[hidden] { display: none; }
-
-.auth-guard-box {
-  text-align: center; max-width: 400px; padding: 2rem;
-}
-
-.auth-guard-icon { font-size: 3rem; margin-bottom: 1rem; }
-
-.auth-guard-box h2 { font-size: 1.3rem; margin-bottom: 0.5rem; }
-
-.auth-guard-box p { color: var(--text-dim); font-size: 0.9rem; margin-bottom: 1.5rem; }
-
-.auth-required .tools-grid,
-.auth-required .categories,
-.auth-required .scenes,
-.auth-required .relations-panel,
-.auth-required .ad-container { filter: blur(8px); pointer-events: none; user-select: none; }
-
-.auth-required .auth-guard { display: flex; }
 
 @media (max-width: 600px) {
   .auth-bar { order: 4; width: 100%; justify-content: flex-end; }
