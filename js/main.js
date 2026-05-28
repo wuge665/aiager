@@ -530,64 +530,56 @@ function bindEvents() {
 }
 
 // ===== Background Music =====
+const MUSIC_TRACKS = [
+  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
+  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
+  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
+  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3',
+];
+
 let musicStarted = false;
-let musicCtx = null;
-let musicInterval = null;
-let useWebAudio = false;
+let musicPlayer = null;
+let musicTrackIdx = 0;
 
-function playWebAudioMelody() {
-  if (musicCtx) return;
-  try {
-    musicCtx = new (window.AudioContext || window.webkitAudioContext)();
-    if (musicCtx.state === 'suspended') musicCtx.resume();
-    const gain = musicCtx.createGain();
-    gain.gain.value = 0.08;
-    gain.connect(musicCtx.destination);
+function playMusic() {
+  if (musicPlayer && !musicPlayer.paused) return;
+  if (!musicPlayer) {
+    musicPlayer = document.createElement('audio');
+    musicPlayer.volume = 0.5;
+    musicPlayer.addEventListener('ended', nextTrack);
+  }
+  musicPlayer.src = MUSIC_TRACKS[musicTrackIdx % MUSIC_TRACKS.length];
+  musicPlayer.play().catch(() => {});
+  document.getElementById('musicToggle').textContent = '🔊';
+  document.getElementById('musicToggle').classList.add('playing');
+  musicStarted = true;
+  localStorage.setItem('bgMusic', 'playing');
+}
 
-    const notes = [523, 587, 659, 784, 659, 587, 523, 659, 784, 880, 784, 659, 523, 587, 659, 523];
-    let noteIdx = 0;
-
-    musicInterval = setInterval(() => {
-      if (!musicCtx) return;
-      const osc = musicCtx.createOscillator();
-      osc.type = 'sine';
-      osc.frequency.value = notes[noteIdx % notes.length];
-      const ng = musicCtx.createGain();
-      ng.gain.setValueAtTime(0.08, musicCtx.currentTime);
-      ng.gain.exponentialRampToValueAtTime(0.001, musicCtx.currentTime + 0.4);
-      osc.connect(ng);
-      ng.connect(gain);
-      osc.start();
-      osc.stop(musicCtx.currentTime + 0.4);
-      noteIdx++;
-    }, 500);
-
-    document.getElementById('musicToggle').textContent = '🔊';
-    document.getElementById('musicToggle').classList.add('playing');
-    musicStarted = true;
-    useWebAudio = true;
-    localStorage.setItem('bgMusic', 'playing');
-  } catch(e) {
-    console.warn('[Music] Web Audio not supported');
+function nextTrack() {
+  musicTrackIdx++;
+  if (musicPlayer) {
+    musicPlayer.src = MUSIC_TRACKS[musicTrackIdx % MUSIC_TRACKS.length];
+    musicPlayer.play().catch(() => {});
   }
 }
 
 function stopMusic() {
-  if (musicInterval) { clearInterval(musicInterval); musicInterval = null; }
-  if (musicCtx) { musicCtx.close(); musicCtx = null; }
-  useWebAudio = false;
+  if (musicPlayer) {
+    musicPlayer.pause();
+    musicPlayer.currentTime = 0;
+  }
+  document.getElementById('musicToggle').textContent = '🎵';
+  document.getElementById('musicToggle').classList.remove('playing');
   musicStarted = false;
+  localStorage.setItem('bgMusic', 'paused');
 }
 
 window.toggleMusic = function () {
-  const btn = document.getElementById('musicToggle');
-  if (musicCtx) {
+  if (musicPlayer && !musicPlayer.paused) {
     stopMusic();
-    btn.textContent = '🎵';
-    btn.classList.remove('playing');
-    localStorage.setItem('bgMusic', 'paused');
   } else {
-    playWebAudioMelody();
+    playMusic();
   }
 };
 
@@ -596,7 +588,7 @@ document.addEventListener('click', function startMusic() {
   if (musicStarted) return;
   document.removeEventListener('click', startMusic);
   if (localStorage.getItem('bgMusic') === 'playing') {
-    playWebAudioMelody();
+    playMusic();
   }
   musicStarted = true;
 }, { once: true });
