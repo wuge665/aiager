@@ -1063,6 +1063,17 @@ const TOOLS_DATA = [
     ]
   },
   {
+    id: 'opencode-vps',
+    name: 'VPS OpenCode',
+    desc: 'VPS 上的 AI 编程助手网页版，支持远程编码与终端操作',
+    icon: '💻',
+    category: 'code',
+    tags: ['编程', 'AI助手', '远程'],
+    url: 'https://memohmt4.tail369da7.ts.net/',
+    roles: ['developer'],
+    relations: []
+  },
+  {
     id: 'thbe',
     name: 'THBE 按键工具集',
     desc: '在线按键工具集合，提供多种实用按键功能与自动化操作',
