@@ -114,6 +114,7 @@ window.readArticle = async function (url) {
     loading.hidden = true;
     content.textContent = data.content || '暂无内容';
     document.getElementById('articleTitle').textContent = data.title || '';
+    if (item && data.content) item.content = data.content;
   } catch (e) {
     loading.hidden = true;
     content.textContent = '⚠️ 内容加载失败，请稍后重试';
