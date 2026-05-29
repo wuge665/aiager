@@ -38,7 +38,7 @@ async function signUp(email, password) {
   const data = await sbFetch('signup', { email, password });
   if (data.error || data.error_code || data.code) {
     const msg = (data.error_description || data.msg || data.error || data.message || '').toLowerCase();
-    if (msg.includes('rate_limit') || msg.includes('rate limit') || msg.includes('email rate')) throw new Error('注册太频繁，请稍后再试');
+    if (msg.includes('rate_limit') || msg.includes('rate limit') || msg.includes('email rate') || msg.includes('over_email')) throw new Error('注册太频繁，请等待一小时后重试');
     if (msg.includes('already') || msg.includes('exist')) throw new Error('该邮箱已注册，请直接登录');
     throw new Error('注册失败：' + (msg || '请检查邮箱格式或稍后再试'));
   }
