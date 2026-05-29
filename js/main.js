@@ -568,14 +568,14 @@ const audio = document.getElementById('bgAudio');
 audio.volume = 1.0;
 
 const TRACKS = [
-  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-16.mp3',
-  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3',
-  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3',
-  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-13.mp3',
-  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
-  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-18.mp3',
-  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-19.mp3',
-  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3'
+  'https://freepd.cn/api/music/526f6d616e63652f446f63746f722773204f72646572732e6d7033',
+  'https://freepd.cn/api/music/5570626561742f416c747572654e6f74652e6d7033',
+  'https://freepd.cn/api/music/576f726c642f416e6369656e7420496e766f636174696f6e2e6d7033',
+  'https://freepd.cn/api/music/526f6d616e63652f4120427265617468206f66204672657368204169722e6d7033',
+  'https://freepd.cn/api/music/5570626561742f4661726577656c6c20546f20546865204d6f6f6e2e6d7033',
+  'https://freepd.cn/api/music/4d6973632f466c6f6174696e6720436f6e6669742e6d7033',
+  'https://freepd.cn/api/music/526f6d616e63652f4865617274206f66204769616e74732e6d7033',
+  'https://freepd.cn/api/music/576f726c642f5a656e2047617264656e2e6d7033'
 ];
 
 audio.addEventListener('ended', () => {

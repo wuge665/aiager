@@ -889,11 +889,11 @@ const TOOLS_DATA = [
   {
     id: 'douyin-ai',
     name: '抖音即创',
-    desc: '字节旗下AI视频创作工具，脚本文案+数字人+剪辑一体',
-    icon: '🎵',
+    desc: '字节跳动AI创意工具，智能生成短视频、图文与直播素材',
+    icon: '🎬',
     category: 'video',
-    tags: ['短视频', '数字人', '免费', '国产'],
-    url: 'https://jichuang.bytedance.com',
+    tags: ['短视频', '素材', 'AI生成', '免费'],
+    url: 'https://aic.oceanengine.com',
     roles: ['operator', 'designer'],
     relations: [
       { id: 'capcut', reason: '剪辑联动' },
