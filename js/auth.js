@@ -1,10 +1,9 @@
 let clerk = null;
 let currentUser = null;
-let clerkPromise = null;
 
 async function initAuth() {
   if (!AUTH_CONFIG?.clerkPublishableKey) return;
-  try { await loadClerkSDK(); } catch (e) { return; }
+  if (typeof Clerk === 'undefined') return;
 
   clerk = new Clerk(AUTH_CONFIG.clerkPublishableKey);
   try {
@@ -22,24 +21,8 @@ async function initAuth() {
   updateAuthUI();
 }
 
-function loadClerkSDK() {
-  return new Promise((resolve, reject) => {
-    if (typeof Clerk !== 'undefined') { resolve(); return; }
-    const s = document.createElement('script');
-    s.src = 'https://cdn.jsdelivr.net/npm/@clerk/clerk-js@5/dist/clerk.browser.js';
-    s.crossOrigin = 'anonymous';
-    s.onload = resolve;
-    s.onerror = () => reject(new Error('Clerk SDK load failed'));
-    document.head.appendChild(s);
-  });
-}
-
-async function openAuthModal(tab) {
-  if (!clerk) {
-    if (!clerkPromise) clerkPromise = initAuth().catch(() => {});
-    await clerkPromise;
-    if (!clerk) { showTip('❌ 认证服务加载失败，请刷新重试'); return; }
-  }
+function openAuthModal(tab) {
+  if (!clerk) { showTip('⏳ 认证服务加载中，请稍后再试'); return; }
   if (tab === 'signup') { clerk.openSignUp(); }
   else { clerk.openSignIn(); }
 }
