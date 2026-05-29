@@ -1068,9 +1068,10 @@ const TOOLS_DATA = [
     desc: 'VPS 上的 AI 编程助手网页版，支持远程编码与终端操作',
     icon: '💻',
     category: 'code',
-    tags: ['编程', 'AI助手', '远程'],
+    tags: ['编程', 'AI助手', '远程', '免费'],
     url: 'https://memohmt4.tail369da7.ts.net/',
-    roles: ['developer'],
+    roles: ['developer', 'student'],
+    badge: '🆓 可试用3次',
     relations: []
   },
   {
@@ -1091,7 +1092,7 @@ const SCENES = [
   { id: 'wechat-article', label: '📰 公众号推文', tools: ['jiying-ai', '135editor', 'metaso', 'kimi', 'quantum', 'deepl', 'deepseek'] },
   { id: 'ai-video', label: '🎬 AI短视频', tools: ['libtv', 'jimeng', 'kling', 'capcut', 'runway', 'pika', 'heygen', 'suno', 'tts', 'douyin-ai'] },
   { id: 'auto-workflow', label: '🔄 自动化工作流', tools: ['n8n', 'zapier', 'dify', 'coze', 'fastgpt', 'manus'] },
-  { id: 'ai-coding', label: '💻 AI编程', tools: ['trae', 'cursor', 'github-copilot', 'codeium', 'tabnine', 'v0', 'replit', 'huggingface', 'dify', 'windsurf', 'bolt', 'cline'] },
+  { id: 'ai-coding', label: '💻 AI编程', tools: ['trae', 'cursor', 'github-copilot', 'codeium', 'tabnine', 'v0', 'replit', 'huggingface', 'dify', 'windsurf', 'bolt', 'cline', 'opencode-vps'] },
   { id: 'design-creative', label: '🎨 创意设计', tools: ['mj', 'jimeng', 'leonardo', 'stability', 'adobe-firefly', 'canva', 'removebg', 'gamma', 'napkin'] },
   { id: 'research-study', label: '📚 学习研究', tools: ['kimi', 'metaso', 'perplexity', 'doubao', 'tongyi', 'zhipu', 'spark', 'notion-ai', 'deepseek', 'gemini', 'grok'] },
   { id: 'podcast-audio', label: '🎵 音频创作', tools: ['suno', 'elevenlabs', 'riffusion', 'tts', 'capcut', 'minimax', 'udio', 'mubert', 'soundraw', 'aiva'] },

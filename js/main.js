@@ -214,7 +214,7 @@ function renderTools(tools) {
     card.innerHTML = `
       <div class="tool-header">
         <div class="tool-icon">${tool.icon}</div>
-        <div class="tool-name">${escapeHtml(tool.name)}</div>
+        <div class="tool-name">${escapeHtml(tool.name)}${tool.badge ? `<span class="tool-badge">${tool.badge}</span>` : ''}</div>
       </div>
       <div class="tool-desc">${escapeHtml(tool.desc)}</div>
       <div class="tool-tags">
