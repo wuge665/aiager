@@ -173,6 +173,51 @@
     </div>
   </div>
 
+  <!-- Auth Modal -->
+  <div class="modal-overlay" id="authModal" hidden>
+    <div class="modal modal-auth" role="dialog" aria-label="登录/注册">
+      <div class="modal-header">
+        <div class="auth-tabs">
+          <button class="auth-tab active" data-tab="login" onclick="switchAuthTab('login')">登录</button>
+          <button class="auth-tab" data-tab="signup" onclick="switchAuthTab('signup')">注册</button>
+        </div>
+        <button class="modal-close" onclick="closeAuthModal()" aria-label="关闭">✕</button>
+      </div>
+
+      <form id="form-login" class="auth-form" onsubmit="handleAuthSubmit(event,'login')">
+        <div class="form-group">
+          <label for="loginEmail">邮箱</label>
+          <input type="email" id="loginEmail" name="email" required placeholder="you@example.com" />
+        </div>
+        <div class="form-group">
+          <label for="loginPassword">密码</label>
+          <input type="password" id="loginPassword" name="password" required minlength="4" placeholder="至少4位密码" />
+        </div>
+        <div class="auth-msg" style="display:none"></div>
+        <button type="submit" class="submit-btn auth-submit">登录</button>
+        <p class="auth-hint"><a href="#" onclick="resetPassword()" style="color:var(--accent);text-decoration:none;font-size:0.85rem">忘记密码？</a></p>
+      </form>
+
+      <form id="form-signup" class="auth-form" style="display:none" onsubmit="handleAuthSubmit(event,'signup')">
+        <div class="form-group">
+          <label for="signupEmail">邮箱</label>
+          <input type="email" id="signupEmail" name="email" required placeholder="you@example.com" />
+        </div>
+        <div class="form-group">
+          <label for="signupPassword">密码</label>
+          <input type="password" id="signupPassword" name="password" required minlength="4" placeholder="至少4位密码" />
+        </div>
+        <div class="form-group">
+          <label for="signupConfirm">确认密码</label>
+          <input type="password" id="signupConfirm" oninput="this.setCustomValidity(this.value!==this.form.password.value?'密码不一致':'')" required placeholder="再次输入密码" />
+        </div>
+        <div class="auth-msg" style="display:none"></div>
+        <button type="submit" class="submit-btn auth-submit">注册</button>
+        <p class="auth-hint">注册即表示同意使用条款，邮箱仅用于登录</p>
+      </form>
+    </div>
+  </div>
+
   <!-- Background Audio -->
   <audio id="bgAudio" preload="none"></audio>
 
@@ -199,7 +244,6 @@
   </footer>
 
   <!-- Scripts -->
-  <script src="js/clerk.browser.js"></script>
   <script src="js/auth-config.js"></script>
   <script src="js/data.js"></script>
   <script src="js/wechat.js"></script>

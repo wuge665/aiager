@@ -946,6 +946,26 @@ footer {
 
 .user-name { font-size: 0.82rem; color: var(--text-dim); max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
+.modal-auth { max-width: 400px; }
+
+.auth-tabs { display: flex; gap: 0; border-bottom: 1px solid var(--border); width: 100%; }
+
+.auth-tab {
+  flex: 1; padding: 0.6rem; text-align: center;
+  background: none; border: none; border-bottom: 2px solid transparent;
+  color: var(--text-dim); font-size: 0.95rem; cursor: pointer; transition: var(--transition);
+}
+
+.auth-tab.active { color: var(--text); border-bottom-color: var(--primary); }
+
+.auth-form { padding-top: 1rem; }
+
+.auth-submit { margin-top: 0.5rem; }
+
+.auth-msg { color: #ef4444; font-size: 0.85rem; margin-bottom: 0.5rem; padding: 0.4rem 0.6rem; background: rgba(239,68,68,0.1); border-radius: 6px; }
+
+.auth-hint { text-align: center; font-size: 0.78rem; color: var(--text-dim); margin-top: 0.75rem; }
+
 .auth-link-btn {
   display: block; margin: 0.75rem auto 0;
   background: none; border: none;
