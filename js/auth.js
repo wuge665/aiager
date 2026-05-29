@@ -12,7 +12,8 @@ async function sbFetch(path, body) {
     method: body ? 'POST' : 'GET'
   });
   const text = await r.text();
-  try { return JSON.parse(text); } catch (e) { throw new Error('请求失败: ' + (text.slice(0, 100) || '网络错误')); }
+  if (!r.ok && !text.startsWith('{')) throw new Error('网络错误 ' + r.status);
+  try { return JSON.parse(text); } catch (e) { throw new Error('服务器响应异常'); }
 }
 
 let currentUser = null;
@@ -35,10 +36,11 @@ async function initAuth() {
 async function signUp(email, password) {
   if (!SB_READY) throw new Error('认证系统未配置');
   const data = await sbFetch('signup', { email, password });
-  if (data.error || data.error_code) {
-    const msg = (data.error_description || data.msg || data.error || '').toLowerCase();
+  if (data.error || data.error_code || data.code) {
+    const msg = (data.error_description || data.msg || data.error || data.message || '').toLowerCase();
     if (msg.includes('rate_limit') || msg.includes('rate limit') || msg.includes('email rate')) throw new Error('注册太频繁，请稍后再试');
-    throw new Error(msg || '注册失败');
+    if (msg.includes('already') || msg.includes('exist')) throw new Error('该邮箱已注册，请直接登录');
+    throw new Error('注册失败：' + (msg || '请检查邮箱格式或稍后再试'));
   }
   if (data.access_token && data.user) {
     localStorage.setItem('sb_token', data.access_token);
@@ -49,7 +51,7 @@ async function signUp(email, password) {
     closeAuthModal();
     showTip('✅ 注册成功！请查看邮箱完成验证。');
   } else {
-    throw new Error('注册失败：服务器响应异常');
+    throw new Error('注册失败：服务器异常，请稍后再试');
   }
   return data;
 }
@@ -57,7 +59,7 @@ async function signUp(email, password) {
 async function signIn(email, password) {
   if (!SB_READY) throw new Error('认证系统未配置');
   const data = await sbFetch('token?grant_type=password', { email, password });
-  if (data.error || data.error_code) throw new Error('未注册，请先注册');
+  if (data.error || data.error_code || data.code) throw new Error('未注册，请先注册');
   if (!data.access_token || !data.user) throw new Error('未注册，请先注册');
   localStorage.setItem('sb_token', data.access_token);
   currentUser = data.user;
