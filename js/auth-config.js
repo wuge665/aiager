@@ -1,4 +1,3 @@
 const AUTH_CONFIG = {
-  supabaseUrl: 'https://oqmtsqqtxfvuxuzxnelk.supabase.co',
-  supabaseAnonKey: 'sb_publishable_ZIV113hmzSq3yMh4BKpSmw_qAluomBE'
+  clerkPublishableKey: 'pk_test_ZGVsaWNhdGUtZ2FyZmlzaC0xOC5jbGVyay5hY2NvdW50cy5kZXYk'
 };
