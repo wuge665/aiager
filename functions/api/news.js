@@ -22,9 +22,9 @@ function isEnglish(text) {
 
 async function translate(text) {
   if (!text) return '';
-  const url = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=zh-CN&dt=t&q=' + encodeURIComponent(text.slice(0, 1000));
+  const url = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=zh-CN&dt=t&q=' + encodeURIComponent(text.slice(0, 500));
   try {
-    const res = await fetch(url, { signal: AbortSignal.timeout(3000) });
+    const res = await fetch(url, { signal: AbortSignal.timeout(2000) });
     if (!res.ok) return text;
     const data = await res.json();
     return data[0].map(s => s[0]).join('') || text;
@@ -88,7 +88,7 @@ async function fetchFeed(source) {
   try {
     const res = await fetch(source.url, {
       headers: { 'User-Agent': 'Mozilla/5.0 (compatible; AIHubNewsBot/1.0)' },
-      signal: AbortSignal.timeout(10000),
+      signal: AbortSignal.timeout(6000),
     });
     if (!res.ok) return [];
     const xml = await res.text();
@@ -115,16 +115,13 @@ export async function onRequest(context) {
     if (!seen.has(key)) { seen.add(key); deduped.push(item); }
   }
 
-  const top = deduped.slice(0, 10);
+  const top = deduped.slice(0, 8);
 
   const translated = await Promise.all(top.map(async item => {
     const isEn = !ZH_SOURCES.includes(item.source) && isEnglish(item.title);
     if (!isEn) return { ...item, translated: false };
-    const [titleZh, descZh] = await Promise.all([
-      translate(item.title),
-      isEnglish(item.desc) ? translate(item.desc) : Promise.resolve(item.desc),
-    ]);
-    return { ...item, title: titleZh, desc: descZh, translated: true };
+    const titleZh = await translate(item.title);
+    return { ...item, title: titleZh, translated: true };
   }));
 
   return new Response(JSON.stringify(translated), {
