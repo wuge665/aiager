@@ -1,3 +1,9 @@
+function timeoutSignal(ms) {
+  const ctrl = new AbortController();
+  setTimeout(() => ctrl.abort(), ms);
+  return ctrl.signal;
+}
+
 const SOURCES = [
   { name: 'Hacker News', url: 'https://hnrss.org/frontpage?count=30' },
   { name: 'TechCrunch', url: 'https://techcrunch.com/category/artificial-intelligence/feed/' },
@@ -24,7 +30,7 @@ async function translate(text) {
   if (!text) return '';
   const url = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=zh-CN&dt=t&q=' + encodeURIComponent(text.slice(0, 500));
   try {
-    const res = await fetch(url, { signal: AbortSignal.timeout(2000) });
+    const res = await fetch(url, { signal: timeoutSignal(2000) });
     if (!res.ok) return text;
     const data = await res.json();
     return data[0].map(s => s[0]).join('') || text;
@@ -92,7 +98,7 @@ async function fetchFeed(source) {
   try {
     const res = await fetch(source.url, {
       headers: { 'User-Agent': 'Mozilla/5.0 (compatible; AIHubNewsBot/1.0)' },
-      signal: AbortSignal.timeout(6000),
+      signal: timeoutSignal(6000),
     });
     if (!res.ok) return [];
     const xml = await res.text();

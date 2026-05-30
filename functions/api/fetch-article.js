@@ -1,3 +1,9 @@
+function timeoutSignal(ms) {
+  const ctrl = new AbortController();
+  setTimeout(() => ctrl.abort(), ms);
+  return ctrl.signal;
+}
+
 function isEnglish(text) {
   return /[a-zA-Z]/.test(text) && (text.match(/[a-zA-Z]/g).length / text.length) > 0.3;
 }
@@ -6,7 +12,7 @@ async function translate(text) {
   if (!text) return '';
   const url = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=zh-CN&dt=t&q=' + encodeURIComponent(text.slice(0, 3000));
   try {
-    const res = await fetch(url, { signal: AbortSignal.timeout(5000) });
+    const res = await fetch(url, { signal: timeoutSignal(5000) });
     if (!res.ok) return text;
     const data = await res.json();
     return data[0].map(s => s[0]).join('') || text;
@@ -24,7 +30,7 @@ export async function onRequest(context) {
   try {
     const res = await fetch(targetUrl, {
       headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' },
-      signal: AbortSignal.timeout(12000),
+      signal: timeoutSignal(12000),
     });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const html = await res.text();

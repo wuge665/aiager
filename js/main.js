@@ -601,45 +601,75 @@ function bindEvents() {
   });
 }
 
-// ===== Background Music =====
+// ===== Background Music (Web Audio API, no external files) =====
 let musicStarted = false;
-let currentTrack = Math.floor(Math.random() * 8);
-const audio = document.getElementById('bgAudio');
-audio.volume = 1.0;
+let musicCtx = null;
+let musicNodes = [];
+let currentTrack = 0;
+let musicInterval = null;
 
+// Each track: [note frequencies], duration ms
 const TRACKS = [
-  'https://freepd.cn/api/music/526f6d616e63652f446f63746f722773204f72646572732e6d7033',
-  'https://freepd.cn/api/music/5570626561742f416c747572654e6f74652e6d7033',
-  'https://freepd.cn/api/music/576f726c642f416e6369656e7420496e766f636174696f6e2e6d7033',
-  'https://freepd.cn/api/music/526f6d616e63652f4120427265617468206f66204672657368204169722e6d7033',
-  'https://freepd.cn/api/music/5570626561742f4661726577656c6c20546f20546865204d6f6f6e2e6d7033',
-  'https://freepd.cn/api/music/4d6973632f466c6f6174696e6720436f6e6669742e6d7033',
-  'https://freepd.cn/api/music/526f6d616e63652f4865617274206f66204769616e74732e6d7033',
-  'https://freepd.cn/api/music/576f726c642f5a656e2047617264656e2e6d7033'
+  { notes: [261.63, 329.63, 392.00], dur: 4000 }, // C major
+  { notes: [293.66, 369.99, 440.00], dur: 4000 }, // D major
+  { notes: [329.63, 415.30, 493.88], dur: 4000 }, // E major
+  { notes: [349.23, 440.00, 523.25], dur: 4000 }, // F major
+  { notes: [392.00, 493.88, 587.33], dur: 4000 }, // G major
+  { notes: [261.63, 349.23, 440.00], dur: 4000 }, // F major 2
+  { notes: [293.66, 369.99, 466.16], dur: 4000 }, // Bb major
+  { notes: [220.00, 329.63, 392.00], dur: 4000 }, // Am
 ];
 
-audio.addEventListener('ended', () => {
-  if (!musicStarted) return;
-  currentTrack = (currentTrack + 1) % TRACKS.length;
-  audio.src = TRACKS[currentTrack];
-  audio.play().catch(() => {});
-});
+function stopAudioNodes() {
+  musicNodes.forEach(n => { try { n.stop(); } catch {} });
+  musicNodes = [];
+  if (musicInterval) { clearInterval(musicInterval); musicInterval = null; }
+}
+
+function playTrack(index) {
+  if (!musicCtx) return;
+  stopAudioNodes();
+  const track = TRACKS[index % TRACKS.length];
+  const gain = musicCtx.createGain();
+  gain.gain.value = 0.04;
+  gain.connect(musicCtx.destination);
+  track.notes.forEach(freq => {
+    const osc = musicCtx.createOscillator();
+    osc.type = 'sine';
+    osc.frequency.value = freq;
+    const g = musicCtx.createGain();
+    g.gain.value = 0.3;
+    osc.connect(g);
+    g.connect(gain);
+    osc.start();
+    musicNodes.push(osc);
+  });
+  musicInterval = setTimeout(() => {
+    if (musicStarted) {
+      currentTrack = (currentTrack + 1) % TRACKS.length;
+      playTrack(currentTrack);
+    }
+  }, track.dur);
+}
 
 function playMusic() {
-  audio.src = TRACKS[currentTrack];
-  audio.play().then(() => {
-    document.getElementById('musicToggle').textContent = '🔊';
-    document.getElementById('musicToggle').classList.add('playing');
-    musicStarted = true;
-    localStorage.setItem('bgMusic', 'playing');
-  }).catch(() => {});
+  stopAudioNodes();
+  musicCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if (musicCtx.state === 'suspended') musicCtx.resume();
+  musicStarted = true;
+  currentTrack = Math.floor(Math.random() * TRACKS.length);
+  playTrack(currentTrack);
+  document.getElementById('musicToggle').textContent = '🔊';
+  document.getElementById('musicToggle').classList.add('playing');
+  localStorage.setItem('bgMusic', 'playing');
 }
 
 function stopMusic() {
-  audio.pause();
+  stopAudioNodes();
+  if (musicCtx) { musicCtx.close(); musicCtx = null; }
+  musicStarted = false;
   document.getElementById('musicToggle').textContent = '🎵';
   document.getElementById('musicToggle').classList.remove('playing');
-  musicStarted = false;
   localStorage.setItem('bgMusic', 'paused');
 }
 
