@@ -85,7 +85,7 @@ function applyConfig(config) {
 // ===== News Mode =====
 async function fetchNews() {
   try {
-    const res = await fetch('data/news.json?_t=' + Date.now());
+    const res = await fetch('/api/news');
     if (res.ok) { NEWS_DATA = await res.json(); }
   } catch {}
 }
