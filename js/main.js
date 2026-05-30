@@ -86,6 +86,10 @@ function applyConfig(config) {
 async function fetchNews() {
   try {
     const res = await fetch('/api/news');
+    if (res.ok) { NEWS_DATA = await res.json(); return; }
+  } catch {}
+  try {
+    const res = await fetch('data/news.json?_t=' + Date.now());
     if (res.ok) { NEWS_DATA = await res.json(); }
   } catch {}
 }

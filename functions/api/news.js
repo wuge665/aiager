@@ -63,6 +63,7 @@ function parseDate(str) {
 
 function hasAiRelevance(item) {
   const text = (item.title + ' ' + item.desc).toLowerCase();
+  if (text.includes('央视') || text.includes('cctv')) return false;
   return AI_KEYWORDS.some(kw => text.includes(kw.toLowerCase()));
 }
 
