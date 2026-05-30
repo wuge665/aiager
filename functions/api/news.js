@@ -124,8 +124,11 @@ export async function onRequest(context) {
   const translated = await Promise.all(top.map(async item => {
     const isEn = !ZH_SOURCES.includes(item.source) && isEnglish(item.title);
     if (!isEn) return { ...item, translated: false };
-    const titleZh = await translate(item.title);
-    return { ...item, title: titleZh, translated: true };
+    const [titleZh, descZh] = await Promise.all([
+      translate(item.title),
+      isEnglish(item.desc) ? translate(item.desc) : Promise.resolve(item.desc),
+    ]);
+    return { ...item, title: titleZh, desc: descZh, translated: true };
   }));
 
   return new Response(JSON.stringify(translated), {
