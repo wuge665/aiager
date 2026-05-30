@@ -23,6 +23,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   setTimeout(() => {
     document.getElementById('loader').classList.add('hidden');
   }, 300);
+
+  // URL hash direct entry: #news → show news mode
+  const mode = window.location.hash.replace('#', '') || new URLSearchParams(window.location.search).get('mode');
+  if (mode === 'news') {
+    setTimeout(showNewsMode, 400);
+  }
 });
 
 // ===== Load Config =====
@@ -158,6 +164,7 @@ function renderNews() {
 
 function showNewsMode() {
   currentMode = 'news';
+  location.hash = 'news';
   document.getElementById('sceneTags').closest('.scenes').style.display = 'none';
   const grid = document.getElementById('toolsGrid');
   if (!NEWS_DATA || NEWS_DATA.length === 0) {
@@ -188,6 +195,7 @@ async function loadNews() {
 
 function showToolsMode() {
   currentMode = 'tools';
+  location.hash = '';
   document.getElementById('sceneTags').closest('.scenes').style.display = '';
 }
 
@@ -586,6 +594,10 @@ function bindEvents() {
     if (!e.target.closest('.search-box')) {
       searchHints.classList.remove('show');
     }
+  });
+  window.addEventListener('hashchange', () => {
+    if (location.hash === '#news') showNewsMode();
+    else if (!location.hash) showToolsMode();
   });
 }
 
