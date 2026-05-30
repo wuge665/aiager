@@ -24,9 +24,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('loader').classList.add('hidden');
   }, 300);
 
-  // URL hash direct entry: #news → show news mode
-  const mode = window.location.hash.replace('#', '') || new URLSearchParams(window.location.search).get('mode');
-  if (mode === 'news') {
+  // Direct entry: #news or ?mode=news or /news → show news mode
+  const hashMode = window.location.hash.replace('#', '');
+  const queryMode = new URLSearchParams(window.location.search).get('mode');
+  if (hashMode === 'news' || queryMode === 'news') {
     setTimeout(showNewsMode, 400);
   }
 });
