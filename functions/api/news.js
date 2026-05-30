@@ -3,7 +3,7 @@ const SOURCES = [
   { name: 'TechCrunch', url: 'https://techcrunch.com/category/artificial-intelligence/feed/' },
   { name: 'ArsTechnica', url: 'https://feeds.arstechnica.com/arstechnica/technology-lab' },
   { name: '36氪', url: 'https://36kr.com/feed' },
-  { name: 'InfoQ', url: 'https://www.infoq.cn/feed' },
+  { name: '量子位', url: 'https://www.qbitai.com/feed/' },
 ];
 
 const AI_KEYWORDS = [
@@ -14,7 +14,7 @@ const AI_KEYWORDS = [
   'copilot', 'chatbot', 'agi', 'multimodal', '多模态',
 ];
 
-const ZH_SOURCES = ['36氪', 'InfoQ'];
+const ZH_SOURCES = ['36氪', '量子位'];
 
 function isEnglish(text) {
   return /[a-zA-Z]/.test(text) && (text.match(/[a-zA-Z]/g).length / text.length) > 0.3;
@@ -81,7 +81,11 @@ function parseDate(str) {
 function hasAiRelevance(item) {
   const text = (item.title + ' ' + item.desc).toLowerCase();
   if (text.includes('央视') || text.includes('cctv')) return false;
-  return AI_KEYWORDS.some(kw => text.includes(kw.toLowerCase()));
+  const titleLower = item.title.toLowerCase();
+  const titleMatch = AI_KEYWORDS.some(kw => titleLower.includes(kw.toLowerCase()));
+  if (titleMatch) return true;
+  const matchCount = AI_KEYWORDS.filter(kw => text.includes(kw.toLowerCase())).length;
+  return matchCount >= 2;
 }
 
 async function fetchFeed(source) {

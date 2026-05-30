@@ -159,7 +159,31 @@ function renderNews() {
 function showNewsMode() {
   currentMode = 'news';
   document.getElementById('sceneTags').closest('.scenes').style.display = 'none';
-  renderNews();
+  const grid = document.getElementById('toolsGrid');
+  if (!NEWS_DATA || NEWS_DATA.length === 0) {
+    grid.innerHTML = '<div class="empty-state"><h3>📰 AI 资讯</h3><p>正在加载最新资讯...</p><div class="spinner" style="margin:1rem auto"></div></div>';
+    loadNews();
+  } else {
+    renderNews();
+  }
+}
+
+async function loadNews() {
+  try {
+    const res = await fetch('/api/news');
+    if (res.ok) {
+      NEWS_DATA = await res.json();
+      if (currentMode === 'news') renderNews();
+      return;
+    }
+  } catch {}
+  try {
+    const res = await fetch('data/news.json?_t=' + Date.now());
+    if (res.ok) {
+      NEWS_DATA = await res.json();
+      if (currentMode === 'news') renderNews();
+    }
+  } catch {}
 }
 
 function showToolsMode() {
