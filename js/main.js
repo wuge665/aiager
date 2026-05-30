@@ -147,9 +147,9 @@ function renderNews() {
       <div class="news-desc">${escapeHtml(item.desc || '').slice(0, 120)}</div>
       <div class="news-footer">
         <span class="news-date">${item.date || ''}</span>
-        <span class="news-read">展开阅读 →</span>
+        <span class="news-read">查看原文 →</span>
       </div>`;
-    card.addEventListener('click', () => readArticle(item.url));
+    card.addEventListener('click', () => window.open(item.url, '_blank'));
     grid.appendChild(card);
   });
   document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
