@@ -1,3 +1,18 @@
+function isEnglish(text) {
+  return /[a-zA-Z]/.test(text) && (text.match(/[a-zA-Z]/g).length / text.length) > 0.3;
+}
+
+async function translate(text) {
+  if (!text) return '';
+  const url = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=zh-CN&dt=t&q=' + encodeURIComponent(text.slice(0, 3000));
+  try {
+    const res = await fetch(url, { signal: AbortSignal.timeout(5000) });
+    if (!res.ok) return text;
+    const data = await res.json();
+    return data[0].map(s => s[0]).join('') || text;
+  } catch { return text; }
+}
+
 export async function onRequest(context) {
   const url = new URL(context.request.url);
   const targetUrl = url.searchParams.get('url');
@@ -27,8 +42,15 @@ export async function onRequest(context) {
       .trim()
       .slice(0, 3000);
     const titleMatch = html.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
-    const title = titleMatch ? titleMatch[1].trim() : '';
-    return new Response(JSON.stringify({ title, content: text }), {
+    let title = titleMatch ? titleMatch[1].trim() : '';
+    let content = text;
+    if (isEnglish(title)) {
+      title = await translate(title);
+    }
+    if (content && isEnglish(content)) {
+      content = await translate(content);
+    }
+    return new Response(JSON.stringify({ title, content }), {
       headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
     });
   } catch (e) {
