@@ -14,6 +14,23 @@ const AI_KEYWORDS = [
   'copilot', 'chatbot', 'agi', 'multimodal', '多模态',
 ];
 
+const ZH_SOURCES = ['36氪', 'InfoQ'];
+
+function isEnglish(text) {
+  return /[a-zA-Z]/.test(text) && (text.match(/[a-zA-Z]/g).length / text.length) > 0.3;
+}
+
+async function translate(text) {
+  if (!text) return '';
+  const url = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=zh-CN&dt=t&q=' + encodeURIComponent(text.slice(0, 1000));
+  try {
+    const res = await fetch(url, { signal: AbortSignal.timeout(3000) });
+    if (!res.ok) return text;
+    const data = await res.json();
+    return data[0].map(s => s[0]).join('') || text;
+  } catch { return text; }
+}
+
 function extractRssItems(xml, sourceName) {
   const items = [];
   const itemRegex = /<item>([\s\S]*?)<\/item>/gi;
@@ -98,7 +115,19 @@ export async function onRequest(context) {
     if (!seen.has(key)) { seen.add(key); deduped.push(item); }
   }
 
-  return new Response(JSON.stringify(deduped.slice(0, 20)), {
+  const top = deduped.slice(0, 10);
+
+  const translated = await Promise.all(top.map(async item => {
+    const isEn = !ZH_SOURCES.includes(item.source) && isEnglish(item.title);
+    if (!isEn) return { ...item, translated: false };
+    const [titleZh, descZh] = await Promise.all([
+      translate(item.title),
+      isEnglish(item.desc) ? translate(item.desc) : Promise.resolve(item.desc),
+    ]);
+    return { ...item, title: titleZh, desc: descZh, translated: true };
+  }));
+
+  return new Response(JSON.stringify(translated), {
     headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
   });
 }
