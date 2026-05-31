@@ -56,6 +56,7 @@ function extractRssItems(xml, sourceName) {
       url: link,
       source: sourceName,
       date: parseDate(dateStr),
+      userEdited: false,
     });
   }
   return items;
@@ -85,6 +86,7 @@ function parseDate(str) {
 }
 
 function hasAiRelevance(item) {
+  if (item.userEdited) return true;
   const text = (item.title + ' ' + item.desc).toLowerCase();
   if (text.includes('央视') || text.includes('cctv')) return false;
   const titleLower = item.title.toLowerCase();
@@ -108,11 +110,31 @@ async function fetchFeed(source) {
   }
 }
 
-export async function onRequest(context) {
-  const allItems = (await Promise.all(SOURCES.map(s => fetchFeed(s)))).flat();
-  const aiItems = allItems.filter(hasAiRelevance);
+function isWithinDays(dateStr, days) {
+  const d = new Date(dateStr);
+  if (isNaN(d.getTime())) return true;
+  const cutoff = Date.now() - days * 86400000;
+  return d.getTime() > cutoff;
+}
 
-  aiItems.sort((a, b) => {
+async function fetchExisting() {
+  try {
+    const res = await fetch('https://aiager.top/data/news.json', { signal: timeoutSignal(3000) });
+    if (res.ok) return await res.json();
+  } catch {}
+  return [];
+}
+
+export async function onRequest(context) {
+  const [freshItems, existingItems] = await Promise.all([
+    Promise.all(SOURCES.map(s => fetchFeed(s))).then(r => r.flat()),
+    fetchExisting(),
+  ]);
+
+  const allItems = [...freshItems, ...existingItems];
+  const filtered = allItems.filter(hasAiRelevance).filter(item => isWithinDays(item.date, 30));
+
+  filtered.sort((a, b) => {
     if (a.date > b.date) return -1;
     if (a.date < b.date) return 1;
     return 0;
@@ -120,14 +142,15 @@ export async function onRequest(context) {
 
   const seen = new Set();
   const deduped = [];
-  for (const item of aiItems) {
+  for (const item of filtered) {
     const key = item.title.slice(0, 30).toLowerCase();
     if (!seen.has(key)) { seen.add(key); deduped.push(item); }
   }
 
-  const top = deduped.slice(0, 8);
+  const top = deduped.slice(0, 30);
 
   const translated = await Promise.all(top.map(async item => {
+    if (item.userEdited || item.translated) return item;
     const isEn = !ZH_SOURCES.includes(item.source) && isEnglish(item.title);
     if (!isEn) return { ...item, translated: false };
     const [titleZh, descZh] = await Promise.all([

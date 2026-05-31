@@ -602,24 +602,17 @@ function bindEvents() {
   });
 }
 
-// ===== Background Music (Web Audio API, no external files) =====
+// ===== Background Music (local MP3 + Web Audio API fallback) =====
 let musicStarted = false;
 let musicCtx = null;
 let musicNodes = [];
 let currentTrack = 0;
 let musicInterval = null;
-
-// Each track: [note frequencies], duration ms
-const TRACKS = [
-  { notes: [261.63, 329.63, 392.00], dur: 4000 }, // C major
-  { notes: [293.66, 369.99, 440.00], dur: 4000 }, // D major
-  { notes: [329.63, 415.30, 493.88], dur: 4000 }, // E major
-  { notes: [349.23, 440.00, 523.25], dur: 4000 }, // F major
-  { notes: [392.00, 493.88, 587.33], dur: 4000 }, // G major
-  { notes: [261.63, 349.23, 440.00], dur: 4000 }, // F major 2
-  { notes: [293.66, 369.99, 466.16], dur: 4000 }, // Bb major
-  { notes: [220.00, 329.63, 392.00], dur: 4000 }, // Am
-];
+let useLocalFiles = false;
+let localTracks = [];
+let localTrackIndex = 0;
+const audio = document.getElementById('bgAudio');
+audio.volume = 0.6;
 
 function stopAudioNodes() {
   musicNodes.forEach(n => { try { n.stop(); } catch {} });
@@ -627,10 +620,42 @@ function stopAudioNodes() {
   if (musicInterval) { clearInterval(musicInterval); musicInterval = null; }
 }
 
-function playTrack(index) {
+function getLocalTrackFiles() {
+  const files = [];
+  for (let i = 1; i <= 50; i++) {
+    files.push('assets/music/track' + String(i).padStart(2, '0') + '.mp3');
+  }
+  return files;
+}
+
+async function findLocalTracks() {
+  const candidates = getLocalTrackFiles();
+  const found = [];
+  for (const path of candidates) {
+    try {
+      const res = await fetch(path, { method: 'HEAD', signal: AbortSignal.timeout(2000) });
+      if (res.ok) found.push(path);
+      if (found.length >= 20) break;
+    } catch {}
+  }
+  return found;
+}
+
+const AMBIENT_TRACKS = [
+  { notes: [261.63, 329.63, 392.00], dur: 4000 },
+  { notes: [293.66, 369.99, 440.00], dur: 4000 },
+  { notes: [329.63, 415.30, 493.88], dur: 4000 },
+  { notes: [349.23, 440.00, 523.25], dur: 4000 },
+  { notes: [392.00, 493.88, 587.33], dur: 4000 },
+  { notes: [261.63, 349.23, 440.00], dur: 4000 },
+  { notes: [293.66, 369.99, 466.16], dur: 4000 },
+  { notes: [220.00, 329.63, 392.00], dur: 4000 },
+];
+
+function playAmbientTrack(index) {
   if (!musicCtx) return;
   stopAudioNodes();
-  const track = TRACKS[index % TRACKS.length];
+  const track = AMBIENT_TRACKS[index % AMBIENT_TRACKS.length];
   const gain = musicCtx.createGain();
   gain.gain.value = 0.04;
   gain.connect(musicCtx.destination);
@@ -647,19 +672,48 @@ function playTrack(index) {
   });
   musicInterval = setTimeout(() => {
     if (musicStarted) {
-      currentTrack = (currentTrack + 1) % TRACKS.length;
-      playTrack(currentTrack);
+      currentTrack = (currentTrack + 1) % AMBIENT_TRACKS.length;
+      playAmbientTrack(currentTrack);
     }
   }, track.dur);
 }
 
-function playMusic() {
+audio.addEventListener('ended', () => {
+  if (!musicStarted || !useLocalFiles) return;
+  localTrackIndex = (localTrackIndex + 1) % localTracks.length;
+  audio.src = localTracks[localTrackIndex];
+  audio.play().catch(() => {});
+});
+
+async function playMusic() {
   stopAudioNodes();
+  if (!useLocalFiles) {
+    localTracks = await findLocalTracks();
+    useLocalFiles = localTracks.length > 0;
+  }
+  if (useLocalFiles) {
+    localTrackIndex = Math.floor(Math.random() * localTracks.length);
+    audio.src = localTracks[localTrackIndex];
+    audio.play().then(() => {
+      document.getElementById('musicToggle').textContent = '🔊';
+      document.getElementById('musicToggle').classList.add('playing');
+      musicStarted = true;
+      localStorage.setItem('bgMusic', 'playing');
+    }).catch(() => {
+      useLocalFiles = false;
+      playAmbientFallback();
+    });
+  } else {
+    playAmbientFallback();
+  }
+}
+
+function playAmbientFallback() {
   musicCtx = new (window.AudioContext || window.webkitAudioContext)();
   if (musicCtx.state === 'suspended') musicCtx.resume();
   musicStarted = true;
-  currentTrack = Math.floor(Math.random() * TRACKS.length);
-  playTrack(currentTrack);
+  currentTrack = Math.floor(Math.random() * AMBIENT_TRACKS.length);
+  playAmbientTrack(currentTrack);
   document.getElementById('musicToggle').textContent = '🔊';
   document.getElementById('musicToggle').classList.add('playing');
   localStorage.setItem('bgMusic', 'playing');
@@ -667,8 +721,11 @@ function playMusic() {
 
 function stopMusic() {
   stopAudioNodes();
+  audio.pause();
+  audio.src = '';
   if (musicCtx) { musicCtx.close(); musicCtx = null; }
   musicStarted = false;
+  useLocalFiles = false;
   document.getElementById('musicToggle').textContent = '🎵';
   document.getElementById('musicToggle').classList.remove('playing');
   localStorage.setItem('bgMusic', 'paused');

@@ -1,12 +1,21 @@
 [
   {
+    "id": "user-1",
+    "title": "AI 百宝箱收录 55+ 款免费 AI 工具",
+    "desc": "AI 百宝箱（aiager.top）已收录 55+ 款免费 AI 工具，覆盖写作、视频、图像、编程、Agent、音频、效率七大分类，支持场景模式一键推荐。",
+    "url": "https://aiager.top",
+    "source": "AI 百宝箱",
+    "date": "2026-05-30",
+    "content": "AI 百宝箱（aiager.top）已收录 55+ 款免费 AI 工具，覆盖写作、视频、图像、编程、Agent、音频、效率七大分类。网站特色功能包括场景模式（按角色推荐工具）、AI 资讯（实时抓取全球 AI 新闻并翻译中文）、关联推荐（工具间智能关联）。所有工具免费使用，无需下载 App，浏览器打开即用。",
+    "userEdited": true
+  },
+  {
     "id": "seed-deepseek-r2",
     "title": "DeepSeek R2 发布：国产大模型性能全面对标 GPT-4o",
     "desc": "DeepSeek 发布新一代大语言模型 R2，在推理、编程和多模态能力上全面对标 GPT-4o，API 价格仅为 OpenAI 的十分之一。",
     "url": "https://deepseek.com",
     "source": "36氪",
     "date": "2026-05-28",
-    "tags": ["AI", "大模型", "DeepSeek"],
     "content": "DeepSeek 发布新一代大语言模型 R2，在推理、编程和多模态能力上全面对标 GPT-4o，API 价格仅为 OpenAI 的十分之一。该模型在多项基准测试中表现优异，特别是在中文理解和生成任务上超越了 GPT-4o。DeepSeek R2 支持 128K 上下文窗口，能够在单次对话中处理大量文本信息。目前该模型已开放 API 调用，开发者可以通过 DeepSeek 官方网站申请使用。"
   },
   {
@@ -16,8 +25,7 @@
     "url": "https://manus.im",
     "source": "量子位",
     "date": "2026-05-27",
-    "tags": ["AI", "Agent", "智能体"],
-    "content": "Manus 作为新一代 AI 智能体引发广泛关注，能够自主完成简历筛选、房产分析、股票研究等复杂多步骤任务。与传统聊天机器人不同，Manus 可以独立规划和执行任务流程，调用各种工具和 API 完成实际工作。用户只需要给出目标，Manus 会自动分解任务、选择工具、执行操作并返回结果。这种通用型 AI Agent 被认为是 AI 应用的下一个重要发展方向。"
+    "content": "Manus 作为新一代 AI 智能体引发广泛关注，能够自主完成简历筛选、房产分析、股票研究等复杂多步骤任务。与传统聊天机器人不同，Manus 可以独立规划和执行任务流程，调用各种工具和 API 完成实际工作。用户只需要给出目标，Manus 会自动分解任务、选择工具、执行操作并返回结果。"
   },
   {
     "id": "seed-gemini-live",
@@ -26,8 +34,7 @@
     "url": "https://gemini.google.com",
     "source": "TechCrunch",
     "date": "2026-05-26",
-    "tags": ["AI", "Gemini", "Google"],
-    "content": "Google 发布 Gemini 2.5 系列更新，支持实时语音交互、更长上下文窗口（1M tokens），在多项基准测试中超越 GPT-4o。Gemini 2.5 采用了全新的 MoE（混合专家）架构，在保持高效推理的同时大幅提升了模型能力。实时语音功能让用户可以像与真人对话一样与 AI 交流，支持打断、语气识别和多轮对话。1M token 的上下文窗口意味着可以一次性处理整本小说或大量文档。"
+    "content": "Google 发布 Gemini 2.5 系列更新，支持实时语音交互、更长上下文窗口（1M tokens），在多项基准测试中超越 GPT-4o。Gemini 2.5 采用了全新的 MoE（混合专家）架构，在保持高效推理的同时大幅提升了模型能力。"
   },
   {
     "id": "seed-claude-code",
@@ -36,8 +43,7 @@
     "url": "https://anthropic.com",
     "source": "ArsTechnica",
     "date": "2026-05-25",
-    "tags": ["AI", "编程", "Claude"],
-    "content": "Anthropic 发布 Claude Code，支持命令行交互式编程、自动代码审查和项目级重构，开发者可用自然语言编写和调试代码。Claude Code 深度集成到开发工作流中，可以直接读写文件、运行命令、管理 Git 分支。它理解项目上下文，能够进行跨文件的重构和调试。开发者只需用自然语言描述需求，Claude Code 就能生成相应的代码实现。"
+    "content": "Anthropic 发布 Claude Code，支持命令行交互式编程、自动代码审查和项目级重构，开发者可用自然语言编写和调试代码。Claude Code 深度集成到开发工作流中，可以直接读写文件、运行命令、管理 Git 分支。"
   },
   {
     "id": "seed-ai-video-sora",
@@ -46,7 +52,16 @@
     "url": "https://sora.com",
     "source": "Hacker News",
     "date": "2026-05-24",
-    "tags": ["AI", "视频", "Sora"],
-    "content": "OpenAI 向全体用户开放 Sora 视频生成功能，支持 1080p 高清输出、多种风格模板和更精准的文本理解能力。Sora 能够根据文本描述生成长达 60 秒的高清视频，支持多种画面风格和镜头运动。最新版本大幅提升了人物和物体的连贯性，减少了闪烁和变形等问题。用户还可以上传图片作为参考，让 Sora 生成与参考图风格一致的视频内容。"
+    "content": "OpenAI 向全体用户开放 Sora 视频生成功能，支持 1080p 高清输出、多种风格模板和更精准的文本理解能力。Sora 能够根据文本描述生成长达 60 秒的高清视频，支持多种画面风格和镜头运动。"
+  },
+  {
+    "id": "user-2",
+    "title": "即创（抖音 AI 创作平台）免费开放使用",
+    "desc": "字节跳动旗下 AI 创作平台即创（aic.oceanengine.com）免费开放，支持一键生成短视频、智能配音、自动字幕。",
+    "url": "https://aic.oceanengine.com",
+    "source": "AI 百宝箱",
+    "date": "2026-05-22",
+    "content": "字节跳动旗下 AI 创作平台即创免费开放使用，支持一键生成短视频、智能配音、自动字幕等功能。即创整合了字节系的多项 AI 能力，包括豆包大模型、火山引擎等，为创作者提供从文案到视频的一站式 AI 创作体验。适合新媒体运营和短视频创作者使用。",
+    "userEdited": true
   }
 ]
