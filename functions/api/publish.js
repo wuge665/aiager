@@ -40,12 +40,12 @@ export async function onRequest(context) {
       result.newsEntry = entry;
     } else {
       result.newsEntry = buildNewsEntry(data, wpPostId);
-      result.newsEntry._note = 'GITHUB_TOKEN not configured, add to Cloudflare Pages environment variables to enable auto-commit';
+      result.newsEntry._note = 'GITHUB_TOKEN not configured — add to Cloudflare Pages env vars';
     }
 
     return new Response(JSON.stringify(result), { status: 200, headers: { 'Content-Type': 'application/json', ...corsHeaders() } });
   } catch (e) {
-    return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: { 'Content-Type': 'application/json' } });
+    return new Response(JSON.stringify({ error: e.message, stack: e.stack?.split('\n').slice(0,3).join(' ') }), { status: 500, headers: { 'Content-Type': 'application/json' } });
   }
 }
 
@@ -68,30 +68,7 @@ async function wpNewPost(data) {
   const auth = btoa(`${WP_USER}:${WP_PASS}`);
   const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;');
 
-  // Try WordPress REST API via rest_route (works without pretty permalinks)
-  const wpBody = {
-    title: data.title,
-    content: data.content,
-    status: data.status === 'draft' ? 'draft' : 'publish'
-  };
-  if (data.excerpt) wpBody.excerpt = data.excerpt;
-
-  const wpRes = await fetch('https://aiager.wordpress.com/wp-json/wp/v2/posts', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Basic ${auth}`,
-      'User-Agent': 'aiager-publish/1.0'
-    },
-    body: JSON.stringify(wpBody)
-  });
-
-  if (wpRes.ok) {
-    const wpData = await wpRes.json();
-    if (wpData.id) return wpData.id.toString();
-  }
-
-  // Fallback: XML-RPC with auth header
+  // Try XML-RPC with Basic Auth header
   const members = [
     ['post_title', 'string', esc(data.title)],
     ['post_content', 'string', esc(data.content)],
@@ -115,27 +92,22 @@ async function wpNewPost(data) {
   const xrMatch = xrText.match(/<string>(\d+)<\/string>/);
   if (xrMatch) return xrMatch[1];
 
-  // Last resort: WordPress.com REST API v1.1
-  const wpcBody = {
-    title: data.title,
-    content: data.content,
-    status: data.status === 'draft' ? 'draft' : 'publish'
-  };
-  if (data.excerpt) wpcBody.excerpt = data.excerpt;
-
-  const wpcRes = await fetch('https://public-api.wordpress.com/rest/v1.1/sites/255258581/posts/new', {
+  // Fallback: WordPress REST API with rest_route param
+  const wpRes = await fetch('https://aiager.wordpress.com/?rest_route=/wp/v2/posts', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Basic ${auth}`
     },
-    body: JSON.stringify(wpcBody)
+    body: JSON.stringify({ title: data.title, content: data.content, status: data.status === 'draft' ? 'draft' : 'publish' })
   });
+  const wpText = await wpRes.text();
+  try {
+    const wpData = JSON.parse(wpText);
+    if (wpData?.id) return wpData.id.toString();
+  } catch (_) {}
 
-  const wpcData = await wpcRes.json();
-  if (wpcData?.ID) return wpcData.ID.toString();
-
-  throw new Error(`All WP APIs failed. REST: ${wpRes.status} / XMLRPC: ${xrRes.status} / WPC: ${wpcRes.status}`);
+  throw new Error(`WP API failed. XMLRPC(${xrRes.status}): ${xrText.slice(0,100)} REST(${wpRes.status}): ${wpText.slice(0,100)}`);
 }
 
 async function updateNewsJson(token, entry) {
