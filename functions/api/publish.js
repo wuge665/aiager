@@ -1,156 +1,126 @@
-const WP_USER = 'aiager';
-const WP_PASS = '9X0C16Rs';
-const WP_URL = 'https://aiager.wordpress.com/xmlrpc.php';
-
-const GITHUB_REPO = 'wuge665/aiager';
-const GITHUB_BRANCH = 'master';
-const NEWS_FILE = 'data/news.json';
-
 export async function onRequest(context) {
   const { request } = context;
 
+  // GET = health check
+  if (request.method === 'GET') {
+    return new Response('OK', { status: 200 });
+  }
   if (request.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders() });
+    return new Response(null, { headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Methods': 'POST, OPTIONS', 'Access-Control-Allow-Headers': 'Content-Type' } });
   }
   if (request.method !== 'POST') {
-    return new Response(JSON.stringify({ error: 'Method not allowed' }), { status: 405, headers: { 'Content-Type': 'application/json' } });
+    return new Response('Method not allowed', { status: 405 });
+  }
+
+  let data;
+  try {
+    data = await request.json();
+  } catch (e) {
+    return new Response(JSON.stringify({ error: 'invalid json: ' + (e.message || e) }), { status: 400, headers: { 'Content-Type': 'application/json' } });
+  }
+
+  if (!data || !data.title || !data.content) {
+    return new Response(JSON.stringify({ error: 'title and content required' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
   }
 
   try {
-    const data = await request.json();
-    if (!data.title || !data.content) {
-      return new Response(JSON.stringify({ error: 'title and content required' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
-    }
-
-    const result = { wordpress: null, newsEntry: null };
-
-    // 1. Publish to WordPress
-    const wpPostId = await wpNewPost(data);
-    result.wordpress = {
-      id: wpPostId,
-      url: `https://aiager.wordpress.com/?p=${wpPostId}`,
-      editUrl: `https://aiager.wordpress.com/wp-admin/post.php?post=${wpPostId}&action=edit`
-    };
-
-    // 2. Update data/news.json via GitHub API
+    const wpId = await xmlrpcPost(data);
     const ghToken = context.env?.GITHUB_TOKEN;
+    let newsEntry = null;
     if (ghToken) {
-      const entry = buildNewsEntry(data, wpPostId);
-      await updateNewsJson(ghToken, entry);
-      result.newsEntry = entry;
-    } else {
-      result.newsEntry = buildNewsEntry(data, wpPostId);
-      result.newsEntry._note = 'GITHUB_TOKEN not configured — add to Cloudflare Pages env vars';
+      newsEntry = buildEntry(data, wpId);
+      await githubCommit(ghToken, newsEntry);
     }
 
-    return new Response(JSON.stringify(result), { status: 200, headers: { 'Content-Type': 'application/json', ...corsHeaders() } });
+    return new Response(JSON.stringify({
+      wordpress: { id: wpId, url: 'https://aiager.wordpress.com/?p=' + wpId, editUrl: 'https://aiager.wordpress.com/wp-admin/post.php?post=' + wpId + '&action=edit' },
+      newsEntry: newsEntry
+    }), { status: 200, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } });
   } catch (e) {
-    return new Response(JSON.stringify({ error: e.message, stack: e.stack?.split('\n').slice(0,3).join(' ') }), { status: 500, headers: { 'Content-Type': 'application/json' } });
+    return new Response(JSON.stringify({ error: String(e.message || e) }), { status: 500, headers: { 'Content-Type': 'application/json' } });
   }
 }
 
-function buildNewsEntry(data, wpPostId) {
-  const now = new Date();
-  const dateStr = now.toISOString().slice(0, 10);
+function b64(s) {
+  if (typeof btoa !== 'undefined') return btoa(s);
+  return Buffer.from(s).toString('base64');
+}
+
+async function xmlrpcPost(data) {
+  const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;');
+
+  let members = '';
+  members += `<member><name>post_title</name><value><string>${esc(data.title)}</string></value></member>`;
+  members += `<member><name>post_content</name><value><string>${esc(data.content)}</string></value></member>`;
+  members += `<member><name>post_status</name><value><string>${data.status === 'draft' ? 'draft' : 'publish'}</string></value></member>`;
+
+  const xml = `<?xml version="1.0"?>
+<methodCall>
+  <methodName>wp.newPost</methodName>
+  <params>
+    <param><value><int>1</int></value></param>
+    <param><value><string>aiager</string></value></param>
+    <param><value><string>9X0C16Rs</string></value></param>
+    <param><value><struct>${members}</struct></value></param>
+  </params>
+</methodCall>`;
+
+  const res = await fetch('https://aiager.wordpress.com/xmlrpc.php', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'text/xml',
+      'Authorization': 'Basic ' + b64('aiager:9X0C16Rs')
+    },
+    body: xml
+  });
+
+  const text = await res.text();
+  const m = text.match(/<string>(\d+)<\/string>/);
+  if (m) return m[1];
+
+  // Try REST API as fallback
+  const r2 = await fetch('https://aiager.wordpress.com/?rest_route=/wp/v2/posts', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Basic ' + b64('aiager:9X0C16Rs')
+    },
+    body: JSON.stringify({ title: data.title, content: data.content, status: data.status === 'draft' ? 'draft' : 'publish' })
+  });
+  const j2 = await r2.json();
+  if (j2?.id) return String(j2.id);
+
+  throw new Error('All WP APIs failed. XML-RPC status: ' + res.status + ' body: ' + text.slice(0, 100) + ' | REST status: ' + r2.status);
+}
+
+function buildEntry(data, wpId) {
+  const date = new Date().toISOString().slice(0, 10);
   return {
-    id: `wp-${wpPostId}-${dateStr}`,
+    id: 'wp-' + wpId + '-' + date,
     title: data.title,
-    desc: data.desc || data.content.slice(0, 120) + '…',
-    url: `https://aiager.wordpress.com/?p=${wpPostId}`,
+    desc: data.desc || (data.content.length > 120 ? data.content.slice(0, 120) + '…' : data.content),
+    url: 'https://aiager.wordpress.com/?p=' + wpId,
     source: data.source || 'AI 百宝箱',
-    date: dateStr,
+    date,
     content: data.content,
     userEdited: true
   };
 }
 
-async function wpNewPost(data) {
-  const auth = btoa(`${WP_USER}:${WP_PASS}`);
-  const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;');
+async function githubCommit(token, entry) {
+  const h = { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json' };
 
-  // Try XML-RPC with Basic Auth header
-  const members = [
-    ['post_title', 'string', esc(data.title)],
-    ['post_content', 'string', esc(data.content)],
-    ['post_status', 'string', data.status === 'draft' ? 'draft' : 'publish'],
-  ];
-  if (data.excerpt) members.push(['post_excerpt', 'string', esc(data.excerpt)]);
+  const g = await fetch('https://api.github.com/repos/wuge665/aiager/contents/data/news.json?ref=master', { headers: h });
+  if (!g.ok) throw new Error('GitHub GET ' + g.status);
+  const f = await g.json();
+  const cur = JSON.parse(atob(f.content));
+  cur.unshift(entry);
+  if (cur.length > 100) cur.length = 100;
 
-  let structXml = members.map(([k, t, v]) =>
-    `<member><name>${k}</name><value><${t}>${v}</${t}></value></member>`
-  ).join('');
-
-  const xml = `<?xml version="1.0"?><methodCall><methodName>wp.newPost</methodName><params><param><value><int>1</int></value></param><param><value><string>${esc(WP_USER)}</string></value></param><param><value><string>${esc(WP_PASS)}</string></value></param><param><value><struct>${structXml}</struct></value></param></params></methodCall>`;
-
-  const xrRes = await fetch('https://aiager.wordpress.com/xmlrpc.php', {
-    method: 'POST',
-    headers: { 'Content-Type': 'text/xml', Authorization: `Basic ${auth}` },
-    body: xml
-  });
-
-  const xrText = await xrRes.text();
-  const xrMatch = xrText.match(/<string>(\d+)<\/string>/);
-  if (xrMatch) return xrMatch[1];
-
-  // Fallback: WordPress REST API with rest_route param
-  const wpRes = await fetch('https://aiager.wordpress.com/?rest_route=/wp/v2/posts', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Basic ${auth}`
-    },
-    body: JSON.stringify({ title: data.title, content: data.content, status: data.status === 'draft' ? 'draft' : 'publish' })
-  });
-  const wpText = await wpRes.text();
-  try {
-    const wpData = JSON.parse(wpText);
-    if (wpData?.id) return wpData.id.toString();
-  } catch (_) {}
-
-  throw new Error(`WP API failed. XMLRPC(${xrRes.status}): ${xrText.slice(0,100)} REST(${wpRes.status}): ${wpText.slice(0,100)}`);
-}
-
-async function updateNewsJson(token, entry) {
-  const headers = {
-    Authorization: `Bearer ${token}`,
-    Accept: 'application/vnd.github.v3+json',
-    'Content-Type': 'application/json',
-  };
-
-  // Get current file
-  const getRes = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${NEWS_FILE}?ref=${GITHUB_BRANCH}`, { headers });
-  if (!getRes.ok) throw new Error(`GitHub get failed: ${getRes.status}`);
-
-  const fileData = await getRes.json();
-  const currentContent = JSON.parse(atob(fileData.content));
-  const sha = fileData.sha;
-
-  // Prepend new entry
-  currentContent.unshift(entry);
-
-  // Keep max 100 entries
-  if (currentContent.length > 100) currentContent.length = 100;
-
-  const newContent = btoa(JSON.stringify(currentContent, null, 2));
-
-  const putRes = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${NEWS_FILE}`, {
+  const p = await fetch('https://api.github.com/repos/wuge665/aiager/contents/data/news.json', {
     method: 'PUT',
-    headers,
-    body: JSON.stringify({
-      message: `publish: ${entry.title}`,
-      content: newContent,
-      sha,
-      branch: GITHUB_BRANCH
-    })
+    headers: h,
+    body: JSON.stringify({ message: 'publish: ' + entry.title, content: btoa(JSON.stringify(cur, null, 2)), sha: f.sha, branch: 'master' })
   });
-
-  if (!putRes.ok) throw new Error(`GitHub put failed: ${putRes.status} ${await putRes.text()}`);
-}
-
-function corsHeaders() {
-  return {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type',
-  };
+  if (!p.ok) throw new Error('GitHub PUT ' + p.status + ' ' + (await p.text()).slice(0, 200));
 }
