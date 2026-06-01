@@ -23,6 +23,9 @@ textarea{resize:vertical;min-height:80px}
 .btn-primary{background:#6366f1;color:#fff}
 .btn-primary:hover{background:#4f46e5}
 .btn-copy{background:#f0f0f0;color:#333;margin-left:8px}
+.btn-success{background:#10b981;color:#fff}
+.btn-success:hover{background:#059669}
+.btn-success:disabled{background:#94a3b8;cursor:not-allowed}
 .btn-copy:hover{background:#e0e0e0}
 .output{background:#1a1a2e;color:#e0e0e0;padding:16px;border-radius:8px;font-size:13px;font-family:'SF Mono','Courier New',monospace;white-space:pre-wrap;word-break:break-all;min-height:200px;max-height:400px;overflow:auto;margin-top:12px}
 .tip{font-size:12px;color:#999;margin-top:6px}
@@ -38,7 +41,7 @@ textarea{resize:vertical;min-height:80px}
 <body>
 <div class="container">
 <h1>✏️ 内容编辑器</h1>
-<p style="color:#666;margin-bottom:20px">一次编写，同步到公众号和网站。编辑 → 复制 JSON 到 data/news.json → git push</p>
+<p style="color:#666;margin-bottom:20px">一次编写，一键发布到 WordPress + data/news.json + 公众号（复制 HTML）</p>
 <div class="layout">
 <div class="card">
 <h2>📝 编辑内容</h2>
@@ -92,10 +95,12 @@ textarea{resize:vertical;min-height:80px}
 <div style="display:flex;gap:8px;flex-wrap:wrap">
 <button class="btn btn-primary" onclick="copyJson()">📋 复制 JSON</button>
 <button class="btn btn-primary" onclick="copyWechat()">📋 复制公众号 HTML</button>
+<button class="btn btn-success" onclick="publishToWordPress()" id="publishBtn">🚀 发布到 WordPress</button>
 <button class="btn btn-copy" onclick="switchTab('json')">JSON</button>
 <button class="btn btn-copy" onclick="switchTab('wechat')">公众号</button>
 <button class="btn btn-copy" onclick="switchTab('preview')">预览</button>
 </div>
+<div id="publishResult" style="margin-top:8px;display:none"></div>
 <div id="tabJson" class="output"></div>
 <div id="tabWechat" class="output" style="display:none"></div>
 <div id="tabPreview" class="wechat-preview" style="display:none"></div>
@@ -198,6 +203,50 @@ async function copyWechat() {
     await navigator.clipboard.writeText(buildWechatHtml());
     showToast('✅ 公众号 HTML 已复制，粘贴到微信编辑器');
   } catch {}
+}
+
+async function publishToWordPress() {
+  const btn = document.getElementById('publishBtn');
+  const resultDiv = document.getElementById('publishResult');
+  const d = getData();
+  btn.disabled = true;
+  btn.textContent = '⏳ 发布中…';
+  resultDiv.style.display = 'none';
+  try {
+    const res = await fetch('/api/publish', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        title: d.title,
+        content: d.content,
+        desc: d.desc,
+        source: d.source,
+        url: d.url,
+        status: 'publish'
+      })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error);
+    let html = '<div style="padding:12px;background:#ecfdf5;border-radius:8px;font-size:13px">';
+    html += '✅ 发布成功！<br>';
+    html += `📝 <a href="${data.wordpress.url}" target="_blank" style="color:#059669">查看 WordPress 文章</a><br>`;
+    html += `✏️ <a href="${data.wordpress.editUrl}" target="_blank" style="color:#059669">编辑文章</a>`;
+    if (data.newsEntry?._note) {
+      html += `<br>⚠️ ${data.newsEntry._note}`;
+    } else if (data.newsEntry) {
+      html += '<br>📰 data/news.json 已同步更新';
+    }
+    html += '</div>';
+    resultDiv.innerHTML = html;
+    resultDiv.style.display = 'block';
+    showToast('✅ 发布成功');
+  } catch (e) {
+    resultDiv.innerHTML = `<div style="padding:12px;background:#fef2f2;border-radius:8px;font-size:13px;color:#dc2626">❌ 发布失败：${e.message}</div>`;
+    resultDiv.style.display = 'block';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '🚀 发布到 WordPress';
+  }
 }
 
 document.getElementById('date').value = new Date().toISOString().slice(0,10);
