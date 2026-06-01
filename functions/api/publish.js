@@ -68,12 +68,35 @@ async function wpNewPost(data) {
   const auth = btoa(`${WP_USER}:${WP_PASS}`);
   const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;');
 
+  // Try WordPress REST API via rest_route (works without pretty permalinks)
+  const wpBody = {
+    title: data.title,
+    content: data.content,
+    status: data.status === 'draft' ? 'draft' : 'publish'
+  };
+  if (data.excerpt) wpBody.excerpt = data.excerpt;
+
+  const wpRes = await fetch('https://aiager.wordpress.com/wp-json/wp/v2/posts', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Basic ${auth}`,
+      'User-Agent': 'aiager-publish/1.0'
+    },
+    body: JSON.stringify(wpBody)
+  });
+
+  if (wpRes.ok) {
+    const wpData = await wpRes.json();
+    if (wpData.id) return wpData.id.toString();
+  }
+
+  // Fallback: XML-RPC with auth header
   const members = [
     ['post_title', 'string', esc(data.title)],
     ['post_content', 'string', esc(data.content)],
     ['post_status', 'string', data.status === 'draft' ? 'draft' : 'publish'],
   ];
-
   if (data.excerpt) members.push(['post_excerpt', 'string', esc(data.excerpt)]);
 
   let structXml = members.map(([k, t, v]) =>
@@ -82,16 +105,37 @@ async function wpNewPost(data) {
 
   const xml = `<?xml version="1.0"?><methodCall><methodName>wp.newPost</methodName><params><param><value><int>1</int></value></param><param><value><string>${esc(WP_USER)}</string></value></param><param><value><string>${esc(WP_PASS)}</string></value></param><param><value><struct>${structXml}</struct></value></param></params></methodCall>`;
 
-  const res = await fetch(WP_URL, {
+  const xrRes = await fetch('https://aiager.wordpress.com/xmlrpc.php', {
     method: 'POST',
-    headers: { 'Content-Type': 'text/xml' },
+    headers: { 'Content-Type': 'text/xml', Authorization: `Basic ${auth}` },
     body: xml
   });
 
-  const text = await res.text();
-  const match = text.match(/<string>(\d+)<\/string>/);
-  if (!match) throw new Error(`WordPress XML-RPC failed: ${text.slice(0, 300)}`);
-  return match[1];
+  const xrText = await xrRes.text();
+  const xrMatch = xrText.match(/<string>(\d+)<\/string>/);
+  if (xrMatch) return xrMatch[1];
+
+  // Last resort: WordPress.com REST API v1.1
+  const wpcBody = {
+    title: data.title,
+    content: data.content,
+    status: data.status === 'draft' ? 'draft' : 'publish'
+  };
+  if (data.excerpt) wpcBody.excerpt = data.excerpt;
+
+  const wpcRes = await fetch('https://public-api.wordpress.com/rest/v1.1/sites/255258581/posts/new', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Basic ${auth}`
+    },
+    body: JSON.stringify(wpcBody)
+  });
+
+  const wpcData = await wpcRes.json();
+  if (wpcData?.ID) return wpcData.ID.toString();
+
+  throw new Error(`All WP APIs failed. REST: ${wpRes.status} / XMLRPC: ${xrRes.status} / WPC: ${wpcRes.status}`);
 }
 
 async function updateNewsJson(token, entry) {
