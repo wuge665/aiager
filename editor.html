@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>内容编辑器 — AI 百宝箱</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#f5f5f5;font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;padding:20px;color:#333}
+.container{max-width:1000px;margin:0 auto}
+h1{font-size:24px;margin-bottom:20px;color:#1a1a2e}
+.layout{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:768px){.layout{grid-template-columns:1fr}}
+.card{background:#fff;border-radius:12px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+.card h2{font-size:16px;margin-bottom:16px;color:#6366f1}
+label{display:block;font-size:13px;color:#666;margin-bottom:4px;margin-top:12px}
+label:first-child{margin-top:0}
+input,textarea,select{width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:8px;font-size:14px;font-family:inherit}
+input:focus,textarea:focus,select:focus{outline:none;border-color:#6366f1;box-shadow:0 0 0 3px rgba(99,102,241,0.1)}
+textarea{resize:vertical;min-height:80px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.btn{padding:10px 20px;border:none;border-radius:8px;font-size:14px;cursor:pointer;margin-top:16px}
+.btn-primary{background:#6366f1;color:#fff}
+.btn-primary:hover{background:#4f46e5}
+.btn-copy{background:#f0f0f0;color:#333;margin-left:8px}
+.btn-copy:hover{background:#e0e0e0}
+.output{background:#1a1a2e;color:#e0e0e0;padding:16px;border-radius:8px;font-size:13px;font-family:'SF Mono','Courier New',monospace;white-space:pre-wrap;word-break:break-all;min-height:200px;max-height:400px;overflow:auto;margin-top:12px}
+.tip{font-size:12px;color:#999;margin-top:6px}
+.wechat-preview{margin-top:12px;padding:16px;border:1px solid #eee;border-radius:8px;font-size:15px;line-height:1.8}
+.wechat-preview h3{font-size:18px;margin-bottom:8px}
+.wechat-preview .meta{font-size:12px;color:#999;margin-bottom:12px}
+.copy-row{display:flex;align-items:center;gap:8px;margin-top:12px}
+.copy-row .btn{padding:6px 14px;font-size:13px;margin-top:0}
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#1a1a2e;color:#fff;padding:10px 24px;border-radius:8px;font-size:14px;opacity:0;transition:opacity 0.3s;pointer-events:none}
+.toast.show{opacity:1}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>✏️ 内容编辑器</h1>
+<p style="color:#666;margin-bottom:20px">一次编写，同步到公众号和网站。编辑 → 复制 JSON 到 data/news.json → git push</p>
+<div class="layout">
+<div class="card">
+<h2>📝 编辑内容</h2>
+<form id="editorForm">
+<div class="row">
+<div>
+<label>标题</label>
+<input id="title" value="AI 百宝箱上线 55+ 款免费 AI 工具" oninput="updatePreview()">
+</div>
+<div>
+<label>日期</label>
+<input id="date" type="date" oninput="updatePreview()">
+</div>
+</div>
+<label>摘要（显示在卡片上，建议 50 字以内）</label>
+<textarea id="desc" rows="2" oninput="updatePreview()">AI 百宝箱已收录 55+ 款免费 AI 工具，覆盖写作、视频、图像、编程等七大分类。</textarea>
+<label>全文内容（点击"阅读全文"后显示）</label>
+<textarea id="content" rows="6" oninput="updatePreview()">AI 百宝箱（aiager.top）已收录 55+ 款免费 AI 工具，覆盖写作、视频、图像、编程、Agent、音频、效率七大分类。
+
+特色功能：
+• 场景模式 — 按角色推荐工具
+• AI 资讯 — 实时抓取全球 AI 新闻并翻译中文
+• 关联推荐 — 工具间智能关联
+
+所有工具免费使用，无需下载 App，浏览器打开即用。</textarea>
+<div class="row">
+<div>
+<label>来源名称</label>
+<input id="source" value="AI 百宝箱" oninput="updatePreview()">
+</div>
+<div>
+<label>原文链接（可选）</label>
+<input id="url" value="https://aiager.top" oninput="updatePreview()">
+</div>
+</div>
+<div class="row">
+<div>
+<label>标签（逗号分隔）</label>
+<input id="tags" value="AI, 工具, 免费" oninput="updatePreview()">
+</div>
+<div>
+<label>标识 ID（英文，唯一）</label>
+<input id="id" value="my-article" oninput="updatePreview()">
+</div>
+</div>
+</form>
+</div>
+
+<div class="card">
+<h2>📋 输出</h2>
+<div style="display:flex;gap:8px;flex-wrap:wrap">
+<button class="btn btn-primary" onclick="copyJson()">📋 复制 JSON</button>
+<button class="btn btn-primary" onclick="copyWechat()">📋 复制公众号 HTML</button>
+<button class="btn btn-copy" onclick="switchTab('json')">JSON</button>
+<button class="btn btn-copy" onclick="switchTab('wechat')">公众号</button>
+<button class="btn btn-copy" onclick="switchTab('preview')">预览</button>
+</div>
+<div id="tabJson" class="output"></div>
+<div id="tabWechat" class="output" style="display:none"></div>
+<div id="tabPreview" class="wechat-preview" style="display:none"></div>
+</div>
+</div>
+</div>
+<div id="toast" class="toast">✅ 已复制</div>
+
+<script>
+let currentTab = 'json';
+
+function getData() {
+  const id = document.getElementById('id').value.trim() || 'article-' + Date.now();
+  const title = document.getElementById('title').value.trim();
+  const desc = document.getElementById('desc').value.trim();
+  const content = document.getElementById('content').value.trim();
+  const url = document.getElementById('url').value.trim();
+  const source = document.getElementById('source').value.trim();
+  const date = document.getElementById('date').value || new Date().toISOString().slice(0,10);
+  const tags = document.getElementById('tags').value.split(/[,，、]/).map(s => s.trim()).filter(Boolean);
+  return { id, title, desc, content, url, source, date, tags };
+}
+
+function buildJson() {
+  const d = getData();
+  return JSON.stringify({
+    id: d.id,
+    title: d.title,
+    desc: d.desc,
+    url: d.url,
+    source: d.source,
+    date: d.date,
+    tags: d.tags,
+    content: d.content,
+    userEdited: true
+  }, null, 2);
+}
+
+function buildWechatHtml() {
+  const d = getData();
+  const paragraphs = d.content.split('\n').filter(Boolean).map(line => {
+    if (line.startsWith('•')) {
+      return line;
+    }
+    return line;
+  }).join('<br><br>');
+  return `<section style="padding:10px 16px">
+  <h2 style="font-size:20px;font-weight:700;margin-bottom:8px">${d.title}</h2>
+  <p style="color:#999;font-size:13px;margin-bottom:16px">${d.source} · ${d.date}</p>
+  <p style="font-size:15px;line-height:1.8;color:#333">${paragraphs}</p>
+  <p style="margin-top:20px;text-align:center">
+    <a href="${d.url || 'https://aiager.top/?mode=news'}" style="display:inline-block;padding:10px 28px;background:#6366f1;color:#fff;border-radius:8px;text-decoration:none;font-size:14px">查看详情 →</a>
+  </p>
+</section>`;
+}
+
+function buildPreview() {
+  const d = getData();
+  const paragraphs = d.content.split('\n').filter(Boolean).map(line => {
+    if (line.startsWith('•')) {
+      return '<p style="margin:4px 0;padding-left:16px;color:#555">' + line + '</p>';
+    }
+    return '<p style="margin:8px 0;line-height:1.8">' + line + '</p>';
+  }).join('');
+  return '<h3 style="font-size:18px;margin-bottom:8px">' + d.title + '</h3>' +
+    '<div class="meta">' + d.source + ' · ' + d.date + '</div>' +
+    paragraphs +
+    '<p style="margin-top:16px;text-align:center"><a href="' + (d.url || 'https://aiager.top/?mode=news') + '" style="display:inline-block;padding:8px 24px;background:#6366f1;color:#fff;border-radius:6px;text-decoration:none;font-size:14px">查看详情 →</a></p>';
+}
+
+function updatePreview() {
+  document.getElementById('tabJson').textContent = buildJson();
+  document.getElementById('tabWechat').textContent = buildWechatHtml();
+  document.getElementById('tabPreview').innerHTML = buildPreview();
+}
+
+function switchTab(tab) {
+  currentTab = tab;
+  ['json','wechat','preview'].forEach(t => {
+    document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1)).style.display = t === tab ? '' : 'none';
+  });
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+async function copyJson() {
+  try {
+    await navigator.clipboard.writeText(buildJson());
+    showToast('✅ JSON 已复制，粘贴到 data/news.json');
+  } catch { document.getElementById('tabJson').select(); }
+}
+
+async function copyWechat() {
+  try {
+    await navigator.clipboard.writeText(buildWechatHtml());
+    showToast('✅ 公众号 HTML 已复制，粘贴到微信编辑器');
+  } catch {}
+}
+
+document.getElementById('date').value = new Date().toISOString().slice(0,10);
+updatePreview();
+</script>
+</body>
+</html>
