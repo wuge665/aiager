@@ -2,7 +2,8 @@ export async function onRequest(context) {
   const { request } = context;
 
   if (request.method === 'GET') {
-    return new Response('OK', { status: 200, headers: { 'Content-Type': 'text/plain' } });
+    const keys = Object.keys(context.env || {}).sort().join(', ');
+    return new Response('OK env_keys: ' + keys, { status: 200, headers: { 'Content-Type': 'text/plain' } });
   }
   if (request.method !== 'POST') {
     return new Response('only POST', { status: 405 });
