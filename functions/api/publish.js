@@ -2,8 +2,10 @@ export async function onRequest(context) {
   const { request } = context;
 
   if (request.method === 'GET') {
-    const keys = Object.keys(context.env || {}).sort().join(', ');
-    return new Response('OK env_keys: ' + keys, { status: 200, headers: { 'Content-Type': 'text/plain' } });
+    const env = context.env || {};
+    const keys = Object.keys(env).sort().join(', ');
+    const tokenInfo = env.GITHUB_TOKEN ? 'present len='+env.GITHUB_TOKEN.length : 'MISSING';
+    return new Response('OK env_keys: ' + keys + ' | token: ' + tokenInfo, { status: 200, headers: { 'Content-Type': 'text/plain' } });
   }
   if (request.method !== 'POST') {
     return new Response('only POST', { status: 405 });
