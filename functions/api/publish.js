@@ -21,28 +21,7 @@ export async function onRequest(context) {
     return new Response('missing fields', { status: 400 });
   }
 
-  // Step 1: build XML
-  try {
-    const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&apos;');
-    const xml = '<?xml version="1.0"?><methodCall><methodName>wp.newPost</methodName><params><param><value><int>1</int></value></param><param><value><string>aiager</string></value></param><param><value><string>9X0C16Rs</string></value></param><param><value><struct><member><name>post_title</name><value><string>'+esc(data.title)+'</string></value></member><member><name>post_content</name><value><string>'+esc(data.content)+'</string></value></member><member><name>post_status</name><value><string>'+(data.status==='draft'?'draft':'publish')+'</string></value></member></struct></value></param></params></methodCall>';
-
-    const auth = btoa('aiager:9X0C16Rs');
-    const res = await fetch('https://aiager.wordpress.com/xmlrpc.php', {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/xml', 'Authorization': 'Basic '+auth },
-      body: xml
-    });
-    const text = await res.text();
-    const m = text.match(/<string>(\d+)<\/string>/);
-    if (!m) {
-      return new Response('xmlrpc fail: '+res.status+' '+text.slice(0,200), { status: 500 });
-    }
-
-    return new Response('OK wpId='+m[1], { status: 200 });
-  } catch(e) {
-    return new Response('error: '+(e.message||e)+' stack:'+((e.stack||'').split('\n').slice(0,2).join('|')), { status: 500 });
-  }
-}
+  return new Response('got: title=' + data.title, { status: 200 });
 
 function b64(s) {
   if (typeof btoa !== 'undefined') return btoa(s);
