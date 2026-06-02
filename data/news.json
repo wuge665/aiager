@@ -1,5 +1,15 @@
 [
   {
+    "id": "wp-14-2026-06-02",
+    "title": "Test from VPS",
+    "desc": "Testing relay server.",
+    "url": "https://aiager.wordpress.com/?p=14",
+    "source": "AI 百宝箱",
+    "date": "2026-06-02",
+    "content": "Testing relay server.",
+    "userEdited": true
+  },
+  {
     "id": "user-1",
     "title": "AI 百宝箱收录 55+ 款免费 AI 工具",
     "desc": "AI 百宝箱（aiager.top）已收录 55+ 款免费 AI 工具，覆盖写作、视频、图像、编程、Agent、音频、效率七大分类，支持场景模式一键推荐。",
