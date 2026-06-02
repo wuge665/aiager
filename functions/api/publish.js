@@ -1,9 +1,8 @@
 export async function onRequest(context) {
   const { request } = context;
 
-  // GET = health check
   if (request.method === 'GET') {
-    return new Response('OK', { status: 200 });
+    return new Response('OK env=' + (typeof context.env) + ' token=' + (context.env?.GITHUB_TOKEN ? 'yes' : 'no'), { status: 200 });
   }
   if (request.method === 'OPTIONS') {
     return new Response(null, { headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Methods': 'POST, OPTIONS', 'Access-Control-Allow-Headers': 'Content-Type' } });
@@ -12,32 +11,36 @@ export async function onRequest(context) {
     return new Response('Method not allowed', { status: 405 });
   }
 
+  let body;
+  try { body = await request.text(); } catch(e) { return new Response('read fail: '+e, { status: 500 }); }
+
   let data;
-  try {
-    data = await request.json();
-  } catch (e) {
-    return new Response(JSON.stringify({ error: 'invalid json: ' + (e.message || e) }), { status: 400, headers: { 'Content-Type': 'application/json' } });
-  }
+  try { data = JSON.parse(body); } catch(e) { return new Response('json fail: '+e, { status: 400 }); }
 
   if (!data || !data.title || !data.content) {
-    return new Response(JSON.stringify({ error: 'title and content required' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
+    return new Response('missing fields', { status: 400 });
   }
 
+  // Step 1: build XML
   try {
-    const wpId = await xmlrpcPost(data);
-    const ghToken = context.env?.GITHUB_TOKEN;
-    let newsEntry = null;
-    if (ghToken) {
-      newsEntry = buildEntry(data, wpId);
-      await githubCommit(ghToken, newsEntry);
+    const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&apos;');
+    const xml = '<?xml version="1.0"?><methodCall><methodName>wp.newPost</methodName><params><param><value><int>1</int></value></param><param><value><string>aiager</string></value></param><param><value><string>9X0C16Rs</string></value></param><param><value><struct><member><name>post_title</name><value><string>'+esc(data.title)+'</string></value></member><member><name>post_content</name><value><string>'+esc(data.content)+'</string></value></member><member><name>post_status</name><value><string>'+(data.status==='draft'?'draft':'publish')+'</string></value></member></struct></value></param></params></methodCall>';
+
+    const auth = btoa('aiager:9X0C16Rs');
+    const res = await fetch('https://aiager.wordpress.com/xmlrpc.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/xml', 'Authorization': 'Basic '+auth },
+      body: xml
+    });
+    const text = await res.text();
+    const m = text.match(/<string>(\d+)<\/string>/);
+    if (!m) {
+      return new Response('xmlrpc fail: '+res.status+' '+text.slice(0,200), { status: 500 });
     }
 
-    return new Response(JSON.stringify({
-      wordpress: { id: wpId, url: 'https://aiager.wordpress.com/?p=' + wpId, editUrl: 'https://aiager.wordpress.com/wp-admin/post.php?post=' + wpId + '&action=edit' },
-      newsEntry: newsEntry
-    }), { status: 200, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } });
-  } catch (e) {
-    return new Response(JSON.stringify({ error: String(e.message || e) }), { status: 500, headers: { 'Content-Type': 'application/json' } });
+    return new Response('OK wpId='+m[1], { status: 200 });
+  } catch(e) {
+    return new Response('error: '+(e.message||e)+' stack:'+((e.stack||'').split('\n').slice(0,2).join('|')), { status: 500 });
   }
 }
 
