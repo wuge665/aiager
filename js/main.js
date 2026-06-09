@@ -190,7 +190,12 @@ function openTutorial(id) {
   const t = TUTORIALS.find(x => x.id === id || x.title === id);
   if (!t) return;
   const levelClass = t.level === '入门' ? 'green' : t.level === '进阶' ? 'orange' : 'red';
-  openOverlay(`<h2>${t.title}</h2><div class="meta">${t.source || 'AI 百宝箱'} · ${t.date || ''} · <span class="tool-tag ${levelClass}">${t.level}</span></div><div class="body"><p>${t.desc}</p>${t.url && t.url !== '#' ? `<p style="margin-top:16px"><a href="${t.url}" target="_blank">阅读完整教程 →</a></p>` : ''}</div>`);
+  const body = t.content ? t.content.split('\n').filter(Boolean).map(line => {
+    if (line.startsWith('## ')) return `<h3 style="margin:16px 0 8px">${line.slice(3)}</h3>`;
+    if (line.startsWith('- ')) return `<li style="margin:4px 0 4px 16px;color:var(--text-muted)">${line.slice(2)}</li>`;
+    return `<p style="margin:6px 0;line-height:1.8">${line}</p>`;
+  }).join('') : `<p>${t.desc}</p>`;
+  openOverlay(`<h2>${t.title}</h2><div class="meta">${t.source || 'AI 百宝箱'} · ${t.date || ''} · <span class="tool-tag ${levelClass}">${t.level}</span></div><div class="body">${body}${t.url && t.url !== '#' ? `<p style="margin-top:20px"><a href="${t.url}" target="_blank">使用该工具 →</a></p>` : ''}</div>`);
 }
 
 // ===== Projects (GitHub Trending) =====

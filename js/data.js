@@ -1121,80 +1121,100 @@ const TAG_RELATIONS = {
 // ===== Tutorials Data (AI 教程) =====
 const TUTORIALS_DATA = [
   {
+    id: 'tut-chatgpt',
     title: 'ChatGPT 从入门到精通',
     desc: '覆盖账号注册、提示词工程、插件使用、API 调用等全流程教程。',
-    url: '#',
+    content: 'ChatGPT 是 OpenAI 开发的对话式 AI 助手，是目前最受欢迎的 AI 工具之一。\n\n第一步：账号注册\n访问 chat.openai.com，使用邮箱注册。注册后可能需要验证手机号。\n\n第二步：提示词工程基础\n- 明确指令：告诉 AI 你想要的输出格式、长度、风格\n- 提供上下文：给 AI 足够的背景信息\n- 分步提问：复杂问题拆解成多个简单问题\n\n第三步：GPT-4 与插件\nChatGPT Plus 用户可以使用 GPT-4 模型和插件系统，包括代码解释器、联网搜索等。\n\n第四步：API 调用\n开发者可以通过 OpenAI API 将 ChatGPT 集成到自己的应用中。',
+    url: 'https://chat.openai.com',
     source: 'AI 百宝箱',
     level: '入门',
     tags: ['ChatGPT', '提示词', 'GPT-4']
   },
   {
+    id: 'tut-midjourney',
     title: 'Midjourney 绘画完全指南',
     desc: '参数详解、提示词公式、风格参考、商业应用案例一应俱全。',
-    url: '#',
+    content: 'Midjourney 是当前最受欢迎的 AI 绘画工具之一，通过 Discord 使用。\n\n基础参数\n- --ar 16:9：宽高比\n- --v 6：模型版本\n- --s 250：风格化程度\n\n提示词公式\n[主体] + [环境] + [风格] + [参数]\n\n进阶技巧\n- 使用 --cref 进行角色一致性控制\n- Blend 模式混合多张图片\n- Describe 功能反推图片提示词',
+    url: 'https://www.midjourney.com',
     source: 'AI 百宝箱',
     level: '进阶',
     tags: ['Midjourney', 'AI绘画', '设计']
   },
   {
+    id: 'tut-claude-coding',
     title: 'Claude 编程实战技巧',
     desc: '用 Claude 辅助编码、调试、代码审查、文档生成的最佳实践。',
-    url: '#',
+    content: 'Claude 是 Anthropic 开发的 AI 助手，在编程领域表现出色。\n\n代码生成\n- 提供详细的需求描述\n- 指定编程语言和框架\n- 要求添加注释和错误处理\n\n代码审查\n将代码粘贴给 Claude，让它审查安全性、性能、代码风格等问题。\n\n调试技巧\n遇到 bug 时，将错误信息和相关代码给 Claude 分析。',
+    url: 'https://claude.ai',
     source: 'AI 百宝箱',
     level: '进阶',
     tags: ['Claude', '编程', 'Anthropic']
   },
   {
+    id: 'tut-ai-video',
     title: 'AI 视频制作全流程',
     desc: '从脚本生成到 AI 配音、数字人播报、自动剪辑的完整工作流。',
+    content: '使用 AI 工具完成视频制作全流程。\n\n第一步：脚本生成\n使用 ChatGPT 生成视频脚本。\n\n第二步：AI 配音\n使用 ElevenLabs 或火山引擎 TTS 将脚本转为语音。\n\n第三步：数字人播报\n使用 D-ID 或 HeyGen 生成数字人形象。\n\n第四步：自动剪辑\n使用剪映或 CapCut 自动剪辑功能添加字幕、背景音乐。',
     url: '#',
     source: 'AI 百宝箱',
     level: '入门',
     tags: ['视频', '数字人', '剪辑']
   },
   {
+    id: 'tut-cursor',
     title: 'Cursor AI 编辑器入门',
     desc: 'AI 原生 IDE 的使用技巧，包括代码补全、对话调试、项目重构。',
-    url: '#',
+    content: 'Cursor 是 AI 原生的代码编辑器，基于 VS Code 构建。\n\n核心功能\n- Tab 补全：AI 预测你的下一步操作\n- 对话面板：选中代码后按 Ctrl+K 对话\n- 项目级理解：Ctrl+Enter 让 AI 理解整个项目\n- 代码重构：AI 建议并执行重构\n\n高效工作流\n1. 用自然语言描述功能\n2. AI 生成代码后审查\n3. 使用对话面板迭代修正\n4. AI 生成单元测试',
+    url: 'https://cursor.sh',
     source: 'AI 百宝箱',
     level: '入门',
     tags: ['Cursor', '编辑器', '效率']
   },
   {
+    id: 'tut-deepseek',
     title: 'DeepSeek R1 推理模型深度解析',
     desc: '深入讲解 DeepSeek R1 的推理能力、使用场景和提示词策略。',
-    url: '#',
+    content: 'DeepSeek R1 是国内顶尖的推理模型。\n\n核心优势\n- 强大的逻辑推理能力\n- 支持深度思考模式\n- 国产模型，无需科学上网\n- 性价比高\n\n提示词策略\n- 明确要求"请逐步推理"\n- 提供思考框架\n- 要求输出推理过程\n\n适用场景\n- 复杂数学问题\n- 代码调试和算法设计\n- 逻辑分析和决策',
+    url: 'https://chat.deepseek.com',
     source: 'AI 百宝箱',
     level: '进阶',
     tags: ['DeepSeek', '推理', '国产']
   },
   {
+    id: 'tut-agent',
     title: 'AI Agent 开发入门',
     desc: '使用 Dify / Coze / LangChain 搭建智能助手和自动化工作流。',
+    content: 'AI Agent 是能自主执行任务的智能体系统。\n\n主流平台\n- Dify：开源 LLM 应用开发平台\n- Coze：字节跳动推出，可发布到微信/飞书\n- LangChain：最流行的 Agent 开发框架\n- FastGPT：基于知识库的问答 Agent\n\n开发流程\n1. 定义 Agent 的职责范围\n2. 配置 LLM 模型\n3. 添加工具（搜索、API 等）\n4. 设置知识库\n5. 测试和优化',
     url: '#',
     source: 'AI 百宝箱',
     level: '进阶',
     tags: ['Agent', 'Dify', 'Coze']
   },
   {
+    id: 'tut-suno',
     title: 'Suno AI 音乐创作教程',
     desc: 'AI 生成音乐从零开始：歌词创作、风格控制、混音导出技巧。',
-    url: '#',
+    content: 'Suno 是最受欢迎的 AI 音乐生成工具。\n\n基础使用\n- 选择模式：Custom Mode 或 Instrumental\n- 填写歌词或让 AI 自动生成\n- 选择音乐风格\n\n风格控制技巧\n- 指定具体风格如 epic orchestral\n- 加入年代特征如 80s synthwave\n- 描述情绪如 dark ambient\n\n进阶技巧\n- 使用 [Verse] [Chorus] 标签定义结构\n- 使用 Extend 功能延展片段',
+    url: 'https://suno.ai',
     source: 'AI 百宝箱',
     level: '入门',
     tags: ['Suno', '音乐', 'AI创作']
   },
   {
+    id: 'tut-perplexity',
     title: 'Perplexity AI 深度搜索技巧',
     desc: '学术搜索、实时数据、文件分析等高级使用方法和提示词范例。',
-    url: '#',
+    content: 'Perplexity 是 AI 搜索引擎，提供带引用来源的搜索结果。\n\n搜索模式\n- 普通搜索：快速答案\n- Pro 搜索：深度研究\n- Academic 模式：仅搜索学术论文\n\n高级技巧\n- 使用 site: 限定搜索范围\n- 上传 PDF 进行分析\n- Copilot 功能优化搜索词\n\n适用场景\n- 学术文献综述\n- 技术调研\n- 事实核查',
+    url: 'https://perplexity.ai',
     source: 'AI 百宝箱',
     level: '入门',
     tags: ['Perplexity', '搜索', '研究']
   },
   {
+    id: 'tut-workflow',
     title: 'AI 工具组合工作流案例',
     desc: '真实业务场景中多个 AI 工具的组合使用方案，提升整体效率。',
+    content: '组合使用 AI 工具发挥最大效能。\n\n案例一：公众号文章创作\n1. 秘塔AI 搜索热点\n2. ChatGPT 生成初稿\n3. 秘塔写作猫 优化标题\n4. 135编辑器 格式化\n\n案例二：代码开发\n1. Claude 生成框架\n2. Cursor 代码编辑\n3. GitHub Copilot 补全\n\n案例三：视频制作\n1. ChatGPT 写脚本\n2. ElevenLabs 配音\n3. D-ID 生成数字人\n4. 剪映 自动剪辑',
     url: '#',
     source: 'AI 百宝箱',
     level: '进阶',
