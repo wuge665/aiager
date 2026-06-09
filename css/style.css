@@ -135,7 +135,7 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;height:550px;backgro
 .toast.show{opacity:1}
 
 /* WeChat float */
-.wechat-float{position:fixed;right:24px;bottom:100px;z-index:200;display:none;flex-direction:column;align-items:center;gap:8px}
+.wechat-float{position:fixed;right:24px;bottom:100px;z-index:200;display:flex;flex-direction:column;align-items:center;gap:8px}
 .wechat-float-trigger{width:44px;height:44px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 2px 12px rgba(89,97,249,0.3);transition:all .3s}
 .wechat-float-trigger:hover{transform:scale(1.1);background:var(--primary-hover)}
 .wechat-qrcode{display:none;flex-direction:column;align-items:center;background:var(--card-bg);border-radius:12px;padding:12px;box-shadow:0 4px 20px rgba(0,0,0,0.15);position:absolute;bottom:52px;right:0;min-width:160px}

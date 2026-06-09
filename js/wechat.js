@@ -1,8 +1,8 @@
 // ===== WeChat Official Account Config =====
 const WECHAT_CONFIG = {
-  officialAccount: 'AI 百宝箱',
+  officialAccount: '有越干货',
   qrCode: 'assets/images/wechat-qr.png',
-  enabled: false,
+  enabled: true,
   toolKeywords: {}
 };
 
