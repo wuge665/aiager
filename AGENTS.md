@@ -29,8 +29,38 @@ Static AI tools navigation site. Pure HTML+CSS+JS, no build step.
 - **Submit tool** modal builds a `mailto:hi@aihub.pro` link — no backend.
 - **Relations** system links related tools (defined per-tool `relations` array). Panel auto-hides after 8s.
 
+## API 中转站 (`relay/`)
+
+OpenAI 兼容的 API 中转服务，位于 `relay/` 目录。
+
+| Path | Purpose |
+|------|---------|
+| `relay/main.py` | FastAPI 入口 |
+| `relay/config.py` | 配置 (环境变量 `RELAY_*`) |
+| `relay/database.py` | SQLAlchemy 模型 (User, ApiKey, Channel, UsageLog) |
+| `relay/services/providers/` | Provider 适配器 (openai, anthropic, google) |
+| `relay/routers/v1_chat.py` | OpenAI 兼容 `/v1/*` 端点 |
+| `relay/routers/admin.py` | 管理 API |
+| `relay/routers/auth.py` | 用户认证 |
+| `relay/worker/relay-worker.js` | Cloudflare Worker 边缘层 |
+| `relay/seed.py` | 初始化数据库和示例数据 |
+
+### 命令
+```bash
+cd relay
+pip install -r requirements.txt
+python seed.py       # 初始化 DB + 示例数据
+python main.py       # 启动 (http://localhost:8080)
+```
+
+### 架构
+```
+用户 (OpenAI SDK) → Cloudflare Worker → VPS FastAPI → OpenAI / Claude / Gemini
+```
+
 ## Editing Checklist
 1. Edit tool data → `js/data.js`
 2. Edit site text/metadata → `index.html` (static) or `config.json` (dynamic)
 3. Edit styles → `css/style.css`
-4. Verify by opening `index.html` locally or re-deploying
+4. API 中转站 → `relay/` (python, restart service)
+5. Verify by opening `index.html` locally or re-deploying

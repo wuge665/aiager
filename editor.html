@@ -43,7 +43,7 @@ textarea{resize:vertical;min-height:80px}
 <h1>✏️ 内容编辑器</h1>
 <p style="color:#666;margin-bottom:20px">一次编写，一键发布到 WordPress + data/news.json + 公众号（复制 HTML）</p>
 <div class="layout">
-<div class="card">
+    <div class="card">
 <h2>📝 编辑内容</h2>
 <form id="editorForm">
 <div class="row">
@@ -54,6 +54,23 @@ textarea{resize:vertical;min-height:80px}
 <div>
 <label>日期</label>
 <input id="date" type="date" oninput="updatePreview()">
+</div>
+</div>
+<div class="row">
+<div>
+<label>类型</label>
+<select id="type" onchange="toggleTutorialFields()">
+<option value="news">📰 资讯</option>
+<option value="tutorial">📖 教程</option>
+</select>
+</div>
+<div>
+<label>难度（教程类型）</label>
+<select id="level">
+<option value="入门">入门</option>
+<option value="进阶">进阶</option>
+<option value="高级">高级</option>
+</select>
 </div>
 </div>
 <label>摘要（显示在卡片上，建议 50 字以内）</label>
@@ -112,6 +129,11 @@ textarea{resize:vertical;min-height:80px}
 <script>
 let currentTab = 'json';
 
+function toggleTutorialFields() {
+  const isTut = document.getElementById('type').value === 'tutorial';
+  document.querySelectorAll('#editorForm .row')[1].style.display = isTut ? '' : 'none';
+}
+
 function getData() {
   const id = document.getElementById('id').value.trim() || 'article-' + Date.now();
   const title = document.getElementById('title').value.trim();
@@ -121,12 +143,14 @@ function getData() {
   const source = document.getElementById('source').value.trim();
   const date = document.getElementById('date').value || new Date().toISOString().slice(0,10);
   const tags = document.getElementById('tags').value.split(/[,，、]/).map(s => s.trim()).filter(Boolean);
-  return { id, title, desc, content, url, source, date, tags };
+  const type = document.getElementById('type').value;
+  const level = document.getElementById('level').value;
+  return { id, title, desc, content, url, source, date, tags, type, level };
 }
 
 function buildJson() {
   const d = getData();
-  return JSON.stringify({
+  const obj = {
     id: d.id,
     title: d.title,
     desc: d.desc,
@@ -136,7 +160,9 @@ function buildJson() {
     tags: d.tags,
     content: d.content,
     userEdited: true
-  }, null, 2);
+  };
+  if (d.type === 'tutorial') { obj.level = d.level; }
+  return JSON.stringify(obj, null, 2);
 }
 
 function buildWechatHtml() {
@@ -222,7 +248,10 @@ async function publishToWordPress() {
         desc: d.desc,
         source: d.source,
         url: d.url,
-        status: 'publish'
+        status: 'publish',
+        type: d.type,
+        level: d.level,
+        tags: d.tags
       })
     });
     const data = await res.json();
@@ -231,10 +260,12 @@ async function publishToWordPress() {
     html += '✅ 发布成功！<br>';
     html += `📝 <a href="${data.wordpress.url}" target="_blank" style="color:#059669">查看 WordPress 文章</a><br>`;
     html += `✏️ <a href="${data.wordpress.editUrl}" target="_blank" style="color:#059669">编辑文章</a>`;
-    if (data.newsEntry?._note) {
-      html += `<br>⚠️ ${data.newsEntry._note}`;
-    } else if (data.newsEntry) {
-      html += '<br>📰 data/news.json 已同步更新';
+    const entryKey = data.type === 'tutorial' ? 'tutorialEntry' : 'newsEntry';
+    const entry = data[entryKey];
+    if (entry?._note) {
+      html += `<br>⚠️ ${entry._note}`;
+    } else if (entry) {
+      html += `<br>${data.type === 'tutorial' ? '📖' : '📰'} ${entry.file} 已同步更新`;
     }
     html += '</div>';
     resultDiv.innerHTML = html;
@@ -250,6 +281,7 @@ async function publishToWordPress() {
 }
 
 document.getElementById('date').value = new Date().toISOString().slice(0,10);
+toggleTutorialFields();
 updatePreview();
 </script>
 </body>

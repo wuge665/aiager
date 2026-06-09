@@ -1,749 +1,305 @@
 // ===== State =====
-let currentTools = TOOLS_DATA;
-let searchTimeout = null;
-let SITE_CONFIG = {};
-let NEWS_DATA = [];
-let currentMode = 'tools';
+let TOOLS = []; let NEWS = []; let PROJECTS = []; let TUTORIALS = [];
+let currentPage = 'home'; let currentCategory = 'all';
 
-// ===== Init =====
-document.addEventListener('DOMContentLoaded', async () => {
-  SITE_CONFIG = await loadConfig();
-  applyConfig(SITE_CONFIG);
+const CATEGORIES = {
+  writing: { name: 'AI 写作', icon: 'fa-pencil-square-o', subs: [] },
+  image: { name: 'AI 图像', icon: 'fa-picture-o', subs: ['AI 绘画', 'AI 修图', 'AI 设计'] },
+  video: { name: 'AI 视频', icon: 'fa-video-camera', subs: [] },
+  code: { name: 'AI 编程', icon: 'fa-code', subs: [] },
+  agent: { name: 'AI 智能体', icon: 'fa-robot', subs: [] },
+  audio: { name: 'AI 音频', icon: 'fa-music', subs: [] },
+  productivity: { name: 'AI 效率', icon: 'fa-tasks', subs: [] }
+};
 
-  // Render ads before tools so ad cards are included
-  initAds();
+const ICON_COLORS = ['#5961f9','#10b981','#f59e0b','#ef4444','#8b5cf6','#ec4899','#06b6d4'];
 
-  initParticles();
-  renderScenes();
-  renderTools(TOOLS_DATA);
-  fetchNews();
+document.addEventListener('DOMContentLoaded', init);
+
+async function init() {
+  document.getElementById('loader').classList.add('hidden');
+  parseData();
+  buildSidebar();
+  loadPage('home');
   bindEvents();
-  initScrollTop();
-
-  setTimeout(() => {
-    document.getElementById('loader').classList.add('hidden');
-  }, 300);
-
-  // Direct entry: #news or ?mode=news or /news → show news mode
-  const hashMode = window.location.hash.replace('#', '');
-  const queryMode = new URLSearchParams(window.location.search).get('mode');
-  if (hashMode === 'news' || queryMode === 'news') {
-    setTimeout(showNewsMode, 400);
-  }
-});
-
-// ===== Load Config =====
-async function loadConfig() {
-  try {
-    const res = await fetch('config.json?_t=' + Date.now());
-    if (res.ok) return await res.json();
-  } catch {}
-  // Fallback: check window.__AD_CONFIG
-  return {};
+  fetchNews();
+  fetchProjects();
+  fetchTutorials();
 }
 
-function applyConfig(config) {
-  const ads = config.ads || {};
-  if (ads.enabled && ads.adsensePublisherId && ads.adsensePublisherId !== 'ca-pub-XXXXXXXXXXXXXXXX') {
-    window.__AD_CONFIG = {
-      enabled: true,
-      adsensePublisherId: ads.adsensePublisherId,
-      adsenseSlot: ads.adsenseSlot || {},
-      adInterval: ads.adInterval || 4
-    };
-    window.__ADS_ENABLED = true;
-  }
-
-  const wechat = config.wechat || {};
-  if (wechat.enabled && typeof WECHAT_CONFIG !== 'undefined') {
-    WECHAT_CONFIG.enabled = true;
-    WECHAT_CONFIG.officialAccount = wechat.name || WECHAT_CONFIG.officialAccount;
-    WECHAT_CONFIG.qrCode = wechat.qr || WECHAT_CONFIG.qrCode;
-    if (typeof window.initWechat === 'function') window.initWechat();
-  }
-
-  // Analytics
-  const analytics = config.analytics || {};
-  if (analytics.enabled && analytics.measurementId && analytics.measurementId !== 'G-XXXXXXXXXX') {
-    // gtag
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){ dataLayer.push(arguments); }
-    window.gtag = gtag;
-    gtag('js', new Date());
-    gtag('config', analytics.measurementId);
-
-    const gaScript = document.createElement('script');
-    gaScript.async = true;
-    gaScript.src = `https://www.googletagmanager.com/gtag/js?id=${analytics.measurementId}`;
-    document.head.appendChild(gaScript);
-  }
-
-  // Update page metadata
-  const site = config.site || {};
-  if (site.title) document.title = site.title;
-  if (site.description) {
-    document.querySelector('meta[name="description"]')?.setAttribute('content', site.description);
-  }
-  if (site.keywords) {
-    document.querySelector('meta[name="keywords"]')?.setAttribute('content', site.keywords);
-  }
+function parseData() {
+  TOOLS = TOOLS_DATA || [];
+  if (window.TUTORIALS_DATA) window.__tuts = TUTORIALS_DATA;
 }
 
-// ===== News Mode =====
+// ===== Sidebar =====
+function buildSidebar() {
+  const nav = document.getElementById('sidebarNav');
+  nav.innerHTML = '';
+  Object.entries(CATEGORIES).forEach(([key, cat]) => {
+    const li = document.createElement('li');
+    li.className = 'sidebar-item';
+    const hasSub = cat.subs && cat.subs.length;
+    const count = TOOLS.filter(t => t.category === key).length;
+    const expandIcon = hasSub ? `<i class="fa fa-chevron-right sidebar-more"></i>` : '';
+    li.innerHTML = `
+      <a href="#" data-cat="${key}" onclick="filterByCategory('${key}')">
+        <i class="fa ${cat.icon}"></i><span>${cat.name}</span><span style="margin-left:auto;font-size:11px;color:var(--text-muted)">${count}</span>
+      </a>${expandIcon}
+      ${hasSub ? `<div class="sidebar-sub">${cat.subs.map(s => `<a href="#" onclick="filterByCategory('${key}')">${s}</a>`).join('')}</div>` : ''}`;
+    nav.appendChild(li);
+  });
+}
+
+// ===== Page Routing =====
+function loadPage(page, data) {
+  currentPage = page;
+  document.querySelectorAll('.header-nav a').forEach(a => a.classList.toggle('active', a.dataset.page === page));
+  const container = document.getElementById('pageContent');
+  const pages = { home: renderHome, news: renderNews, tutorials: renderTutorials, projects: renderProjects };
+  if (pages[page]) container.innerHTML = pages[page](data);
+}
+
+// ===== Home: Hero + Category Sections =====
+function renderHome() {
+  const hero = `
+    <div class="hero">
+      <img src="assets/icons/logo.svg" alt="AI 百宝箱"/>
+      <h1>AI 百宝箱</h1>
+      <p>精选 AI 工具，提升工作效率</p>
+      <div class="search-box">
+        <input id="searchInput" placeholder="搜索 AI 工具..." autocomplete="off"/>
+        <button onclick="doSearch()"><i class="fa fa-search"></i></button>
+      </div>
+    </div>`;
+  let sections = '';
+  Object.entries(CATEGORIES).forEach(([key, cat]) => {
+    const tools = TOOLS.filter(t => t.category === key);
+    if (!tools.length) return;
+    sections += `
+      <div class="section" id="section-${key}">
+        <div class="section-header">
+          <h2><i class="fa ${cat.icon}" style="color:var(--primary);margin-right:8px"></i>${cat.name}</h2>
+        </div>
+        <div class="tool-grid">${tools.map(t => renderToolCard(t)).join('')}</div>
+      </div>`;
+  });
+  return hero + sections;
+}
+
+function renderToolCard(t) {
+  const color = ICON_COLORS[Math.floor(Math.random() * ICON_COLORS.length)];
+  const isEmoji = t.icon && t.icon.length <= 2;
+  return `
+    <div class="tool-card" onclick="openTool('${t.id}')">
+      <div class="tool-icon" style="background:${color}20">${isEmoji ? `<span class="emoji">${t.icon}</span>` : `<img src="${t.icon}" alt=""/>`}</div>
+      <div class="tool-info">
+        <h3>${t.name}</h3>
+        <p>${t.desc || ''}</p>
+        <div class="tool-tags">${(t.tags || []).slice(0,3).map(tag => `<span class="tool-tag">${tag}</span>`).join('')}</div>
+      </div>
+    </div>`;
+}
+
+// ===== News =====
+function renderNews(items) {
+  const list = items || NEWS;
+  if (!list.length) return '<div class="page-header"><h1>AI 资讯</h1><p class="subtitle">加载中...</p></div>';
+  const groups = {};
+  list.forEach(n => {
+    const d = n.date ? n.date.slice(0,10) : '未知';
+    if (!groups[d]) groups[d] = [];
+    groups[d].push(n);
+  });
+  let html = '<div class="page-header"><h1>AI 资讯</h1><p class="subtitle">全球 AI 新闻，自动翻译中文</p></div><div class="news-timeline">';
+  Object.entries(groups).forEach(([date, items]) => {
+    html += `<div class="news-date-group"><div class="news-date-label">${date}</div>`;
+    items.forEach(n => {
+      html += `
+        <div class="news-card" onclick="openNews('${n.id || n.title}')">
+          <div class="meta">${n.source || 'AI 百宝箱'} · ${n.date || ''}</div>
+          <h3>${n.title}</h3>
+          <p>${n.desc || n.content?.slice(0,150) || ''}</p>
+        </div>`;
+    });
+    html += '</div>';
+  });
+  html += '</div>';
+  return html;
+}
+
 async function fetchNews() {
   try {
     const res = await fetch('/api/news');
-    if (res.ok) { NEWS_DATA = await res.json(); return; }
-  } catch {}
-  try {
-    const res = await fetch('data/news.json?_t=' + Date.now());
-    if (res.ok) { NEWS_DATA = await res.json(); }
+    if (res.ok) { NEWS = await res.json(); if (currentPage === 'news') loadPage('news'); }
   } catch {}
 }
 
-window.readArticle = async function (url) {
-  const overlay = document.getElementById('articleOverlay');
-  const content = document.getElementById('articleContent');
-  const loading = document.getElementById('articleLoading');
-  overlay.hidden = false;
-  loading.hidden = false;
-  content.textContent = '';
-  document.body.style.overflow = 'hidden';
-
-  const item = NEWS_DATA.find(function(n) { return n.url === url; });
-  if (item && item.content) {
-    loading.hidden = true;
-    content.textContent = item.content;
-    document.getElementById('articleTitle').textContent = item.title || '';
-    return;
-  }
-
-  try {
-    const res = await fetch('/api/fetch-article?url=' + encodeURIComponent(url));
-    if (!res.ok) throw new Error('获取失败');
-    const data = await res.json();
-    loading.hidden = true;
-    content.textContent = data.content || '暂无内容';
-    document.getElementById('articleTitle').textContent = data.title || '';
-    if (item && data.content) item.content = data.content;
-  } catch (e) {
-    loading.hidden = true;
-    content.textContent = '⚠️ 内容加载失败，请稍后重试';
-  }
-};
-
-window.closeArticle = function () {
-  document.getElementById('articleOverlay').hidden = true;
-  document.body.style.overflow = '';
-};
-
-function renderNews() {
-  const grid = document.getElementById('toolsGrid');
-  if (!NEWS_DATA || NEWS_DATA.length === 0) {
-    grid.innerHTML = '<div class="empty-state"><h3>📰 AI 资讯</h3><p>暂无资讯，请稍后再来查看</p></div>';
-    return;
-  }
-  grid.innerHTML = '';
-  NEWS_DATA.forEach((item, i) => {
-    const card = document.createElement('div');
-    card.className = 'news-card';
-    card.style.animationDelay = i * 0.08 + 's';
-    card.innerHTML = `
-      <div class="news-source">${escapeHtml(item.source || '')}</div>
-      <div class="news-title">${escapeHtml(item.title)}</div>
-      <div class="news-desc">${escapeHtml(item.desc || '').slice(0, 120)}</div>
-      <div class="news-footer">
-        <span class="news-date">${item.date || ''}</span>
-        <span class="news-read">阅读全文 →</span>
-      </div>`;
-    card.addEventListener('click', () => readArticle(item.url));
-    grid.appendChild(card);
+// ===== Tutorials =====
+function renderTutorials(items) {
+  const list = items || TUTORIALS;
+  if (!list.length) return '<div class="page-header"><h1>AI 教程资源</h1><p class="subtitle">加载中...</p></div>';
+  let html = '<div class="page-header"><h1>AI 教程资源</h1><p class="subtitle">从入门到精通的 AI 学习资料</p></div>';
+  html += '<div class="filter-bar">';
+  ['全部','入门','进阶','高级'].forEach(lv => {
+    html += `<span class="filter-btn ${lv === '全部' ? 'active' : ''}" onclick="filterTutorials('${lv}')">${lv}</span>`;
   });
-  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-  document.querySelector('.cat-btn[data-cat="news"]')?.classList.add('active');
-}
-
-function showNewsMode() {
-  currentMode = 'news';
-  location.hash = 'news';
-  document.getElementById('sceneTags').closest('.scenes').style.display = 'none';
-  const grid = document.getElementById('toolsGrid');
-  if (!NEWS_DATA || NEWS_DATA.length === 0) {
-    grid.innerHTML = '<div class="empty-state"><h3>📰 AI 资讯</h3><p>正在加载最新资讯...</p><div class="spinner" style="margin:1rem auto"></div></div>';
-    loadNews();
-  } else {
-    renderNews();
-  }
-}
-
-async function loadNews() {
-  try {
-    const res = await fetch('/api/news');
-    if (res.ok) {
-      NEWS_DATA = await res.json();
-      if (currentMode === 'news') renderNews();
-      return;
-    }
-  } catch {}
-  try {
-    const res = await fetch('data/news.json?_t=' + Date.now());
-    if (res.ok) {
-      NEWS_DATA = await res.json();
-      if (currentMode === 'news') renderNews();
-    }
-  } catch {}
-}
-
-function showToolsMode() {
-  currentMode = 'tools';
-  location.hash = '';
-  document.getElementById('sceneTags').closest('.scenes').style.display = '';
-}
-
-// ===== Particles =====
-function initParticles() {
-  if (typeof particlesJS === 'undefined') return;
-  const isMobile = window.innerWidth < 768;
-  particlesJS('particles', {
-    particles: {
-      number: { value: isMobile ? 25 : 50, density: { enable: true, value_area: isMobile ? 1200 : 800 } },
-      color: { value: '#6366f1' },
-      shape: { type: 'circle' },
-      opacity: { value: 0.2, random: false, anim: { enable: false } },
-      size: { value: 2, random: false },
-      line_linked: { enable: true, distance: 150, color: '#06b6d4', opacity: 0.1, width: 1 },
-      move: { enable: true, speed: 0.8, direction: 'none', random: false, straight: false }
-    },
-    interactivity: {
-      detect_on: 'canvas',
-      events: { onhover: { enable: false }, onclick: { enable: false } }
-    },
-    retina_detect: true
-  });
-}
-
-// ===== Render Scenes =====
-function renderScenes() {
-  const container = document.getElementById('sceneTags');
-  container.innerHTML = SCENES.map(scene =>
-    `<div class="scene-tag" data-scene="${scene.id}" onclick="filterByScene('${scene.id}', this)">${scene.label}</div>`
-  ).join('');
-}
-
-// ===== Render Tools =====
-function renderTools(tools) {
-  const grid = document.getElementById('toolsGrid');
-  currentTools = tools;
-
-  if (!tools || tools.length === 0) {
-    grid.innerHTML = `<div class="empty-state"><h3>😕 未找到匹配工具</h3><p>试试其他关键词或分类</p></div>`;
-    return;
-  }
-
-  grid.innerHTML = '';
-
-  tools.forEach((tool, index) => {
-    const card = document.createElement('div');
-    card.className = 'tool-card';
-    card.dataset.tool = tool.id;
-    card.dataset.tags = tool.tags.join(',');
-    card.style.animationDelay = `${(index % 12) * 0.04}s`;
-
-    card.innerHTML = `
-      <div class="tool-header">
-        <div class="tool-icon">${tool.icon}</div>
-        <div class="tool-name">${escapeHtml(tool.name)}${tool.badge ? `<span class="tool-badge">${tool.badge}</span>` : ''}</div>
-      </div>
-      <div class="tool-desc">${escapeHtml(tool.desc)}</div>
-      <div class="tool-tags">
-        ${tool.tags.map(t => `<span class="tag" data-tag="${escapeHtml(t)}">${escapeHtml(t)}</span>`).join('')}
-      </div>
-      <div class="tool-footer">
-        <span class="tool-link" onclick="handleToolClick(event, '${tool.id}', '${escapeHtml(tool.url)}')">立即使用 →</span>
-        ${tool.relations?.length
-          ? `<span class="tool-relation" onclick="event.stopPropagation();showRelations('${tool.id}')">🔗 关联</span>`
-          : ''}
-      </div>
-    `;
-
-    card.addEventListener('click', (e) => {
-      if (!e.target.closest('a') && !e.target.closest('.tool-relation') && !e.target.closest('.tag') && !e.target.closest('.tool-link')) {
-        handleToolClick(e, tool.id, tool.url);
-      }
-    });
-
-    grid.appendChild(card);
-  });
-}
-
-// ===== Ad unit creator (called after render if needed) =====
-function pushAdUnits() {
-  if (!window.__ADS_ENABLED) return;
-  try {
-    if (window.adsbygoogle) {
-      document.querySelectorAll('.adsbygoogle').forEach(() => {
-        (adsbygoogle = window.adsbygoogle || []).push({});
-      });
-    }
-  } catch (e) {
-    if (location.hostname === 'localhost') console.warn('[Ads] push error:', e);
-  }
-}
-
-// ===== Filter by Scene =====
-function filterByScene(sceneId, el) {
-  document.querySelectorAll('.scene-tag').forEach(t => t.classList.remove('active'));
-  if (el) el.classList.add('active');
-
-  const scene = SCENES.find(s => s.id === sceneId);
-  if (!scene) return;
-
-  const filtered = TOOLS_DATA.filter(t => scene.tools.includes(t.id));
-  renderTools(filtered);
-  document.getElementById('toolsGrid').scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-
-// ===== Category Filter =====
-document.querySelectorAll('.cat-btn').forEach(btn => {
-  btn.addEventListener('click', function (e) {
-    const cat = this.dataset.cat;
-    if (cat === 'news') {
-      showNewsMode();
-      return;
-    }
-    showToolsMode();
-    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-    this.classList.add('active');
-    document.querySelectorAll('.scene-tag').forEach(t => t.classList.remove('active'));
-    const filtered = cat === 'all' ? TOOLS_DATA : TOOLS_DATA.filter(t => t.category === cat);
-    renderTools(filtered);
-  });
-});
-
-// ===== Search =====
-const searchInput = document.getElementById('searchInput');
-const searchHints = document.getElementById('searchHints');
-
-searchInput.addEventListener('input', function () {
-  clearTimeout(searchTimeout);
-  const keyword = this.value.toLowerCase().trim();
-
-  if (keyword.length < 1) {
-    searchHints.classList.remove('show');
-    return;
-  }
-
-  searchTimeout = setTimeout(() => {
-    const matches = TOOLS_DATA.filter(t =>
-      t.name.toLowerCase().includes(keyword) ||
-      t.desc.toLowerCase().includes(keyword) ||
-      t.tags.some(tag => tag.toLowerCase().includes(keyword))
-    ).slice(0, 6);
-
-    if (matches.length > 0) {
-      searchHints.innerHTML = matches.map(m =>
-        `<div onclick="selectSearchResult('${m.id}')" role="option">
-          ${m.name}
-          <small style="color:var(--text-dim)">${m.desc.slice(0, 28)}...</small>
-        </div>`
-      ).join('');
-      searchHints.classList.add('show');
-    } else {
-      searchHints.innerHTML = '<div style="color:var(--text-dim);cursor:default">未找到匹配工具</div>';
-      searchHints.classList.add('show');
-    }
-  }, 200);
-});
-
-// Search submit on Enter
-searchInput.addEventListener('keydown', function (e) {
-  if (e.key === 'Enter') {
-    const keyword = this.value.toLowerCase().trim();
-    if (keyword.length < 1) return;
-
-    showToolsMode();
-    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-    const filtered = TOOLS_DATA.filter(t =>
-      t.name.toLowerCase().includes(keyword) ||
-      t.desc.toLowerCase().includes(keyword) ||
-      t.tags.some(tag => tag.toLowerCase().includes(keyword))
-    );
-    renderTools(filtered);
-    searchHints.classList.remove('show');
-  }
-});
-
-window.selectSearchResult = function (toolId) {
-  const tool = TOOLS_DATA.find(t => t.id === toolId);
-  if (tool) {
-    window.open(tool.url, '_blank');
-    trackClick(toolId, 'search');
-  }
-  searchHints.classList.remove('show');
-  searchInput.value = '';
-};
-
-// ===== Role Filter =====
-document.getElementById('roleSelect').addEventListener('change', function () {
-  const role = this.value;
-  const filtered = role === 'all'
-    ? TOOLS_DATA
-    : TOOLS_DATA.filter(t => t.roles?.includes(role));
-  renderTools(filtered);
-});
-
-// ===== Relations =====
-window.showRelations = function (toolId) {
-  const tool = TOOLS_DATA.find(t => t.id === toolId);
-  if (!tool?.relations?.length) return;
-
-  const panel = document.getElementById('relationsPanel');
-  const chain = document.getElementById('relationChain');
-
-  chain.innerHTML = tool.relations.map(rel => {
-    const relTool = TOOLS_DATA.find(t => t.id === rel.id);
-    const name = relTool ? relTool.name : rel.id;
-    const url = relTool?.url || '#';
-    return `
-      <div class="relation-item">
-        <div style="font-weight:600;margin-bottom:0.25rem">${escapeHtml(name)}</div>
-        <div style="font-size:0.85rem;color:var(--text-dim)">${escapeHtml(rel.reason)}</div>
-        <div style="margin-top:0.5rem">
-          <a href="${url}" target="_blank" rel="noopener" style="font-size:0.9rem">查看 →</a>
+  html += '</div><div class="content-grid">';
+  list.forEach(t => {
+    const levelClass = t.level === '入门' ? 'green' : t.level === '进阶' ? 'orange' : 'red';
+    html += `
+      <div class="content-card" onclick="openTutorial('${t.id || t.title}')">
+        <h3>${t.title}</h3>
+        <div class="desc">${t.desc}</div>
+        <div class="stats">
+          ${t.level ? `<span class="tool-tag ${levelClass}"><i class="fa fa-signal"></i> ${t.level}</span>` : ''}
+          ${(t.tags || []).slice(0,3).map(tag => `<span class="tool-tag">${tag}</span>`).join('')}
         </div>
-      </div>
-    `;
-  }).join('');
-
-  panel.hidden = false;
-  panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-
-  // Auto-hide after 8s
-  if (window._relationsTimer) clearTimeout(window._relationsTimer);
-  window._relationsTimer = setTimeout(() => {
-    closeRelations();
-  }, 8000);
-};
-
-window.closeRelations = function () {
-  const panel = document.getElementById('relationsPanel');
-  if (panel) panel.hidden = true;
-  if (window._relationsTimer) clearTimeout(window._relationsTimer);
-};
-
-// ===== Tag Click Filter =====
-document.addEventListener('click', function (e) {
-  const tagEl = e.target.closest('[data-tag]');
-  if (tagEl) {
-    showToolsMode();
-    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-    const tag = tagEl.dataset.tag;
-    const filtered = TOOLS_DATA.filter(t => t.tags.includes(tag));
-    renderTools(filtered);
-  }
-});
-
-// ===== Reset All =====
-window.resetAll = function () {
-  showToolsMode();
-  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-  document.querySelector('.cat-btn[data-cat="all"]')?.classList.add('active');
-  document.querySelectorAll('.scene-tag').forEach(t => t.classList.remove('active'));
-  document.getElementById('roleSelect').value = 'all';
-  searchInput.value = '';
-  searchHints.classList.remove('show');
-  renderTools(TOOLS_DATA);
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-};
-
-// ===== Scroll to Top Button =====
-function initScrollTop() {
-  const btn = document.getElementById('scrollTop');
-  window.addEventListener('scroll', () => {
-    btn.classList.toggle('visible', window.scrollY > 400);
-  }, { passive: true });
+        <div class="meta">
+          <span><i class="fa fa-user"></i> ${t.source || 'AI 百宝箱'}</span>
+          <span>${t.date || ''}</span>
+        </div>
+      </div>`;
+  });
+  html += '</div>';
+  return html;
 }
 
-// ===== Ads =====
-function getAdConfig() {
-  if (window.__AD_CONFIG) return window.__AD_CONFIG;
+async function fetchTutorials() {
+  const fallback = window.TUTORIALS_DATA || [];
   try {
-    const raw = document.querySelector('script[data-ad-config]');
-    if (raw) return JSON.parse(raw.dataset.adConfig);
+    const res = await fetch('/data/tutorials.json?_t=' + Date.now());
+    if (res.ok) {
+      const remote = await res.json();
+      const seen = new Set();
+      // Remote first (newer), then static as fallback for any missing
+      remote.forEach(t => seen.add(t.id || t.title));
+      TUTORIALS = [...remote, ...fallback.filter(t => !seen.has(t.id || t.title))];
+    } else { TUTORIALS = fallback; }
+  } catch { TUTORIALS = fallback; }
+  if (currentPage === 'tutorials') loadPage('tutorials');
+}
+
+function filterTutorials(level) {
+  if (level === '全部') { loadPage('tutorials'); return; }
+  loadPage('tutorials', TUTORIALS.filter(t => t.level === level));
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b.textContent === level));
+}
+
+function openTutorial(id) {
+  const t = TUTORIALS.find(x => x.id === id || x.title === id);
+  if (!t) return;
+  const levelClass = t.level === '入门' ? 'green' : t.level === '进阶' ? 'orange' : 'red';
+  openOverlay(`<h2>${t.title}</h2><div class="meta">${t.source || 'AI 百宝箱'} · ${t.date || ''} · <span class="tool-tag ${levelClass}">${t.level}</span></div><div class="body"><p>${t.desc}</p>${t.url && t.url !== '#' ? `<p style="margin-top:16px"><a href="${t.url}" target="_blank">阅读完整教程 →</a></p>` : ''}</div>`);
+}
+
+// ===== Projects (GitHub Trending) =====
+function renderProjects(items) {
+  const list = items || PROJECTS;
+  if (!list.length) return '<div class="page-header"><h1>AI 项目</h1><p class="subtitle">加载中...</p></div>';
+  let html = '<div class="page-header"><h1>最新 AI 项目</h1><p class="subtitle">GitHub 热门 AI 开源项目</p></div><div class="content-grid">';
+  list.forEach(p => {
+    html += `
+      <div class="content-card" onclick="window.open('${p.url || p.html_url}','_blank')">
+        <h3><i class="fa fa-github-alt" style="color:var(--primary)"></i> ${p.name || p.full_name}</h3>
+        <div class="desc">${p.description || p.desc || ''}</div>
+        <div class="stats">
+          ${p.stars ? `<span class="tool-tag"><i class="fa fa-star"></i> ${p.stars}</span>` : ''}
+          ${p.language ? `<span class="tool-tag green">${p.language}</span>` : ''}
+          ${p.license ? `<span class="tool-tag">${p.license}</span>` : ''}
+        </div>
+        <div class="meta" style="margin-top:8px">
+          <span><i class="fa fa-code-fork"></i> ${p.forks || ''}</span>
+          <span><i class="fa fa-clock-o"></i> ${p.updated || ''}</span>
+        </div>
+      </div>`;
+  });
+  html += '</div>';
+  return html;
+}
+
+async function fetchProjects() {
+  try {
+    const res = await fetch('/api/github-trending');
+    if (res.ok) { PROJECTS = await res.json(); if (currentPage === 'projects') loadPage('projects'); }
   } catch {}
-  return null;
 }
 
-function initAds() {
-  const adConfig = getAdConfig();
-  const enabled = adConfig?.enabled && window.__ADS_ENABLED;
-
-  window.__ADS_ENABLED = enabled;
-
-  // Populate ad slots with AdSense units
-  const inContent = document.getElementById('adInContent');
-  const banner = document.getElementById('adBanner');
-
-  if (enabled && adConfig) {
-    [inContent, banner].forEach((el, i) => {
-      if (!el) return;
-      el.style.display = 'flex';
-      el.innerHTML = '';
-
-      const ins = document.createElement('ins');
-      ins.className = 'adsbygoogle';
-      ins.style.cssText = 'display:block;text-align:center;min-height:90px;';
-      ins.dataset.adClient = adConfig.adsensePublisherId;
-      ins.dataset.adSlot = i === 0
-        ? (adConfig.adsenseSlot?.inContent || '')
-        : (adConfig.adsenseSlot?.banner || '');
-      ins.dataset.adFormat = 'auto';
-      ins.dataset.fullWidthResponsive = 'true';
-      el.appendChild(ins);
-    });
-
-    // Push ad units after a delay for script to load
-    setTimeout(pushAdUnits, 1000);
-  } else {
-    [inContent, banner].forEach(el => {
-      if (el) el.style.display = 'none';
-    });
-  }
-}
-
-// ===== Tracking =====
-function trackClick(toolId, source) {
-  // Console log in dev
-  if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
-    console.log(`[track] tool:${toolId} source:${source}`);
-  }
-  // GA4 gtag
-  if (typeof gtag === 'function') {
-    gtag('event', 'tool_click', { tool_id: toolId, source });
-  }
-}
-
-// ===== Escape HTML =====
-function escapeHtml(str) {
-  const div = document.createElement('div');
-  div.textContent = str;
-  return div.innerHTML;
-}
-
-// ===== Tool Click Guard =====
-window.handleToolClick = function (e, toolId, toolUrl) {
-  e.preventDefault();
-  e.stopPropagation();
-  const tool = TOOLS_DATA.find(t => t.id === toolId);
-  if (!tool?.login || currentUser) {
-    window.open(toolUrl, '_blank');
-    trackClick(toolId, 'card');
-  } else {
-    openAuthModal('login');
-  }
-};
-
-// ===== Submit Tool Modal =====
-document.getElementById('submitToolBtn')?.addEventListener('click', function (e) {
-  e.preventDefault();
-  document.getElementById('submitModal').hidden = false;
-  document.body.style.overflow = 'hidden';
-});
-
-window.closeSubmitModal = function () {
-  document.getElementById('submitModal').hidden = true;
-  document.body.style.overflow = '';
-};
-
-// Close on overlay click
-document.getElementById('submitModal')?.addEventListener('click', function (e) {
-  if (e.target === this) closeSubmitModal();
-});
-
-// Close on Escape
-document.addEventListener('keydown', function (e) {
-  if (e.key === 'Escape') closeSubmitModal();
-});
-
-window.handleSubmit = function (e) {
-  e.preventDefault();
-  const form = e.target;
-  const data = {
-    name: form.toolName.value.trim(),
-    desc: form.toolDesc.value.trim(),
-    url: form.toolUrl.value.trim(),
-    category: form.toolCategory.value,
-    tags: form.toolTags.value.trim()
-  };
-  if (!data.name || !data.desc || !data.url) return;
-
-  // Build mailto link for manual review
-  const subject = encodeURIComponent(`提交工具：${data.name}`);
-  const body = encodeURIComponent(
-    `工具名称：${data.name}\n简介：${data.desc}\n链接：${data.url}\n分类：${data.category}\n标签：${data.tags}`
-  );
-  window.open(`mailto:hi@aihub.pro?subject=${subject}&body=${body}`, '_blank');
-
-  form.reset();
-  closeSubmitModal();
-  showTip('✅ 已收到，我会尽快审核添加！');
-};
-
-// ===== Bind Global Events =====
+// ===== Navigation Events =====
 function bindEvents() {
-  document.addEventListener('click', function (e) {
-    if (!e.target.closest('.search-box')) {
-      searchHints.classList.remove('show');
-    }
+  document.querySelectorAll('.header-nav a').forEach(a => {
+    a.addEventListener('click', e => { e.preventDefault(); loadPage(a.dataset.page); });
   });
-  window.addEventListener('hashchange', () => {
-    if (location.hash === '#news') showNewsMode();
-    else if (!location.hash) showToolsMode();
+  document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+  document.getElementById('sidebarToggle').addEventListener('click', () => {
+    document.getElementById('sidebar').classList.toggle('open');
+    document.getElementById('sidebarOverlay').classList.toggle('show');
   });
-}
-
-// ===== Background Music (local MP3 + Web Audio API fallback) =====
-let musicStarted = false;
-let musicCtx = null;
-let musicNodes = [];
-let currentTrack = 0;
-let musicInterval = null;
-let useLocalFiles = false;
-let localTracks = [];
-let localTrackIndex = 0;
-const audio = document.getElementById('bgAudio');
-audio.volume = 0.6;
-
-function stopAudioNodes() {
-  musicNodes.forEach(n => { try { n.stop(); } catch {} });
-  musicNodes = [];
-  if (musicInterval) { clearInterval(musicInterval); musicInterval = null; }
-}
-
-function getLocalTrackFiles() {
-  const files = [];
-  for (let i = 1; i <= 50; i++) {
-    files.push('assets/music/track' + String(i).padStart(2, '0') + '.mp3');
-  }
-  return files;
-}
-
-async function findLocalTracks() {
-  const candidates = getLocalTrackFiles();
-  const found = [];
-  for (const path of candidates) {
-    try {
-      const res = await fetch(path, { method: 'HEAD', signal: AbortSignal.timeout(2000) });
-      if (res.ok) found.push(path);
-      if (found.length >= 20) break;
-    } catch {}
-  }
-  return found;
-}
-
-const AMBIENT_TRACKS = [
-  { notes: [261.63, 329.63, 392.00], dur: 4000 },
-  { notes: [293.66, 369.99, 440.00], dur: 4000 },
-  { notes: [329.63, 415.30, 493.88], dur: 4000 },
-  { notes: [349.23, 440.00, 523.25], dur: 4000 },
-  { notes: [392.00, 493.88, 587.33], dur: 4000 },
-  { notes: [261.63, 349.23, 440.00], dur: 4000 },
-  { notes: [293.66, 369.99, 466.16], dur: 4000 },
-  { notes: [220.00, 329.63, 392.00], dur: 4000 },
-];
-
-function playAmbientTrack(index) {
-  if (!musicCtx) return;
-  stopAudioNodes();
-  const track = AMBIENT_TRACKS[index % AMBIENT_TRACKS.length];
-  const gain = musicCtx.createGain();
-  gain.gain.value = 0.04;
-  gain.connect(musicCtx.destination);
-  track.notes.forEach(freq => {
-    const osc = musicCtx.createOscillator();
-    osc.type = 'sine';
-    osc.frequency.value = freq;
-    const g = musicCtx.createGain();
-    g.gain.value = 0.3;
-    osc.connect(g);
-    g.connect(gain);
-    osc.start();
-    musicNodes.push(osc);
+  document.getElementById('sidebarOverlay').addEventListener('click', () => {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sidebarOverlay').classList.remove('show');
   });
-  musicInterval = setTimeout(() => {
-    if (musicStarted) {
-      currentTrack = (currentTrack + 1) % AMBIENT_TRACKS.length;
-      playAmbientTrack(currentTrack);
-    }
-  }, track.dur);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeArticle(); });
 }
 
-audio.addEventListener('ended', () => {
-  if (!musicStarted || !useLocalFiles) return;
-  localTrackIndex = (localTrackIndex + 1) % localTracks.length;
-  audio.src = localTracks[localTrackIndex];
-  audio.play().catch(() => {});
-});
-
-async function playMusic() {
-  stopAudioNodes();
-  if (!useLocalFiles) {
-    localTracks = await findLocalTracks();
-    useLocalFiles = localTracks.length > 0;
-  }
-  if (useLocalFiles) {
-    localTrackIndex = Math.floor(Math.random() * localTracks.length);
-    audio.src = localTracks[localTrackIndex];
-    audio.play().then(() => {
-      document.getElementById('musicToggle').textContent = '🔊';
-      document.getElementById('musicToggle').classList.add('playing');
-      musicStarted = true;
-      localStorage.setItem('bgMusic', 'playing');
-    }).catch(() => {
-      useLocalFiles = false;
-      playAmbientFallback();
-    });
-  } else {
-    playAmbientFallback();
-  }
+function filterByCategory(cat) {
+  currentCategory = cat;
+  loadPage('home');
+  setTimeout(() => {
+    const el = document.getElementById('section-' + cat);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 100);
+  // Close sidebar on mobile
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebarOverlay').classList.remove('show');
 }
 
-function playAmbientFallback() {
-  musicCtx = new (window.AudioContext || window.webkitAudioContext)();
-  if (musicCtx.state === 'suspended') musicCtx.resume();
-  musicStarted = true;
-  currentTrack = Math.floor(Math.random() * AMBIENT_TRACKS.length);
-  playAmbientTrack(currentTrack);
-  document.getElementById('musicToggle').textContent = '🔊';
-  document.getElementById('musicToggle').classList.add('playing');
-  localStorage.setItem('bgMusic', 'playing');
+function doSearch() {
+  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+  if (!q) return;
+  const results = TOOLS.filter(t => t.name.toLowerCase().includes(q) || (t.desc || '').toLowerCase().includes(q) || (t.tags || []).some(tag => tag.toLowerCase().includes(q)));
+  if (!results.length) { showToast('未找到匹配工具'); return; }
+  // Show results as home page with only matching tools
+  const hero = document.querySelector('.hero')?.outerHTML || '';
+  const grid = `<div class="section"><div class="section-header"><h2>搜索结果 (${results.length})</h2></div><div class="tool-grid">${results.map(t => renderToolCard(t)).join('')}</div></div>`;
+  document.getElementById('pageContent').innerHTML = hero + grid;
 }
 
-function stopMusic() {
-  stopAudioNodes();
-  audio.pause();
-  audio.src = '';
-  if (musicCtx) { musicCtx.close(); musicCtx = null; }
-  musicStarted = false;
-  useLocalFiles = false;
-  document.getElementById('musicToggle').textContent = '🎵';
-  document.getElementById('musicToggle').classList.remove('playing');
-  localStorage.setItem('bgMusic', 'paused');
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
 }
 
-window.toggleMusic = function () {
-  if (musicStarted) {
-    stopMusic();
-  } else {
-    playMusic();
-  }
-};
+// ===== Theme =====
+function toggleTheme() {
+  document.body.classList.toggle('dark-mode');
+  document.getElementById('themeToggle').textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+  localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+}
+const savedTheme = localStorage.getItem('theme');
+if (savedTheme === 'dark') { document.body.classList.add('dark-mode'); document.getElementById('themeToggle').textContent = '☀️'; }
 
-document.addEventListener('click', function startMusic() {
-  if (musicStarted) return;
-  document.removeEventListener('click', startMusic);
-  if (localStorage.getItem('bgMusic') === 'playing') {
-    playMusic();
-  }
-  musicStarted = true;
-}, { once: true });
+// ===== Overlay =====
+function openTool(id) {
+  const t = TOOLS.find(x => x.id === id);
+  if (!t) return;
+  openOverlay(`<h2>${t.icon || ''} ${t.name}</h2><div class="meta">${t.url ? `<a href="${t.url}" target="_blank">${t.url}</a>` : ''} · ${(t.tags || []).join(' / ')}</div><div class="body"><p>${t.desc || ''}</p></div>`);
+}
+
+function openNews(id) {
+  const n = NEWS.find(x => x.id === id || x.title === id);
+  if (!n) return;
+  openOverlay(`<h2>${n.title}</h2><div class="meta">${n.source || ''} · ${n.date || ''}</div><div class="body"><p>${n.content || n.desc || ''}</p>${n.url ? `<p><a href="${n.url}" target="_blank">阅读原文 →</a></p>` : ''}</div>`);
+}
+
+function openOverlay(html) {
+  document.getElementById('articleInner').innerHTML = html;
+  document.getElementById('articleOverlay').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeArticle() {
+  document.getElementById('articleOverlay').classList.remove('show');
+  document.body.style.overflow = '';
+}

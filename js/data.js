@@ -1117,3 +1117,87 @@ const TAG_RELATIONS = {
   '推理': ['逻辑', '数学', '代码', '深度思考', '分析'],
   '多模态': ['图像', '视频', '语音', '文档', '识别']
 };
+
+// ===== Tutorials Data (AI 教程) =====
+const TUTORIALS_DATA = [
+  {
+    title: 'ChatGPT 从入门到精通',
+    desc: '覆盖账号注册、提示词工程、插件使用、API 调用等全流程教程。',
+    url: '#',
+    source: 'AI 百宝箱',
+    level: '入门',
+    tags: ['ChatGPT', '提示词', 'GPT-4']
+  },
+  {
+    title: 'Midjourney 绘画完全指南',
+    desc: '参数详解、提示词公式、风格参考、商业应用案例一应俱全。',
+    url: '#',
+    source: 'AI 百宝箱',
+    level: '进阶',
+    tags: ['Midjourney', 'AI绘画', '设计']
+  },
+  {
+    title: 'Claude 编程实战技巧',
+    desc: '用 Claude 辅助编码、调试、代码审查、文档生成的最佳实践。',
+    url: '#',
+    source: 'AI 百宝箱',
+    level: '进阶',
+    tags: ['Claude', '编程', 'Anthropic']
+  },
+  {
+    title: 'AI 视频制作全流程',
+    desc: '从脚本生成到 AI 配音、数字人播报、自动剪辑的完整工作流。',
+    url: '#',
+    source: 'AI 百宝箱',
+    level: '入门',
+    tags: ['视频', '数字人', '剪辑']
+  },
+  {
+    title: 'Cursor AI 编辑器入门',
+    desc: 'AI 原生 IDE 的使用技巧，包括代码补全、对话调试、项目重构。',
+    url: '#',
+    source: 'AI 百宝箱',
+    level: '入门',
+    tags: ['Cursor', '编辑器', '效率']
+  },
+  {
+    title: 'DeepSeek R1 推理模型深度解析',
+    desc: '深入讲解 DeepSeek R1 的推理能力、使用场景和提示词策略。',
+    url: '#',
+    source: 'AI 百宝箱',
+    level: '进阶',
+    tags: ['DeepSeek', '推理', '国产']
+  },
+  {
+    title: 'AI Agent 开发入门',
+    desc: '使用 Dify / Coze / LangChain 搭建智能助手和自动化工作流。',
+    url: '#',
+    source: 'AI 百宝箱',
+    level: '进阶',
+    tags: ['Agent', 'Dify', 'Coze']
+  },
+  {
+    title: 'Suno AI 音乐创作教程',
+    desc: 'AI 生成音乐从零开始：歌词创作、风格控制、混音导出技巧。',
+    url: '#',
+    source: 'AI 百宝箱',
+    level: '入门',
+    tags: ['Suno', '音乐', 'AI创作']
+  },
+  {
+    title: 'Perplexity AI 深度搜索技巧',
+    desc: '学术搜索、实时数据、文件分析等高级使用方法和提示词范例。',
+    url: '#',
+    source: 'AI 百宝箱',
+    level: '入门',
+    tags: ['Perplexity', '搜索', '研究']
+  },
+  {
+    title: 'AI 工具组合工作流案例',
+    desc: '真实业务场景中多个 AI 工具的组合使用方案，提升整体效率。',
+    url: '#',
+    source: 'AI 百宝箱',
+    level: '进阶',
+    tags: ['工作流', '效率', '案例']
+  }
+];

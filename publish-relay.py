@@ -6,7 +6,7 @@ WP_USER = 'aiager'
 WP_PASS = '9X0C16Rs'
 GH_REPO = 'wuge665/aiager'
 GH_BRANCH = 'master'
-GH_FILE = 'data/news.json'
+GH_FILE = 'data/news.json'  # default, overridden by type
 GH_TOKEN = os.environ.get('GITHUB_TOKEN', '')
 
 def esc(s):
@@ -42,11 +42,12 @@ async def wp_post(title, content, status):
                 raise Exception(f'WP XML-RPC {resp.status}: {text[:200]}')
     return await asyncio.wait_for(_do_post(), timeout=15)
 
-async def gh_commit(title, wp_id, src, content, desc):
+async def gh_commit(title, wp_id, src, content, desc, gh_file=None, entry_extra=None):
     if not GH_TOKEN:
         return 'no-token'
     from datetime import date
     today = date.today().isoformat()
+    target = gh_file or 'data/news.json'
     entry = {
         'id': f'wp-{wp_id}-{today}',
         'title': title,
@@ -57,9 +58,11 @@ async def gh_commit(title, wp_id, src, content, desc):
         'content': content,
         'userEdited': True
     }
+    if entry_extra:
+        entry.update(entry_extra)
     async with ClientSession() as sess:
         h = {'Authorization': f'Bearer {GH_TOKEN}', 'Accept': 'application/vnd.github.v3+json'}
-        async with sess.get(f'https://api.github.com/repos/{GH_REPO}/contents/{GH_FILE}?ref={GH_BRANCH}', headers=h) as r:
+        async with sess.get(f'https://api.github.com/repos/{GH_REPO}/contents/{target}?ref={GH_BRANCH}', headers=h) as r:
             if r.status != 200:
                 return f'GH GET {r.status}'
             f = await r.json()
@@ -68,7 +71,7 @@ async def gh_commit(title, wp_id, src, content, desc):
         if len(cur) > 100:
             cur = cur[:100]
         new_enc = base64.b64encode(json.dumps(cur, ensure_ascii=False, indent=2).encode()).decode()
-        async with sess.put(f'https://api.github.com/repos/{GH_REPO}/contents/{GH_FILE}', headers=h, json={
+        async with sess.put(f'https://api.github.com/repos/{GH_REPO}/contents/{target}', headers=h, json={
             'message': f'publish: {title}',
             'content': new_enc,
             'sha': f['sha'],
@@ -97,21 +100,33 @@ async def handle(request):
     except Exception as e:
         wp_result = f'FAIL {e}'
 
+    content_type = data.get('type', 'news')
+    gh_file = 'data/tutorials.json' if content_type == 'tutorial' else 'data/news.json'
+    entry_extra = None
+    if content_type == 'tutorial':
+        entry_extra = {
+            'level': data.get('level', '入门'),
+            'tags': data.get('tags', ['AI', '教程'])
+        }
+
     gh_result = 'no-token'
     if GH_TOKEN and wp_id != '0':
-        gh_result = await gh_commit(data['title'], wp_id, data.get('source', ''), data['content'], data.get('desc', ''))
+        gh_result = await gh_commit(data['title'], wp_id, data.get('source', ''), data['content'], data.get('desc', ''), gh_file, entry_extra)
 
+    result_key = 'tutorialEntry' if content_type == 'tutorial' else 'newsEntry'
     return web.json_response({
         'success': True,
         'wpResult': wp_result,
         'ghResult': gh_result,
+        'type': content_type,
         'wordpress': {
             'id': wp_id,
             'url': f'https://aiager.wordpress.com/?p={wp_id}',
             'editUrl': f'https://aiager.wordpress.com/wp-admin/post.php?post={wp_id}&action=edit'
         } if wp_id != '0' else None,
-        'newsEntry': {
+        result_key: {
             'synced': gh_result == 'OK',
+            'file': gh_file,
             '_note': 'GITHUB_TOKEN not configured — add to Cloudflare Pages env vars' if gh_result == 'no-token' else None
         }
     })

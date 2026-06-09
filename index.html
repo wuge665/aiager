@@ -1,257 +1,78 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>AI 百宝箱 | 精选AI工具导航</title>
-  <style>body{background:#0a0e17;min-height:100vh;display:flex;flex-direction:column}main{flex:1}</style>
-  <meta name="description" content="精选AI工具，提升工作效率 — 写作/编程/设计/视频全收录"/>
-  <meta name="keywords" content="AI工具,人工智能,效率工具,写作,编程,设计"/>
+  <title>AI 百宝箱 | 精选 AI 工具导航</title>
+  <meta name="description" content="精选 AI 工具，提升工作效率 — 写作/编程/设计/视频全收录"/>
+  <meta name="keywords" content="AI 工具,人工智能,效率工具,写作,编程,设计"/>
   <meta name="robots" content="index, follow"/>
   <link rel="canonical" href="https://aiager.top/"/>
-
-  <!-- Open Graph -->
   <meta property="og:title" content="AI 百宝箱"/>
-  <meta property="og:description" content="精选AI工具，提升工作效率 — 写作/编程/设计/视频全收录"/>
+  <meta property="og:description" content="精选 AI 工具，提升工作效率"/>
   <meta property="og:type" content="website"/>
   <meta property="og:url" content="https://aiager.top/"/>
   <meta property="og:image" content="https://aiager.top/assets/icons/logo.svg"/>
-
-  <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image"/>
-  <meta name="twitter:title" content="AI 百宝箱"/>
-  <meta name="twitter:description" content="精选AI工具，提升工作效率 — 写作/编程/设计/视频全收录"/>
-
   <link rel="stylesheet" href="css/style.css"/>
   <link rel="icon" href="assets/icons/logo.svg" type="image/svg+xml"/>
-  <link rel="apple-touch-icon" href="assets/icons/logo.svg"/>
-
-  <!-- Preconnect to CDN -->
   <link rel="preconnect" href="https://cdn.jsdelivr.net"/>
   <link rel="dns-prefetch" href="https://cdn.jsdelivr.net"/>
-
-  <!-- Google AdSense -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5148253505955374"
-     crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css"/>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5148253505955374" crossorigin="anonymous"></script>
 </head>
 <body>
-  <!-- Loading indicator -->
-  <div id="loader" class="loader" aria-hidden="true">
-    <div class="spinner"></div>
-  </div>
+  <!-- Loader -->
+  <div id="loader" class="loader"><div class="spinner"></div></div>
 
-  <!-- Dynamic particle background -->
-  <div id="particles" aria-hidden="true"></div>
-
-  <!-- Top navigation -->
-  <header class="glass-nav" role="banner">
-    <div class="logo" role="button" tabindex="0" onclick="resetAll()" onkeydown="if(event.key==='Enter')resetAll()">
-      <img src="assets/icons/logo.svg" alt="AI Hub Pro" width="32" height="32"/>
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <img src="assets/icons/logo.svg" alt="AI 百宝箱"/>
       <span>AI 百宝箱</span>
     </div>
-
-    <!-- Smart search -->
-    <div class="search-box" role="search">
-      <input type="text" id="searchInput" placeholder="搜索工具 / 场景 / 标签..." autocomplete="off" aria-label="搜索工具"/>
-      <div class="search-hints" id="searchHints" role="listbox"></div>
-    </div>
-
-    <!-- Role switcher -->
-    <div class="user-role">
-      <select id="roleSelect" aria-label="用户角色筛选">
-        <option value="all">🌐 全部角色</option>
-        <option value="operator">✍️ 公众号运营</option>
-        <option value="developer">💻 技术开发者</option>
-        <option value="designer">🎨 创意设计师</option>
-        <option value="student">🎓 学习研究者</option>
-      </select>
-    </div>
-
-    <!-- Auth -->
-    <div class="auth-bar">
-      <button class="auth-btn" id="loginBtn" onclick="openAuthModal('login')">登录</button>
-      <div class="user-menu" id="userMenu" style="display:none">
-        <span class="user-name" id="userName"></span>
-        <button class="auth-btn auth-outline" onclick="signOut()">退出</button>
-      </div>
-    </div>
-  </header>
-
-  <!-- Main content -->
-  <main role="main">
-    <!-- Scene quick access -->
-    <section class="scenes" aria-label="热门场景">
-      <h3>🎯 热门场景</h3>
-      <div class="scene-tags" id="sceneTags"></div>
-      <a href="https://thbe.pages.dev" target="_blank" class="launch-btn">🔧 工具台</a>
-      <a href="https://memohmt4.tail369da7.ts.net/" target="_blank" class="launch-btn">💬 OpenCode</a>
-    </section>
-
-    <!-- Category navigation -->
-    <nav class="categories" aria-label="工具分类">
-      <button class="cat-btn active" data-cat="all">全部</button>
-      <button class="cat-btn" data-cat="writing">✍️ 写作</button>
-      <button class="cat-btn" data-cat="video">🎬 视频</button>
-      <button class="cat-btn" data-cat="image">🎨 图像</button>
-      <button class="cat-btn" data-cat="code">💻 编程</button>
-      <button class="cat-btn" data-cat="agent">🤖 智能体</button>
-      <button class="cat-btn" data-cat="audio">🎵 音频</button>
-      <button class="cat-btn" data-cat="productivity">⚡ 效率</button>
-      <button class="cat-btn" data-cat="news">📰 AI 资讯</button>
+    <nav class="sidebar-menu">
+      <ul id="sidebarNav"></ul>
     </nav>
+    <div class="sidebar-bottom">
+      <a href="https://github.com/wuge665/aiager" target="_blank"><i class="fa fa-github"></i> GitHub</a>
+      <a href="/editor.html" target="_blank"><i class="fa fa-edit"></i> 发布</a>
+    </div>
+  </aside>
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-    <!-- In-content ad slot -->
-    <div class="ad-container ad-incontent" id="adInContent" aria-hidden="true" style="display:none"></div>
-
-    <!-- Tool cards grid -->
-    <section class="tools-grid" id="toolsGrid" aria-label="工具列表"></section>
-
-    <!-- Banner ad slot -->
-    <div class="ad-container ad-banner" id="adBanner" aria-hidden="true" style="display:none"></div>
-
-    <!-- Deep relation panel -->
-    <section class="relations-panel" id="relationsPanel" hidden aria-label="深度关联推荐">
-      <div class="relations-header">
-        <h3>🔗 深度关联推荐</h3>
-        <button class="relations-close" onclick="closeRelations()" aria-label="关闭">✕</button>
+  <!-- Main -->
+  <div class="main-content">
+    <!-- Header -->
+    <header class="header">
+      <button class="sidebar-toggle" id="sidebarToggle" aria-label="菜单">☰</button>
+      <nav class="header-nav" id="headerNav">
+        <a href="#" data-page="home" class="active"><i class="fa fa-th"></i> 工具集</a>
+        <a href="#" data-page="news"><i class="fa fa-newspaper-o"></i> AI 资讯</a>
+        <a href="#" data-page="tutorials"><i class="fa fa-graduation-cap"></i> AI 教程</a>
+        <a href="#" data-page="projects"><i class="fa fa-github-alt"></i> AI 项目</a>
+      </nav>
+      <div class="header-right">
+        <button class="theme-toggle" id="themeToggle" aria-label="切换主题">🌙</button>
       </div>
-      <div class="relation-chain" id="relationChain"></div>
-    </section>
-  </main>
+    </header>
 
-  <!-- Floating WeChat widget -->
-  <div class="wechat-float" id="wechatFloat" role="button" tabindex="0" aria-label="公众号联动">
-    <div class="wechat-icon">💬</div>
-    <div class="wechat-tip">公众号回复【工具名】获取专属教程</div>
-    <div class="wechat-qrcode" id="wechatQR">
-      <img src="assets/images/wechat-qr.png" alt="公众号二维码" loading="lazy" onerror="this.closest('.wechat-qrcode')?.remove()"/>
+    <!-- Page content -->
+    <div class="page-content" id="pageContent"></div>
+  </div>
+
+  <!-- Article overlay -->
+  <div class="overlay" id="articleOverlay">
+    <div class="overlay-content" id="articleBody">
+      <button class="overlay-close" onclick="closeArticle()">✕</button>
+      <div id="articleInner"></div>
     </div>
   </div>
 
-  <!-- Scroll to top -->
-  <button class="scroll-top" id="scrollTop" aria-label="返回顶部" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+  <!-- Toast -->
+  <div id="toast" class="toast"></div>
 
-  <!-- Submit tool modal -->
-  <div class="modal-overlay" id="submitModal" hidden>
-    <div class="modal" role="dialog" aria-label="提交工具">
-      <div class="modal-header">
-        <h3>📦 提交工具</h3>
-        <button class="modal-close" onclick="closeSubmitModal()" aria-label="关闭">✕</button>
-      </div>
-      <form id="submitForm" onsubmit="handleSubmit(event)">
-        <div class="form-group">
-          <label for="toolName">工具名称 *</label>
-          <input type="text" id="toolName" required placeholder="例如：ChatGPT"/>
-        </div>
-        <div class="form-group">
-          <label for="toolDesc">一句话简介 *</label>
-          <input type="text" id="toolDesc" required placeholder="用一句话描述这个工具"/>
-        </div>
-        <div class="form-group">
-          <label for="toolUrl">工具链接 *</label>
-          <input type="url" id="toolUrl" required placeholder="https://"/>
-        </div>
-        <div class="form-group">
-          <label for="toolCategory">分类</label>
-          <select id="toolCategory">
-            <option value="writing">✍️ 写作</option>
-            <option value="video">🎬 视频</option>
-            <option value="image">🎨 图像</option>
-            <option value="code">💻 编程</option>
-            <option value="agent">🤖 智能体</option>
-            <option value="audio">🎵 音频</option>
-            <option value="productivity">⚡ 效率</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="toolTags">标签（逗号分隔）</label>
-          <input type="text" id="toolTags" placeholder="免费, 国产, 效率"/>
-        </div>
-        <button type="submit" class="submit-btn">提交</button>
-        <p class="form-note">提交后我会审核并添加到列表中 🚀</p>
-      </form>
-    </div>
-  </div>
-
-  <!-- Auth Modal -->
-  <div class="modal-overlay" id="authModal" hidden>
-    <div class="modal modal-auth" role="dialog" aria-label="登录/注册">
-      <div class="modal-header">
-        <div class="auth-tabs">
-          <button class="auth-tab active" data-tab="login" onclick="switchAuthTab('login')">登录</button>
-          <button class="auth-tab" data-tab="signup" onclick="switchAuthTab('signup')">注册</button>
-        </div>
-        <button class="modal-close" onclick="closeAuthModal()" aria-label="关闭">✕</button>
-      </div>
-
-      <form id="form-login" class="auth-form" onsubmit="handleAuthSubmit(event,'login')">
-        <div class="form-group">
-          <label for="loginEmail">邮箱</label>
-          <input type="email" id="loginEmail" name="email" required placeholder="you@example.com" />
-        </div>
-        <div class="form-group">
-          <label for="loginPassword">密码</label>
-          <input type="password" id="loginPassword" name="password" required minlength="4" placeholder="至少4位密码" />
-        </div>
-        <div class="auth-msg" style="display:none"></div>
-        <button type="submit" class="submit-btn auth-submit">登录</button>
-        <p class="auth-hint"><a href="#" onclick="resetPassword()" style="color:var(--accent);text-decoration:none;font-size:0.85rem">忘记密码？</a></p>
-      </form>
-
-      <form id="form-signup" class="auth-form" style="display:none" onsubmit="handleAuthSubmit(event,'signup')">
-        <div class="form-group">
-          <label for="signupEmail">邮箱</label>
-          <input type="email" id="signupEmail" name="email" required placeholder="you@example.com" />
-        </div>
-        <div class="form-group">
-          <label for="signupPassword">密码</label>
-          <input type="password" id="signupPassword" name="password" required minlength="4" placeholder="至少4位密码" />
-        </div>
-        <div class="form-group">
-          <label for="signupConfirm">确认密码</label>
-          <input type="password" id="signupConfirm" oninput="this.setCustomValidity(this.value!==this.form.password.value?'密码不一致':'')" required placeholder="再次输入密码" />
-        </div>
-        <div class="auth-msg" style="display:none"></div>
-        <button type="submit" class="submit-btn auth-submit">注册</button>
-        <p class="auth-hint">注册即表示同意使用条款，邮箱仅用于登录</p>
-      </form>
-    </div>
-  </div>
-
-  <!-- Background Audio -->
-  <audio id="bgAudio" preload="none"></audio>
-
-  <!-- Article Reader Modal -->
-  <div class="modal-overlay" id="articleOverlay" hidden>
-    <div class="modal modal-article" role="dialog" aria-label="文章阅读">
-      <div class="modal-header">
-        <h3 id="articleTitle">加载中...</h3>
-        <button class="modal-close" onclick="closeArticle()" aria-label="关闭">✕</button>
-      </div>
-      <div class="article-body">
-        <div id="articleLoading" class="article-loading">📡 加载中...</div>
-        <div id="articleContent" class="article-content"></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Background Music -->
-  <button class="music-toggle" id="musicToggle" aria-label="背景音乐" onclick="toggleMusic()">🎵</button>
-
-  <!-- Footer -->
-  <footer role="contentinfo">
-    <p>© 2026 AI 百宝箱 · 为创作者赋能 · <a href="#" id="submitToolBtn">提交工具</a> · <a href="privacy.html" target="_blank">隐私政策</a></p>
-  </footer>
-
-  <!-- Scripts -->
-  <script src="js/auth-config.js?v=2"></script>
-  <script src="js/data.js?v=2"></script>
-  <script src="js/wechat.js?v=2"></script>
-  <script src="js/auth2.js"></script>
-  <script src="js/main.js?v=2"></script>
-  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js" defer></script>
-  <script>
-    document.getElementById('loader').style.display = 'none';
-  </script>
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
 </body>
 </html>
