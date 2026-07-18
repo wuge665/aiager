@@ -2,7 +2,7 @@
 // 用于将 GitHub 热门 AI 项目的英文描述替换为更详细、有吸引力的中文内容
 // 优先级：本地中文映射 > API 英文原内容
 
-const PROJECTS_CN = {
+var PROJECTS_CN = {
   // === 实际 API 返回的项目 ===
   'AutoGPT': {
     name: 'AutoGPT',
