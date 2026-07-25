@@ -68,8 +68,8 @@ async def gh_commit(title, wp_id, src, content, desc, gh_file=None, entry_extra=
             f = await r.json()
         cur = json.loads(base64.b64decode(f['content']).decode())
         cur.insert(0, entry)
-        if len(cur) > 100:
-            cur = cur[:100]
+        if len(cur) > 200:
+            cur = cur[:200]
         new_enc = base64.b64encode(json.dumps(cur, ensure_ascii=False, indent=2).encode()).decode()
         async with sess.put(f'https://api.github.com/repos/{GH_REPO}/contents/{target}', headers=h, json={
             'message': f'publish: {title}',

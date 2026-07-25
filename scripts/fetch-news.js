@@ -141,9 +141,34 @@ async function main() {
 
   const outputPath = path.join(__dirname, '..', 'data', 'news.json');
   fs.mkdirSync(path.dirname(outputPath), { recursive: true });
-  fs.writeFileSync(outputPath, JSON.stringify(top5, null, 2), 'utf-8');
-  console.log(`Written ${top5.length} news items to data/news.json`);
-  console.log('Titles:');
+
+  // Read existing entries to preserve previously published content
+  let existing = [];
+  try {
+    const raw = fs.readFileSync(outputPath, 'utf-8');
+    existing = JSON.parse(raw);
+    if (!Array.isArray(existing)) existing = [];
+  } catch (e) {
+    console.log('No existing news.json, starting fresh');
+  }
+
+  // Merge: new items first, then existing; deduplicate by title prefix
+  const seen = new Set();
+  const merged = [];
+  for (const item of [...top5, ...existing]) {
+    const key = (item.title || '').slice(0, 30).toLowerCase();
+    if (!seen.has(key)) {
+      seen.add(key);
+      merged.push(item);
+    }
+  }
+
+  // Cap at 200 entries
+  const final = merged.slice(0, 200);
+
+  fs.writeFileSync(outputPath, JSON.stringify(final, null, 2), 'utf-8');
+  console.log(`Written ${final.length} news items to data/news.json (${top5.length} new + ${existing.length} existing, deduped & capped at 200)`);
+  console.log('New titles:');
   top5.forEach((item, i) => console.log(`  ${i + 1}. [${item.source}] ${item.title}`));
 }
 
