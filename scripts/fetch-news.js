@@ -156,6 +156,42 @@ async function main() {
     }
   }
 
+  // Translate English titles/descs to Chinese
+  const ZH_SOURCES = ['36氪', 'InfoQ', '量子位'];
+  function isEnglish(text) {
+    if (!text) return false;
+    const letters = (text.match(/[a-zA-Z]/g) || []).length;
+    return letters / text.length > 0.3;
+  }
+  async function translateZh(text) {
+    if (!text) return '';
+    try {
+      const url = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=zh-CN&dt=t&q=' + encodeURIComponent(text.slice(0, 500));
+      const res = await fetch(url, { signal: AbortSignal.timeout(5000) });
+      if (!res.ok) return text;
+      const data = await res.json();
+      return data[0].map(s => s[0]).join('') || text;
+    } catch { return text; }
+  }
+
+  for (const item of top5) {
+    if (ZH_SOURCES.includes(item.source) || !isEnglish(item.title)) {
+      item.translated = false;
+      continue;
+    }
+    try {
+      const origTitle = item.title;
+      item.title = await translateZh(item.title);
+      if (isEnglish(item.desc)) item.desc = await translateZh(item.desc);
+      item.origTitle = origTitle;
+      item.translated = true;
+      console.log(`  [翻译] ${origTitle.slice(0, 30)} → ${item.title.slice(0, 30)}`);
+    } catch (e) {
+      console.warn(`[translate] failed: ${e.message}`);
+      item.translated = false;
+    }
+  }
+
   const outputPath = path.join(__dirname, '..', 'data', 'news.json');
   fs.mkdirSync(path.dirname(outputPath), { recursive: true });
 

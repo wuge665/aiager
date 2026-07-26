@@ -1,5 +1,64 @@
 [
   {
+    "id": "multiway-turing-machines-2021-pre-ai-1785107769944",
+    "title": "多路图灵机（2021 年人工智能之前）",
+    "desc": "文章网址：https://bulletins.wolframphysicals.org/2021/02/multiway-turing-machines/\n评论网址：https://news.ycombinator.com/item?id=49062259\n积分：15\n# 评论: 3",
+    "url": "https://bulletins.wolframphysics.org/2021/02/multiway-turing-machines/",
+    "source": "Hacker News",
+    "date": "2026-07-26",
+    "pubDate": "Sun, 26 Jul 2026 20:49:43 +0000",
+    "origTitle": "Multiway Turing Machines (2021 pre-ai)",
+    "translated": true
+  },
+  {
+    "id": "the-new-ai-superpowers-focus-and-followthrough-1785107769944",
+    "title": "新的人工智能超级大国：专注和跟进",
+    "desc": "文章网址：https://www.rickmanelius.com/p/the-new-ai-superpowers-focus-and\n评论网址：https://news.ycombinator.com/item?id=49057877\n积分：115\n# 评论: 37",
+    "url": "https://www.rickmanelius.com/p/the-new-ai-superpowers-focus-and",
+    "source": "Hacker News",
+    "date": "2026-07-26",
+    "pubDate": "Sun, 26 Jul 2026 13:13:03 +0000",
+    "content": "Rick Manelius's Newsletter Subscribe Sign in The New AI Superpowers: Focus and Followthrough Burnout is on the rise again, with an ironic twist. Rick Manelius Jul 26, 2026 4 Share Conventional wisdom is that burnout is caused (solely) by overwork. So logically, if AI can help us complete tasks 2-100x faster than before, we should be UNDERWORKED and experiencing ZERO burnout, right? If only it were that simple. ALL THE THINGS! You may be too young to recognize this meme, but it’s the feeling most people in tech had when AI started accelerating their efficiency. Why? Because for years, all of us had dozens, if not hundreds, of side projects we could have started but had to shelve because there weren’t enough hours in a day. Then AI came along and teased us with a seductive lie… Claude: “But, maybe you can do it all now that I’m here!” For the past decade, I’ve been a repeat startup founder + new dad + always ambitious person. I had over 100 article titles + outlines in draft. I had a someday maybe list full of 50 projects to start “when I had the time.” I started to dip my toe in the water and YOLO some of these side projects between meetings. Queuing up Claude in 5-minute increments and then letting it rip before jumping to the next call. The crazy thing is it started to work… Things I wanted to try, explore, and write about were working, and this only 10X’d my ambition to start more projects! Spin more plates. ALL THE THINGS! The Crash You already know how this ends. Because it always ends this way. There’s the quote: “You can have anything in life, but not everything.” Even when AI can 100x your productivity on a single task, we humans still have a finite number of seconds in a day. And we’re not machines. We’re not meant to operate at 100% speed every waking hour. What happened was I started to notice I had something like 40 “proof of concept” projects going on, and I was starting to feel that pang of burnout growing inside me. Each project was a new open loop, a ",
+    "origTitle": "The New AI Superpowers: Focus and Followthrough",
+    "translated": true
+  },
+  {
+    "id": "making-sense-of-the-panic-over-chinese-ai-1785107769436",
+    "title": "理解对中国人工智能的恐慌",
+    "desc": "在最新一期的 Equity 节目中，我们讨论了为什么 Moonshot AI 的 Kimi 似乎让硅谷和华尔街感到恐慌。",
+    "url": "https://techcrunch.com/2026/07/26/making-sense-of-the-panic-over-chinese-ai/",
+    "source": "TechCrunch",
+    "date": "2026-07-26",
+    "pubDate": "Sun, 26 Jul 2026 19:40:57 +0000",
+    "content": "Image Credits: Raul Ariano/Bloomberg (opens in a new window) / Getty Images AI Making sense of the panic over Chinese AI Anthony Ha 12:40 PM PDT · July 26, 2026 The launch of the latest AI model from a Chinese company — Moonshot AI’s Kimi — reignited debates around American competitiveness and open versus proprietary AI. While there was plenty of conversation on social media , it seems the debate is also happening behind the scenes in Washington, D.C., where OpenAI and Anthropic have reportedly lobbied regulators with concern about open Chinese models. On the latest episode of TechCrunch’s Equity podcast , Kirsten Korosec, Sean O’Kane, and I discussed why this seems to be such a hot button issue. Beyond suggesting that certain folks should “touch grass” rather than spending their weekends arguing on X, Sean noted that in many ways, this “feels like we’re seeing repeats of prior freakouts,” with everyone in Silicon Valley “expecting that something is going to arrive and blow everything else away.” And Kirsten noted that putting heavy restrictions on Chinese AI models could primarily benefit a handful of companies: “Are we accelerating and ensuring that Americans win the AI race, or are we ensuring that certain frontier labs do better than others? Keep reading for an excerpt of our conversation, edited for length and clarity. Anthony Ha: For folks who have followed the discourse around Chinese AI, this will probably be very, very familiar from the launch of DeepSeek, where basically a Chinese model comes out; on some benchmarks, it does as well, or at least seems competitive with some of the frontier models; and a certain portion of the tech industry loses their mind. Some of this [debate] got extra scrutiny because one of the people posting about it was [an executive] at OpenAI. But in general, there [is] this recurring question of: Can Chinese companies beat US companies, at least in some aspects, and do it much more cheaply and in a much more open way? Sean O Kane:",
+    "origTitle": "Making sense of the panic over Chinese AI",
+    "translated": true
+  },
+  {
+    "id": "hugging-face-ceo-calls-for-radical-transparency-after-unprec-1785107769437",
+    "title": "Hugging Face 首席执行官在“史无前例”的 OpenAI 黑客攻击后呼吁“彻底透明”",
+    "desc": "“第一次自主代理网络攻击是前所未有的事件。它应该得到前所未有的回应！”",
+    "url": "https://techcrunch.com/2026/07/26/hugging-face-ceo-calls-for-radical-transparency-after-unprecedented-openai-hack/",
+    "source": "TechCrunch",
+    "date": "2026-07-26",
+    "pubDate": "Sun, 26 Jul 2026 16:33:13 +0000",
+    "content": "In Brief Posted: 9:33 AM PDT · July 26, 2026 Image Credits: Samuel Boivin/NurPhoto and Samuel Boivin/NurPhoto / Getty Images Anthony Ha Hugging Face CEO calls for ‘radical transparency’ after ‘unprecedented’ OpenAI hack After OpenAI recently admitted that one of its models had breached the systems of AI platform Hugging Face , Hugging Face’s CEO Clem Delangue posted on X that he was flying to San Francisco to have “a little chat with that ‘rogue agent.’” Then, in a follow-up post on Saturday, Delangue outlined what he’d asked for from OpenAI. He said he called for “radical transparency,” asking OpenAI to “release the traces from the ‘rogue’ agents so the entire research community can study what happened.” And he also wants “more capabilities for defenders,” calling for OpenAI to commit $100 million worth of computing power “to help the Hugging Face community build powerful cyber defenses with the best open and closed models.” Delangue added, “The first autonomous agent cyberattack is an unprecedented event. It deserves an unprecedented response!” Despite the autonomous nature of the attack, cybersecurity experts suggested that it could also be blamed on human error — namely, OpenAI’s apparent failure to properly configure what should have been a fully isolated testing environment. Topics AI , Clem Delangue , Hugging Face , OpenAI , Security October 13 15 San Francisco Scale faster. Grow your portfolio. Gain practical expertise. No matter your goal, Disrupt can empower you. Save up to $330 toda y! REGISTER NOW Newsletters See More Subscribe for the industry’s biggest tech news TechCrunch Daily News Every weekday and Sunday, you can get the best of TechCrunch’s coverage. TechCrunch Mobility TechCrunch Mobility is your destination for transportation news and insight. Startups Weekly Startups are the core of TechCrunch, so get our best coverage delivered weekly. StrictlyVC Provides movers and shakers with the info they need to start their day. No newsletters selected. S",
+    "origTitle": "Hugging Face CEO calls for ‘radical transparency’ after ‘unprecedented’ OpenAI hack",
+    "translated": true
+  },
+  {
+    "id": "monday-com-is-the-latest-tech-company-to-blame-ai-for-layoff-1785107769437",
+    "title": "Monday.com 是最新一家将裁员归咎于人工智能的科技公司——这里还有另外 20 家公司",
+    "desc": "按时间倒序顺序观察今年宣布大幅裁员的大型科技公司，其中人工智能是一个明确的因素。",
+    "url": "https://techcrunch.com/2026/07/25/the-running-list-major-tech-layoffs-in-2026-where-employers-cited-ai/",
+    "source": "TechCrunch",
+    "date": "2026-07-26",
+    "pubDate": "Sun, 26 Jul 2026 01:30:00 +0000",
+    "content": "Image Credits: ChatGPT for TechCrunch / AI Monday.com is the latest tech company to blame AI for layoffs — here are 20 others Rebecca Bellan Connie Loizos 6:30 PM PDT · July 25, 2026 Monday.com, the Tel Aviv-based work management software company known for its colorful, customizable project-tracking boards, this week became the latest tech company to cite AI as a factor in job cuts. On Wednesday, the company said in an SEC filing that it will lay off about 20% of its workforce, or just over 600 employees, as part of a restructuring plan tied to its ongoing transformation of its product, marketing, and go-to-market strategy in support of a leaner, more focused operating model as it continues investing in its AI-driven growth strategy. Co-founder Eran Zinman told employees in a LinkedIn memo that the move was not made to reduce costs or replace people with AI, positioning it instead as adapting the organization to a new AI-first vision the company laid out roughly a year ago when it rebranded around a platform-wide AI push. Monday.com, which has two offices in the U.S., expects $45 million to $55 million in net restructuring charges but still projects up to 20% year-over-year revenue growth for 2026. So far, according to new Financial Times analysis , U.S. tech companies have slashed nearly 140,000 jobs since the start of this year, with Amazon, Oracle, Meta, and Microsoft alone accounting for almost 50,000 of those cuts as they funnel hundreds of billions of dollars into AI data center buildouts. Interestingly, the FT also found that companies citing AI as a factor in job cuts have underperformed the Nasdaq by almost 10% in the 30 trading days following their announcements, suggesting the market doesn t entirely buy the stories that the companies are telling. Still, the picture isn t uniformly bleak. The FT notes that AI-focused companies like Anthropic and OpenAI are hiring rapidly, absorbing some of the talent shed elsewhere in the industry. And within some of the ",
+    "origTitle": "Monday.com is the latest tech company to blame AI for layoffs — here are 20 others",
+    "translated": true
+  },
+  {
     "id": "the-new-ai-superpowers-focus-and-followthrough-1785107581563",
     "title": "The New AI Superpowers: Focus and Followthrough",
     "desc": "Article URL: https://www.rickmanelius.com/p/the-new-ai-superpowers-focus-and\nComments URL: https://news.ycombinator.com/item?id=49057877\nPoints: 112\n# Comments: 35",

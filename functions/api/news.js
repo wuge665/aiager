@@ -132,7 +132,7 @@ export async function onRequest(context) {
   ]);
 
   const allItems = [...freshItems, ...existingItems];
-  const filtered = allItems.filter(hasAiRelevance).filter(item => isWithinDays(item.date, 30));
+  const filtered = allItems.filter(hasAiRelevance);
 
   filtered.sort((a, b) => {
     if (a.date > b.date) return -1;
@@ -147,7 +147,7 @@ export async function onRequest(context) {
     if (!seen.has(key)) { seen.add(key); deduped.push(item); }
   }
 
-  const top = deduped.slice(0, 30);
+  const top = deduped.slice(0, 200);
 
   const translated = await Promise.all(top.map(async item => {
     if (item.userEdited || item.translated) return item;
