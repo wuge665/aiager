@@ -9,12 +9,22 @@ const SOURCES = [
   { name: 'InfoQ', url: 'https://www.infoq.cn/feed' },
 ];
 
-const AI_KEYWORDS = [
-  'ai', 'artificial intelligence', 'machine learning', 'deep learning',
-  'llm', 'large language model', 'gpt', 'claude', 'gemini', 'openai',
+// English keywords use word-boundary matching to avoid false positives
+const AI_KEYWORDS_EN = [
+  'ai', 'agi', 'llm', 'gpt', 'openai', 'chatgpt', 'claude', 'gemini',
+  'copilot', 'chatbot', 'multimodal', 'diffusion',
+  'artificial intelligence', 'machine learning', 'deep learning',
+  'large language model', 'generative ai', 'ai model', 'ai agent',
+  'ai startup', 'ai chip', 'ai regulation', 'foundation model',
+  'transformer', 'neural network', 'deepseek', 'anthropic', 'mistral',
+  'hugging face', 'stable diffusion', 'midjourney', 'sora',
+  'nvidia', 'hbm', 'ai infrastructure',
+];
+// Chinese keywords use substring matching (no word-boundary issue)
+const AI_KEYWORDS_ZH = [
   '人工智能', '机器学习', '深度学习', '大模型', '语言模型',
-  'agent', '智能体', 'neural', 'transformer', 'diffusion',
-  'copilot', 'chatbot', 'agi', 'multimodal', '多模态',
+  '智能体', '多模态', '生成式', '具身智能', '算力',
+  '芯片', '英伟达', '融资', 'AGI',
 ];
 
 function extractRssItems(xml, sourceName) {
@@ -67,7 +77,14 @@ function parseDate(str) {
 
 function hasAiRelevance(item) {
   const text = (item.title + ' ' + item.desc).toLowerCase();
-  return AI_KEYWORDS.some(kw => text.includes(kw.toLowerCase()));
+  // English: word-boundary match to avoid substring false positives
+  const enMatch = AI_KEYWORDS_EN.some(kw => {
+    const escaped = kw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    return new RegExp(`\\b${escaped}\\b`, 'i').test(text);
+  });
+  if (enMatch) return true;
+  // Chinese: substring match is fine
+  return AI_KEYWORDS_ZH.some(kw => text.includes(kw.toLowerCase()));
 }
 
 async function fetchFeed(source) {
