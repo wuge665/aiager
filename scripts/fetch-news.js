@@ -153,12 +153,12 @@ async function main() {
   }
 
   // Merge: new items first, then existing; deduplicate by title prefix
-  const seen = new Set();
+  const mergeSeen = new Set();
   const merged = [];
   for (const item of [...top5, ...existing]) {
     const key = (item.title || '').slice(0, 30).toLowerCase();
-    if (!seen.has(key)) {
-      seen.add(key);
+    if (!mergeSeen.has(key)) {
+      mergeSeen.add(key);
       merged.push(item);
     }
   }
