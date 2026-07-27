@@ -227,7 +227,7 @@ function renderProjects(items) {
   // 优先显示有中文映射的分类
   const order = ['llm', 'code', 'image', 'video', 'audio', 'other'];
   
-  let html = '<div class="page-header"><h1>🔥 热门 AI 项目</h1><p class="subtitle">精选 GitHub 最具影响力的 AI 开源项目</p></div>';
+  let html = '<div class="page-header"><h1>🔥 热门 AI 项目</h1><p class="subtitle">发掘 GitHub 近期飙升的 AI 开源项目 · 每日更新</p></div>';
   
   order.forEach(cat => {
     const projects = grouped[cat];
