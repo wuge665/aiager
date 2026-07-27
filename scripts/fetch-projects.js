@@ -10,17 +10,20 @@ function daysAgo(n) {
   return new Date(Date.now() - n * 86400000).toISOString().slice(0, 10);
 }
 
-// 近 30-60 天新创建、星数快速增长的 AI 项目（随时间自然轮换）
+// 近 7/30/60 天新创建、星数快速增长的 AI 项目（随时间自然轮换）
+// 7 天短窗口保证"最近几天"的新项目一定能被抓到
 function buildQueries() {
+  const d7 = daysAgo(7);
   const d30 = daysAgo(30);
   const d60 = daysAgo(60);
   return [
+    `created:>${d7} stars:>30 topic:ai`,
+    `created:>${d7} stars:>30 topic:llm`,
+    `created:>${d7} stars:>20 ai in:name`,
     `created:>${d30} stars:>100 topic:ai`,
     `created:>${d30} stars:>100 topic:llm`,
     `created:>${d30} stars:>50 topic:generative-ai`,
-    `created:>${d30} stars:>50 topic:ai-agents`,
     `created:>${d60} stars:>300 ai in:name`,
-    `created:>${d60} stars:>300 (llm OR gpt OR agent) in:description`,
   ];
 }
 
@@ -109,7 +112,8 @@ async function main() {
     }
   }
 
-  projects.sort((a, b) => b.stars - a.stars);
+  // 按创建时间排序：最新的在前面，越老的越往后（同日期按星数）
+  projects.sort((a, b) => (b.created || '').localeCompare(a.created || '') || b.stars - a.stars);
   projects = projects.slice(0, 30);
   console.log(`Collected ${projects.length} trending projects`);
 

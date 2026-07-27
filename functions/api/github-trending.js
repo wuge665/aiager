@@ -56,6 +56,8 @@ export async function onRequest(context) {
       updated: item.updated_at?.slice(0, 10) || '', created: item.created_at?.slice(0, 10) || '',
       topics: item.topics || [],
     }));
+    // 与主数据一致：最新的在前面
+    projects.sort((a, b) => (b.created || '').localeCompare(a.created || '') || b.stars - a.stars);
     const response = new Response(JSON.stringify(projects), { headers: jsonHeaders });
     context.waitUntil(cache.put(cacheKey, response.clone()));
     return response;
