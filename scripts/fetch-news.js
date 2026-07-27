@@ -145,11 +145,15 @@ async function main() {
           .replace(/<nav[\s\S]*?<\/nav>/gi, '')
           .replace(/<header[\s\S]*?<\/header>/gi, '')
           .replace(/<footer[\s\S]*?<\/footer>/gi, '')
+          .replace(/<br\s*\/?>/gi, '\n')
+          .replace(/<\/(p|div|li|h[1-6]|blockquote|article|section|tr)>/gi, '\n\n')
           .replace(/<[^>]+>/g, ' ')
           .replace(/&[^;]+;/g, ' ')
-          .replace(/\s+/g, ' ')
+          .replace(/[ \t]+/g, ' ')
+          .replace(/ ?\n ?/g, '\n')
+          .replace(/\n{3,}/g, '\n\n')
           .trim()
-          .slice(0, 2000);
+          .slice(0, 3000);
       }
     } catch (e) {
       console.warn(`[content] failed for ${item.title.slice(0, 30)}: ${e.message}`);

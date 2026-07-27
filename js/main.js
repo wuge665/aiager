@@ -340,10 +340,32 @@ function openTool(id) {
   openOverlay(`<h2>${t.icon || ''} ${t.name}</h2><div class="meta">${t.url ? `<a href="${t.url}" target="_blank">${t.url}</a>` : ''} · ${(t.tags || []).join(' / ')}</div><div class="body"><p>${t.desc || ''}</p></div>`);
 }
 
+function contentParagraphs(content) {
+  if (!content) return [];
+  if (Array.isArray(content)) return content.map(s => String(s).trim()).filter(Boolean);
+  let parts = String(content).split(/\n{2,}|\n/).map(s => s.trim()).filter(Boolean);
+  // 兼容旧数据：没有换行的长文本按句子切分成段，避免一大坨
+  if (parts.length <= 1 && String(content).length > 300) {
+    const sentences = String(content).match(/[^。！？.!?]+[。！？.!?]?/g) || [String(content)];
+    parts = [];
+    let buf = '';
+    for (const s of sentences) {
+      buf += s;
+      if (buf.length > 180) { parts.push(buf.trim()); buf = ''; }
+    }
+    if (buf.trim()) parts.push(buf.trim());
+  }
+  return parts;
+}
+
 function openNews(id) {
   const n = NEWS.find(x => x.id === id || x.title === id);
   if (!n) return;
-  openOverlay(`<h2>${n.title}</h2><div class="meta">${n.source || ''} · ${n.date || ''}</div><div class="body"><p>${n.content || n.desc || ''}</p>${n.url ? `<p><a href="${n.url}" target="_blank">阅读原文 →</a></p>` : ''}</div>`);
+  const paras = contentParagraphs(n.content || n.desc);
+  const bodyHtml = paras.length
+    ? paras.map(p => `<p>${p}</p>`).join('')
+    : '<p>暂无正文内容</p>';
+  openOverlay(`<h2>${n.title}</h2><div class="meta">${n.source || ''} · ${n.date || ''}</div><div class="body">${bodyHtml}</div>`);
 }
 
 function openOverlay(html) {
