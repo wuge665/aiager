@@ -29,11 +29,15 @@ jobs:
           echo "Current news.json entry count:"
           node -e "const d=require('./data/news.json'); console.log(d.length + ' entries, latest: ' + d[0].title)"
 
+      - name: Fetch trending AI projects
+        run: |
+          node scripts/fetch-projects.js
+
       - name: Commit and push
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/news.json
+          git add data/news.json data/projects.json
           if git diff --cached --quiet; then
             echo "No changes to commit"
           else
