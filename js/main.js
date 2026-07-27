@@ -201,73 +201,39 @@ function openTutorial(id) {
 }
 
 // ===== Projects (GitHub Trending) =====
+function formatStars(n) {
+  if (n === undefined || n === null) return '';
+  if (n >= 1000) return (n / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
+  return String(n);
+}
+
 function renderProjects(items) {
   const list = items || PROJECTS;
   if (!list.length) return '<div class="page-header"><h1>AI 项目</h1><p class="subtitle">加载中...</p></div>';
-  
-  // 中文项目分类标题
-  const categoryTitles = {
-    llm: { icon: '🤖', title: '大语言模型 (LLM)', desc: '本地部署、推理优化、模型管理' },
-    code: { icon: '💻', title: 'AI 编程工具', desc: '智能补全、代码生成、自动化开发' },
-    image: { icon: '🎨', title: 'AI 绘图/图像', desc: '文生图、图生图、图像处理' },
-    video: { icon: '🎬', title: 'AI 视频生成', desc: '文生视频、图生视频、视频编辑' },
-    audio: { icon: '🎵', title: 'AI 音频处理', desc: '语音合成、音乐生成、音频编辑' },
-    other: { icon: '📦', title: '其他热门项目', desc: '工具、框架、数据集等' }
-  };
-  
-  // 按分类分组
-  const grouped = {};
+
+  let html = '<div class="page-header"><h1>🔥 热门 AI 项目</h1><p class="subtitle">发掘 GitHub 近期飙升的 AI 开源项目 · 每日更新</p></div>';
+  html += '<div class="project-list">';
+
   list.forEach(p => {
     const cn = window.PROJECTS_CN?.[p.name] || window.PROJECTS_CN?.[p.full_name?.split('/')?.[1]];
-    const category = cn?.category || 'other';
-    if (!grouped[category]) grouped[category] = [];
-    grouped[category].push({ ...p, cnData: cn });
-  });
-  
-  // 优先显示有中文映射的分类
-  const order = ['llm', 'code', 'image', 'video', 'audio', 'other'];
-  
-  let html = '<div class="page-header"><h1>🔥 热门 AI 项目</h1><p class="subtitle">发掘 GitHub 近期飙升的 AI 开源项目 · 每日更新</p></div>';
-  
-  order.forEach(cat => {
-    const projects = grouped[cat];
-    if (!projects || !projects.length) return;
-    const catInfo = categoryTitles[cat];
-    
+    const displayName = cn?.name || p.name || p.full_name;
+    const displayDesc = cn?.desc || p.description || p.desc || '';
+    const url = p.url || p.html_url;
+
     html += `
-      <div class="section" id="project-section-${cat}">
-        <div class="section-header">
-          <h2>${catInfo.icon} ${catInfo.title}</h2>
-          <p style="color:var(--text-muted);margin:4px 0 0;font-size:14px">${catInfo.desc}</p>
-        </div>
-        <div class="content-grid">`;
-    
-    projects.forEach(p => {
-      // 使用中文数据（如果有），否则保留英文
-      const displayName = p.cnData?.name || p.name || p.full_name;
-      const displayDesc = p.cnData?.desc || p.description || p.desc || '';
-      const displayTags = p.cnData?.tags || [];
-      
-      html += `
-        <div class="content-card" onclick="window.open('${p.url || p.html_url}','_blank')">
-          <h3><i class="fa fa-github-alt" style="color:var(--primary)"></i> ${displayName}</h3>
+      <div class="project-row" onclick="window.open('${url}','_blank')">
+        <div class="project-main">
+          <h3><i class="fa fa-github-alt"></i> ${displayName}</h3>
           <div class="desc">${displayDesc}</div>
-          ${displayTags.length ? `<div class="stats">${displayTags.map(t => `<span class="tool-tag">${t}</span>`).join('')}</div>` : ''}
-          <div class="stats">
-            ${p.stars ? `<span class="tool-tag"><i class="fa fa-star"></i> ${p.stars}</span>` : ''}
-            ${p.language ? `<span class="tool-tag green">${p.language}</span>` : ''}
-            ${p.license ? `<span class="tool-tag">${p.license}</span>` : ''}
-          </div>
-          <div class="meta" style="margin-top:8px">
-            <span><i class="fa fa-code-fork"></i> ${p.forks || ''}</span>
-            <span><i class="fa fa-clock-o"></i> ${p.updated || ''}</span>
-          </div>
-        </div>`;
-    });
-    
-    html += '</div></div>';
+        </div>
+        <div class="project-side">
+          <div class="stars"><i class="fa fa-star"></i> ${formatStars(p.stars)}</div>
+          <div class="sub">${p.language || '—'} · ${p.created || p.updated || ''}</div>
+        </div>
+      </div>`;
   });
-  
+
+  html += '</div>';
   return html;
 }
 
