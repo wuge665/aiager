@@ -17,9 +17,9 @@ function buildQueries() {
   const d30 = daysAgo(30);
   const d60 = daysAgo(60);
   return [
-    `created:>${d7} stars:>30 topic:ai`,
-    `created:>${d7} stars:>30 topic:llm`,
-    `created:>${d7} stars:>20 ai in:name`,
+    `created:>${d7} stars:>80 topic:ai`,
+    `created:>${d7} stars:>80 topic:llm`,
+    `created:>${d7} stars:>60 ai in:name`,
     `created:>${d30} stars:>100 topic:ai`,
     `created:>${d30} stars:>100 topic:llm`,
     `created:>${d30} stars:>50 topic:generative-ai`,
@@ -29,6 +29,29 @@ function buildQueries() {
 
 function fallbackQuery() {
   return `created:>${daysAgo(90)} stars:>500 (ai OR llm OR machine-learning)`;
+}
+
+// 骗局/垃圾仓库关键词黑名单
+const SCAM_KEYWORDS = [
+  '股票', '炒股', '赚钱', '理财', '返利', '免费领', '空投', '撸毛', '兼职', '刷单',
+  'giveaway', 'airdrop', 'free money', 'passive income', 'earn daily',
+  'crypto signal', 'pump', 'memecoin',
+];
+
+// 质量过滤：剔除空壳、刷星、骗局仓库
+function isQualityProject(p) {
+  // 必须有实质性描述（空描述/一句话的多为垃圾仓库）
+  if (!p.description || p.description.trim().length < 15) return false;
+  // 必须检测到编程语言（说明有真实代码；纯链接/空壳仓库无语言）
+  if (!p.language) return false;
+  // 仓库要有实际内容（size 单位 KB，排除空壳）
+  if ((p.size || 0) < 5) return false;
+  // 排除已归档仓库
+  if (p.archived) return false;
+  // 排除骗局关键词
+  const text = ((p.name || '') + ' ' + (p.description || '') + ' ' + (p.topics || []).join(' ')).toLowerCase();
+  if (SCAM_KEYWORDS.some(kw => text.includes(kw.toLowerCase()))) return false;
+  return true;
 }
 
 function isEnglish(text) {
@@ -90,6 +113,8 @@ async function main() {
         updated: item.updated_at?.slice(0, 10) || '',
         created: item.created_at?.slice(0, 10) || '',
         topics: item.topics || [],
+        size: item.size || 0,
+        archived: item.archived || false,
       });
     }
   }
@@ -108,9 +133,15 @@ async function main() {
         language: item.language, license: item.license?.spdx_id || '',
         updated: item.updated_at?.slice(0, 10) || '', created: item.created_at?.slice(0, 10) || '',
         topics: item.topics || [],
+        size: item.size || 0, archived: item.archived || false,
       });
     }
   }
+
+  // 质量过滤：剔除空壳/刷星/骗局仓库
+  const beforeFilter = projects.length;
+  projects = projects.filter(isQualityProject);
+  console.log(`Quality filter: ${beforeFilter} -> ${projects.length} (removed ${beforeFilter - projects.length} low-quality/scam)`);
 
   // 按创建时间排序：最新的在前面，越老的越往后（同日期按星数）
   projects.sort((a, b) => (b.created || '').localeCompare(a.created || '') || b.stars - a.stars);

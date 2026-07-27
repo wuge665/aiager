@@ -1,5 +1,32 @@
 [
   {
+    "id": 1312488824,
+    "name": "deer-workflow",
+    "full_name": "deerwork-ai/deer-workflow",
+    "description": "开源动态工作流运行时，可在 TypeScript 中保持编排并将语义工作委托给可替换的代理运行时。",
+    "url": "https://github.com/deerwork-ai/deer-workflow",
+    "stars": 187,
+    "forks": 18,
+    "language": "TypeScript",
+    "license": "MIT",
+    "updated": "2026-07-27",
+    "created": "2026-07-26",
+    "topics": [
+      "agent",
+      "ai",
+      "ai-agent",
+      "ai-agents",
+      "ai-coding",
+      "bun",
+      "dynamic-workflow",
+      "dynamic-workflows",
+      "llm",
+      "workflow"
+    ],
+    "size": 600,
+    "archived": false
+  },
+  {
     "id": 1313191574,
     "name": "openclaude-improved",
     "full_name": "0xwilliamortiz/openclaude-improved",
@@ -31,54 +58,9 @@
       "mcp",
       "model-context-protocol",
       "openrouter"
-    ]
-  },
-  {
-    "id": 1312488824,
-    "name": "deer-workflow",
-    "full_name": "deerwork-ai/deer-workflow",
-    "description": "开源动态工作流运行时，可在 TypeScript 中保持编排并将语义工作委托给可替换的代理运行时。",
-    "url": "https://github.com/deerwork-ai/deer-workflow",
-    "stars": 175,
-    "forks": 18,
-    "language": "TypeScript",
-    "license": "MIT",
-    "updated": "2026-07-27",
-    "created": "2026-07-26",
-    "topics": [
-      "agent",
-      "ai",
-      "ai-agent",
-      "ai-agents",
-      "ai-coding",
-      "bun",
-      "dynamic-workflow",
-      "dynamic-workflows",
-      "llm",
-      "workflow"
-    ]
-  },
-  {
-    "id": 1312446183,
-    "name": "ai-stock-pool",
-    "full_name": "yaoleifly/ai-stock-pool",
-    "description": "美股/A股映射、主动发现、政策施压、一键部署的AI产业链股票池。",
-    "url": "https://github.com/yaoleifly/ai-stock-pool",
-    "stars": 55,
-    "forks": 26,
-    "language": "JavaScript",
-    "license": "MIT",
-    "updated": "2026-07-27",
-    "created": "2026-07-26",
-    "topics": [
-      "a-shares",
-      "ai",
-      "arxiv",
-      "cloudflare-workers",
-      "investment-research",
-      "stock-market",
-      "vercel"
-    ]
+    ],
+    "size": 10541,
+    "archived": false
   },
   {
     "id": 1311384232,
@@ -86,56 +68,15 @@
     "full_name": "mikiarlo3/ai-copywriter",
     "description": "真正的文案技巧+真实的营销知识，人性化的AI文案。",
     "url": "https://github.com/mikiarlo3/ai-copywriter",
-    "stars": 893,
+    "stars": 896,
     "forks": 16,
     "language": "Python",
     "license": "MIT",
     "updated": "2026-07-27",
     "created": "2026-07-24",
-    "topics": []
-  },
-  {
-    "id": 1311174165,
-    "name": "approving",
-    "full_name": "cocofhu/approving",
-    "description": "将编码代理组成您可以信任的工作流程",
-    "url": "https://github.com/cocofhu/approving",
-    "stars": 73,
-    "forks": 3,
-    "language": "Go",
-    "license": "MIT",
-    "updated": "2026-07-27",
-    "created": "2026-07-24",
-    "topics": [
-      "agent",
-      "ai",
-      "browser-automation",
-      "harness",
-      "harness-ai",
-      "harness-ci",
-      "harness-design",
-      "harness-engineering",
-      "harness-execution-layer",
-      "harness-framework",
-      "llm",
-      "mutli-agent",
-      "workflow",
-      "workflow-automation"
-    ]
-  },
-  {
-    "id": 1310057619,
-    "name": "esp32-ai",
-    "full_name": "slvDev/esp32-ai",
-    "description": null,
-    "url": "https://github.com/slvDev/esp32-ai",
-    "stars": 1612,
-    "forks": 168,
-    "language": "Python",
-    "license": "MIT",
-    "updated": "2026-07-27",
-    "created": "2026-07-23",
-    "topics": []
+    "topics": [],
+    "size": 207,
+    "archived": false
   },
   {
     "id": 1309585508,
@@ -149,7 +90,9 @@
     "license": "Apache-2.0",
     "updated": "2026-07-27",
     "created": "2026-07-23",
-    "topics": []
+    "topics": [],
+    "size": 2055,
+    "archived": false
   },
   {
     "id": 1309499087,
@@ -157,32 +100,15 @@
     "full_name": "XYZ-AI-Lab/AxisAgentic",
     "description": "AxisAgentic：用于长视野代理的可扩展运行时和轨迹收集框架。",
     "url": "https://github.com/XYZ-AI-Lab/AxisAgentic",
-    "stars": 248,
-    "forks": 32,
+    "stars": 251,
+    "forks": 35,
     "language": "Python",
     "license": "Apache-2.0",
     "updated": "2026-07-27",
     "created": "2026-07-23",
-    "topics": []
-  },
-  {
-    "id": 1309624659,
-    "name": "Transcript-of-Liang-Wenfengs-DeepSeek-Founder-4-Hour-Investor-Meeting",
-    "full_name": "0xtresser/Transcript-of-Liang-Wenfengs-DeepSeek-Founder-4-Hour-Investor-Meeting",
-    "description": "梁文锋四小时投资人会议实录，因原文在微信上无法查看，特传一份github",
-    "url": "https://github.com/0xtresser/Transcript-of-Liang-Wenfengs-DeepSeek-Founder-4-Hour-Investor-Meeting",
-    "stars": 133,
-    "forks": 57,
-    "language": null,
-    "license": "",
-    "updated": "2026-07-27",
-    "created": "2026-07-23",
-    "topics": [
-      "agi",
-      "deepseek",
-      "liang-wenfeng",
-      "llm"
-    ]
+    "topics": [],
+    "size": 1023,
+    "archived": false
   },
   {
     "id": 1309102418,
@@ -190,8 +116,8 @@
     "full_name": "makecindy/cindy",
     "description": "认为它完成了。开箱即用的开源AI代理·设想，能够实现。开源、开箱即用的AI Agent。",
     "url": "https://github.com/makecindy/cindy",
-    "stars": 785,
-    "forks": 98,
+    "stars": 795,
+    "forks": 99,
     "language": "TypeScript",
     "license": "Apache-2.0",
     "updated": "2026-07-27",
@@ -210,21 +136,9 @@
       "react-native",
       "typescript",
       "windows"
-    ]
-  },
-  {
-    "id": 1309282831,
-    "name": "awesome-free-ai-books",
-    "full_name": "MarcosSete/awesome-free-ai-books",
-    "description": "免费、合法的 AI/ML 书籍精选列表",
-    "url": "https://github.com/MarcosSete/awesome-free-ai-books",
-    "stars": 212,
-    "forks": 15,
-    "language": null,
-    "license": "NOASSERTION",
-    "updated": "2026-07-27",
-    "created": "2026-07-22",
-    "topics": []
+    ],
+    "size": 54867,
+    "archived": false
   },
   {
     "id": 1309088889,
@@ -238,7 +152,9 @@
     "license": "NOASSERTION",
     "updated": "2026-07-27",
     "created": "2026-07-22",
-    "topics": []
+    "topics": [],
+    "size": 945,
+    "archived": false
   },
   {
     "id": 1308460307,
@@ -246,58 +162,15 @@
     "full_name": "ddcat-ai/open-ai-canvas",
     "description": "面向 AI 影视创作的开源无限画布工作台，集成多模态生成、分镜编排、素材管理与 Agent 工作流。",
     "url": "https://github.com/ddcat-ai/open-ai-canvas",
-    "stars": 118,
-    "forks": 27,
+    "stars": 132,
+    "forks": 33,
     "language": "TypeScript",
     "license": "AGPL-3.0",
     "updated": "2026-07-27",
     "created": "2026-07-22",
-    "topics": []
-  },
-  {
-    "id": 1308708421,
-    "name": "podcast-shorts-factory",
-    "full_name": "krakonjac300-pixel/podcast-shorts-factory",
-    "description": "十个合作的人工智能代理可以自动将长播客变成短视频。免费且开源，在免费 AI 提供商上运行。",
-    "url": "https://github.com/krakonjac300-pixel/podcast-shorts-factory",
-    "stars": 80,
-    "forks": 29,
-    "language": "Python",
-    "license": "MIT",
-    "updated": "2026-07-27",
-    "created": "2026-07-22",
-    "topics": [
-      "ai-agents",
-      "content-automation",
-      "faceless-channel",
-      "ffmpeg",
-      "llm",
-      "podcast",
-      "python",
-      "video-automation",
-      "whisper",
-      "youtube-shorts"
-    ]
-  },
-  {
-    "id": 1308602622,
-    "name": "handoff-skill",
-    "full_name": "ToolMonsters/handoff-skill",
-    "description": "克劳德技能：将您当前的对话变成完整的交接文档，以便任何法学硕士都可以准确地从您上次停下的地方继续",
-    "url": "https://github.com/ToolMonsters/handoff-skill",
-    "stars": 31,
-    "forks": 15,
-    "language": null,
-    "license": "MIT",
-    "updated": "2026-07-27",
-    "created": "2026-07-22",
-    "topics": [
-      "ai",
-      "claude",
-      "claude-code",
-      "claude-skills",
-      "llm"
-    ]
+    "topics": [],
+    "size": 16550,
+    "archived": false
   },
   {
     "id": 1307252454,
@@ -305,7 +178,7 @@
     "full_name": "hahhforest/pi-textbook",
     "description": "《动手学Pi》：沿着15个真实检查点从零构建Pi式Agent",
     "url": "https://github.com/hahhforest/pi-textbook",
-    "stars": 562,
+    "stars": 567,
     "forks": 33,
     "language": "TypeScript",
     "license": "MIT",
@@ -318,7 +191,9 @@
       "llm",
       "textbook",
       "typescript"
-    ]
+    ],
+    "size": 5661,
+    "archived": false
   },
   {
     "id": 1307136587,
@@ -352,55 +227,9 @@
       "opencode",
       "rbac",
       "terminal"
-    ]
-  },
-  {
-    "id": 1307203323,
-    "name": "sigbound",
-    "full_name": "surya-koritala/sigbound",
-    "description": "在一个 git 存储库上并行运行 AI 编码代理并安全地自动合并它们的工作——仅进行构建并通过测试的更改。在普通 git 之上；带上你自己的模型。",
-    "url": "https://github.com/surya-koritala/sigbound",
-    "stars": 52,
-    "forks": 11,
-    "language": "Go",
-    "license": "Apache-2.0",
-    "updated": "2026-07-27",
-    "created": "2026-07-21",
-    "topics": [
-      "ai",
-      "ai-agents",
-      "cli",
-      "coding-agents",
-      "developer-tools",
-      "git",
-      "git-worktree",
-      "golang",
-      "llm",
-      "merge",
-      "optimistic-concurrency",
-      "parallel"
-    ]
-  },
-  {
-    "id": 1307567870,
-    "name": "moonlit-myriad",
-    "full_name": "xinwithyu/moonlit-myriad",
-    "description": "专为 AI 玩家设计的单文件卡牌肉鸽 🌙",
-    "url": "https://github.com/xinwithyu/moonlit-myriad",
-    "stars": 44,
-    "forks": 10,
-    "language": "Python",
-    "license": "",
-    "updated": "2026-07-27",
-    "created": "2026-07-21",
-    "topics": [
-      "ai",
-      "balatro",
-      "card-game",
-      "llm",
-      "python",
-      "roguelike"
-    ]
+    ],
+    "size": 17017,
+    "archived": false
   },
   {
     "id": 1303829880,
@@ -424,7 +253,9 @@
       "etherlab",
       "mev",
       "mevbots"
-    ]
+    ],
+    "size": 3896,
+    "archived": false
   },
   {
     "id": 1302409680,
@@ -432,8 +263,8 @@
     "full_name": "bytedoger/awesome-OpenPrice",
     "description": "开放价格，一个收录的全以太网开源渠道各种AI订阅价格的项目。打破信息茧房，即可获取各个渠道的Claude、GPT、gemini、cursor产品的最新价格",
     "url": "https://github.com/bytedoger/awesome-OpenPrice",
-    "stars": 551,
-    "forks": 23,
+    "stars": 552,
+    "forks": 24,
     "language": "TypeScript",
     "license": "NOASSERTION",
     "updated": "2026-07-27",
@@ -450,7 +281,9 @@
       "ldxp",
       "price-comparison",
       "sd2"
-    ]
+    ],
+    "size": 1593,
+    "archived": false
   },
   {
     "id": 1301135370,
@@ -485,7 +318,9 @@
       "video-editing",
       "video-editor",
       "webgl"
-    ]
+    ],
+    "size": 51775,
+    "archived": false
   },
   {
     "id": 1300612704,
@@ -494,7 +329,7 @@
     "description": "超越聊天框，利用人工智能进行思考。用于手写、方程、图表和空间推理的共享画布。",
     "url": "https://github.com/penecho/penecho",
     "stars": 1727,
-    "forks": 194,
+    "forks": 195,
     "language": "JavaScript",
     "license": "AGPL-3.0",
     "updated": "2026-07-27",
@@ -508,7 +343,9 @@
       "handwriting",
       "nodejs",
       "visual-thinking"
-    ]
+    ],
+    "size": 2076,
+    "archived": false
   },
   {
     "id": 1296036886,
@@ -516,7 +353,7 @@
     "full_name": "AlephAITech/WorkBuddyGuide",
     "description": "一本通过实际工作流程掌握 WorkBuddy 的实用开源指南。开源的 WorkBuddy 实战蓝书皮：教程、真实工作流、技能、MCP、自动化与多智能体实践。",
     "url": "https://github.com/AlephAITech/WorkBuddyGuide",
-    "stars": 1335,
+    "stars": 1336,
     "forks": 192,
     "language": "Python",
     "license": "MIT",
@@ -527,7 +364,9 @@
       "guide",
       "llm",
       "workbuddy"
-    ]
+    ],
+    "size": 128707,
+    "archived": false
   },
   {
     "id": 1296107475,
@@ -535,7 +374,7 @@
     "full_name": "William-Lu-stack/Flawless",
     "description": "适用于 Kubernetes 和云基础设施的 AI SRE AgenticOps。",
     "url": "https://github.com/William-Lu-stack/Flawless",
-    "stars": 853,
+    "stars": 854,
     "forks": 213,
     "language": "Python",
     "license": "NOASSERTION",
@@ -554,7 +393,9 @@
       "mcp",
       "observability",
       "sre"
-    ]
+    ],
+    "size": 1031,
+    "archived": false
   },
   {
     "id": 1296366949,
@@ -562,7 +403,7 @@
     "full_name": "nexu-io/codex-slides",
     "description": "🎨 Codex 内的开源 AI 幻灯片工作室：图像原生平台，每张幻灯片都是完整的视觉画布。 ⚡ 约 4-5 分钟内 10 多张高质量幻灯片 - 快速模式并行渲染每个页面。 🔍 现场观看整个链条：研究→大纲→样式→渲染→编辑→呈现→导出PDF/PPTX。 🖥️浏览器-",
     "url": "https://github.com/nexu-io/codex-slides",
-    "stars": 615,
+    "stars": 619,
     "forks": 50,
     "language": "TypeScript",
     "license": "MIT",
@@ -589,7 +430,9 @@
       "presentation-generator",
       "slides",
       "typescript"
-    ]
+    ],
+    "size": 25627,
+    "archived": false
   },
   {
     "id": 1296647613,
@@ -620,7 +463,9 @@
       "video",
       "video-generation",
       "vox"
-    ]
+    ],
+    "size": 47487,
+    "archived": false
   },
   {
     "id": 1291783779,
@@ -628,13 +473,15 @@
     "full_name": "petergyang/no-ai-slop",
     "description": "从任何文章中删除 20 多种 AI 废话模式。",
     "url": "https://github.com/petergyang/no-ai-slop",
-    "stars": 2897,
-    "forks": 228,
+    "stars": 2907,
+    "forks": 229,
     "language": "Python",
     "license": "MIT",
     "updated": "2026-07-27",
     "created": "2026-07-07",
-    "topics": []
+    "topics": [],
+    "size": 557,
+    "archived": false
   },
   {
     "id": 1291544092,
@@ -642,7 +489,7 @@
     "full_name": "Sahir619/fable-method",
     "description": "《神鬼寓言 5》的工作流程：《神鬼寓言 5》的工作原理，提炼成任何模型都可以运行的技能，并进行了保持诚实的评估。思考/行动/证明。",
     "url": "https://github.com/Sahir619/fable-method",
-    "stars": 1939,
+    "stars": 1940,
     "forks": 288,
     "language": "Python",
     "license": "MIT",
@@ -658,7 +505,9 @@
       "evaluation",
       "fable",
       "llm"
-    ]
+    ],
+    "size": 1837,
+    "archived": false
   },
   {
     "id": 1289743790,
@@ -687,6 +536,261 @@
       "stock-market",
       "trading",
       "us-stocks"
-    ]
+    ],
+    "size": 2653,
+    "archived": false
+  },
+  {
+    "id": 1289309191,
+    "name": "agent-chief",
+    "full_name": "SmileLikeYe/agent-chief",
+    "description": "注意力是你最稀缺的资源。 Chief 是保护它的本地第一层——将每个代理、警报和反馈转化为一个诚实的呼叫：中断或不中断。",
+    "url": "https://github.com/SmileLikeYe/agent-chief",
+    "stars": 1015,
+    "forks": 4,
+    "language": "Python",
+    "license": "MIT",
+    "updated": "2026-07-26",
+    "created": "2026-07-04",
+    "topics": [
+      "harness",
+      "harness-engineering",
+      "llm",
+      "local-first"
+    ],
+    "size": 14267,
+    "archived": false
+  },
+  {
+    "id": 1288402762,
+    "name": "openscience",
+    "full_name": "synthetic-sciences/openscience",
+    "description": "用于科学研究的开源人工智能工作台",
+    "url": "https://github.com/synthetic-sciences/openscience",
+    "stars": 2877,
+    "forks": 403,
+    "language": "TypeScript",
+    "license": "Apache-2.0",
+    "updated": "2026-07-27",
+    "created": "2026-07-03",
+    "topics": [
+      "agent",
+      "ai",
+      "ai-agent",
+      "bun",
+      "cli",
+      "co-scientist",
+      "llm",
+      "ml",
+      "ml-engineering",
+      "open-source",
+      "research",
+      "research-tools",
+      "science",
+      "scientific-computing",
+      "typescript"
+    ],
+    "size": 52317,
+    "archived": false
+  },
+  {
+    "id": 1287804060,
+    "name": "open-science",
+    "full_name": "aipoch/open-science",
+    "description": "用于科学发现的开源、模型无关的 AI 工作台。",
+    "url": "https://github.com/aipoch/open-science",
+    "stars": 836,
+    "forks": 79,
+    "language": "TypeScript",
+    "license": "Apache-2.0",
+    "updated": "2026-07-27",
+    "created": "2026-07-03",
+    "topics": [
+      "agent",
+      "ai",
+      "ai-agent",
+      "ai-for-science",
+      "ai4s",
+      "ai4science",
+      "biology",
+      "macos",
+      "mcp",
+      "medical",
+      "medical-ai",
+      "medical-research",
+      "medical-research-agent",
+      "model-agnostic",
+      "open-science",
+      "reproducible-research",
+      "research-tools",
+      "scientific-research",
+      "typescript",
+      "windows"
+    ],
+    "size": 8396,
+    "archived": false
+  },
+  {
+    "id": 1287460663,
+    "name": "T3MP3ST",
+    "full_name": "elder-plinius/T3MP3ST",
+    "description": "自主红队平台；多代理攻击安全元工具",
+    "url": "https://github.com/elder-plinius/T3MP3ST",
+    "stars": 5253,
+    "forks": 1087,
+    "language": "TypeScript",
+    "license": "AGPL-3.0",
+    "updated": "2026-07-27",
+    "created": "2026-07-02",
+    "topics": [
+      "agents",
+      "ai",
+      "multi-agent",
+      "offensive-security",
+      "redteam"
+    ],
+    "size": 2343,
+    "archived": false
+  },
+  {
+    "id": 1287168491,
+    "name": "hermex",
+    "full_name": "uzairansaruzi/hermex",
+    "description": "适用于 Hermes 代理商的原生 iPhone 应用程序",
+    "url": "https://github.com/uzairansaruzi/hermex",
+    "stars": 931,
+    "forks": 108,
+    "language": "Swift",
+    "license": "MIT",
+    "updated": "2026-07-27",
+    "created": "2026-07-02",
+    "topics": [
+      "hermes",
+      "hermes-agent",
+      "hermex",
+      "ios",
+      "llm",
+      "self-hosted",
+      "swift",
+      "swiftui"
+    ],
+    "size": 10530,
+    "archived": false
+  },
+  {
+    "id": 1287282432,
+    "name": "Talos",
+    "full_name": "jmerelnyc/Talos",
+    "description": "Talos 网络的 GPU 工作客户端。与您的 Talos 帐户配对，通过 WebSocket 提供开放模型推理作业，并报告付款的正常运行时间。",
+    "url": "https://github.com/jmerelnyc/Talos",
+    "stars": 891,
+    "forks": 17,
+    "language": "Python",
+    "license": "MIT",
+    "updated": "2026-07-26",
+    "created": "2026-07-02",
+    "topics": [
+      "ai",
+      "distributed-computing",
+      "gpu",
+      "llm",
+      "ollama",
+      "python",
+      "websocket",
+      "worker"
+    ],
+    "size": 95,
+    "archived": false
+  },
+  {
+    "id": 1284959612,
+    "name": "claude-real-video",
+    "full_name": "HUANGCHIHHUNGLeo/claude-real-video",
+    "description": "让克劳德（或任何法学硕士）实际观看来自 URL 或本地文件的场景感知、重复数据删除的帧 + 文字记录视频。在麻省理工学院本地运行。",
+    "url": "https://github.com/HUANGCHIHHUNGLeo/claude-real-video",
+    "stars": 1869,
+    "forks": 152,
+    "language": "Python",
+    "license": "MIT",
+    "updated": "2026-07-27",
+    "created": "2026-06-30",
+    "topics": [
+      "claude",
+      "claude-code",
+      "cli",
+      "ffmpeg",
+      "keyframe-extraction",
+      "llm",
+      "multimodal",
+      "python",
+      "scene-detection",
+      "transcription",
+      "video-analysis",
+      "whisper"
+    ],
+    "size": 35201,
+    "archived": false
+  },
+  {
+    "id": 1285161033,
+    "name": "Orkas-VideoStudio",
+    "full_name": "Orkas-AI/Orkas-VideoStudio",
+    "description": "将您的编码代理变成视频工作室：用简单的语言描述视频，然后您的代理编写时间线并生成文件。",
+    "url": "https://github.com/Orkas-AI/Orkas-VideoStudio",
+    "stars": 530,
+    "forks": 20,
+    "language": "TypeScript",
+    "license": "MIT",
+    "updated": "2026-07-24",
+    "created": "2026-06-30",
+    "topics": [
+      "ai-agents",
+      "ai-video",
+      "cli",
+      "coding-agents",
+      "ffmpeg",
+      "generative-ai",
+      "hyperframes",
+      "local-first",
+      "mcp-server",
+      "motion-graphics",
+      "open-source",
+      "subtitles",
+      "text-to-video",
+      "tts",
+      "typescript",
+      "video-automation",
+      "video-composition",
+      "video-editing",
+      "video-generation",
+      "whisper-cpp"
+    ],
+    "size": 505,
+    "archived": false
+  },
+  {
+    "id": 1282650900,
+    "name": "llm-space",
+    "full_name": "deer-flow/llm-space",
+    "description": "一款桌面应用程序，可在一个地方对代理想法进行原型设计、检查每个控制步骤、重放失败并评估性能。本地优先，云就绪，适合托管代理。",
+    "url": "https://github.com/deer-flow/llm-space",
+    "stars": 1289,
+    "forks": 138,
+    "language": "TypeScript",
+    "license": "MIT",
+    "updated": "2026-07-27",
+    "created": "2026-06-28",
+    "topics": [
+      "agent",
+      "deer-flow",
+      "develop",
+      "electrobun",
+      "harness",
+      "llm",
+      "llm-tools",
+      "managed-agents"
+    ],
+    "size": 41679,
+    "archived": false
   }
 ]
