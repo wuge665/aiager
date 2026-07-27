@@ -21,7 +21,7 @@ export async function onRequest(context) {
 
   const jsonHeaders = {
     'Content-Type': 'application/json; charset=utf-8',
-    'Cache-Control': 'public, s-maxage=1800, max-age=1800',
+    'Cache-Control': 'public, s-maxage=1800, max-age=60',
     'Access-Control-Allow-Origin': '*',
   };
 
