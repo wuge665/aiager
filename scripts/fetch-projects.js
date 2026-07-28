@@ -10,17 +10,19 @@ function daysAgo(n) {
   return new Date(Date.now() - n * 86400000).toISOString().slice(0, 10);
 }
 
-// 近 7/30/60 天新创建、星数快速增长的 AI 项目（随时间自然轮换）
-// 7 天短窗口保证"最近几天"的新项目一定能被抓到
+// 近 3/7/30/60 天新创建、星数快速增长的 AI 项目（随时间自然轮换）
+// 3 天短窗口保证"昨天/今天"刚冒头的新项目能被抓到并排到最前
 function buildQueries() {
+  const d3 = daysAgo(3);
   const d7 = daysAgo(7);
   const d30 = daysAgo(30);
   const d60 = daysAgo(60);
   return [
-    `created:>${d7} stars:>80 topic:ai`,
-    `created:>${d7} stars:>80 topic:llm`,
-    `created:>${d7} stars:>60 ai in:name`,
-    `created:>${d30} stars:>100 topic:ai`,
+    `created:>${d3} stars:>25 topic:ai`,
+    `created:>${d3} stars:>20 ai in:name`,
+    `created:>${d7} stars:>60 topic:ai`,
+    `created:>${d7} stars:>60 topic:llm`,
+    `created:>${d7} stars:>50 ai in:name`,
     `created:>${d30} stars:>100 topic:llm`,
     `created:>${d30} stars:>50 topic:generative-ai`,
     `created:>${d60} stars:>300 ai in:name`,
