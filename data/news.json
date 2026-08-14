@@ -1,5 +1,65 @@
 [
   {
+    "id": "a-contract-grade-verifier-for-llm-generated-gpu-kernels-1786749188259",
+    "title": "LLM 生成的 GPU 内核的合同级验证器",
+    "desc": "文章网址：https://arxiv.org/abs/2608.12700\n评论网址：https://news.ycombinator.com/item?id=49301417\n积分：29\n# 评论: 0",
+    "url": "https://arxiv.org/abs/2608.12700",
+    "source": "Hacker News",
+    "date": "2026-08-14",
+    "pubDate": "Fri, 14 Aug 2026 16:57:14 +0000",
+    "content": "Skip to main content\n\nSearch arXiv\n\nPress Enter to search Advanced search\n\n-->\n\nComputer Science > Machine Learning\n\narXiv:2608.12700 (cs)\n\n[Submitted on 13 Aug 2026]\n\nTitle: A Contract-Grade Verifier for LLM-Generated GPU Kernels, and a Native Blackwell Backward for the Gated-Linear-Recurrence Family\n\nAuthors: Rishi Shah , Rishav Shrestha\n\nView a PDF of the paper titled A Contract-Grade Verifier for LLM-Generated GPU Kernels, and a Native Blackwell Backward for the Gated-Linear-Recurrence Family, by Rishi Shah and 1 other authors\n\nView PDF\nHTML (experimental)\n\nAbstract: Systems that generate GPU kernels with language models report high correctness rates. Those rates come from a single loose test: run the kernel on a few random inputs at one fixed shape and accept it if the output is close to a reference. A kernel can pass that test and still be silently wrong. It can return an ordinary number where the true answer is a NaN or an infinity, differ from run to run, break when the shape changes, or accumulate in fp16 where the reference keeps an fp32 total. We build the instrument that checks correctness properly: a contract-grade verifier of twelve adversarial gates, each a property a correct kernel must satisfy, several of them tolerance-free, so no choice of threshold can explain a failure away. Aimed outward, the verifier audits 2,638 machine-generated kernels that a public system s own harness had already accepted as correct. It finds 39.5% broken beyond any tolerance argument and 62.1% carrying at least one violation. The field s standard test accepts 1,487 kernels the verifier rejects, against only 14 the other way. We defend the finding four independent ways: a 7/7 positive control, a threshold-calibration sweep, 98.5% agreement with the reference benchmark s own correctness code, and a stratified hand-audit. Aimed inward, the verifier judges a kernel of our own: the first native Blackwell tcgen05 training backward for the gated-linear-recurrence (GDN) family, including the reverse-state stage the field still runs on a fallback. We establish its correctness independently, against a double-precision oracle, and train five family members through it. The correctness signal behind reported progress in kernel generation is far weaker than the numbers suggest, and a set of tolerance-free contracts would close most of the gap.\n\nComments:\n17 pages, 3 figures. Also archived at doi: https://doi.org/10.5281/zenodo.21563213\n\nSubjects:\n\nMachine Learning (cs.LG) ; Hardware Architecture (cs.AR); Distributed, Parallel, and Cluster Computing (cs.DC)\n\nCite as:\narXiv:2608.12700 [cs.LG]\n\n(or\narXiv:2608.12700v1 [cs.LG] for this version)\n\nhttps://doi.org/10.48550/arXiv.2608.12700\n\nFocus to learn more\n\narXiv-issued DOI via DataCite (pending registration)\n\nSubmission history\n\nFrom: Rishi Shah [ view email ]\n[v1]\nThu, 13 Aug 2026 01:25:56 UTC (149 KB)\n\nFull-text links:\nAccess Paper:\n\nView a PDF of the paper titled A Contract-Grade Verifier for LLM-Generated GPU Kern",
+    "origTitle": "A Contract-Grade Verifier for LLM-Generated GPU Kernels",
+    "translated": true
+  },
+  {
+    "id": "maximizing-the-value-of-your-claude-code-sessions-1786749188259",
+    "title": "最大限度地发挥克劳德代码课程的价值",
+    "desc": "文章网址：https://claude.com/blog/maximizing-the-value-of-your-claude-code-sessions\n评论网址：https://news.ycombinator.com/item?id=49300800\n积分：110\n# 评论: 75",
+    "url": "https://claude.com/blog/maximizing-the-value-of-your-claude-code-sessions",
+    "source": "Hacker News",
+    "date": "2026-08-14",
+    "pubDate": "Fri, 14 Aug 2026 16:15:21 +0000",
+    "content": "Platform\n\nSolutions\n\nPricing\n\nResources\n\nLogin\n\nContact sales\n\nContact sales Contact sales\n\nTry Claude\n\nTry Claude Try Claude\n\nContact sales\n\nContact sales Contact sales\n\nTry Claude\n\nTry Claude Try Claude\n\nPlatform\n\nSolutions\n\nPricing\n\nResources\n\nLogin\n\nContact sales\n\nContact sales Contact sales\n\nTry Claude\n\nTry Claude Try Claude\n\nContact sales\n\nContact sales Contact sales\n\nTry Claude\n\nTry Claude Try Claude\n\nExplore here\n\nMaximizing the value of your Claude Code sessions\n\nHow to run efficient sessions that get the most value from every token.\n\nCategory\n\nClaude Code\n\nEnterprise AI\n\nProduct\n\nClaude Code\n\nDate\n\nAugust 14, 2026\n\nReading time\n\n5\n\nmin\n\nShare\n\nCopy link https://claude.com/blog/maximizing-the-value-of-your-claude-code-sessions\n\nAuthor(s)\n\nLydia Hallie\n\nTL;DR\n\nRun /clear between tasks. This prevents prior irrelevant context from being sent back to the model, which can reduce token usage.\n\nSet your model and effort level before you start. Changing either one mid-conversation can bust your prompt cache, which can increase token cost.\n\n@-mention files instead of naming them. The file gets attached to your message directly, which saves a Read call, or a search if Claude has to go find it. \n\nAdd quiet flags to noisy commands, or run them in a subagent. Command output is added to the conversation just like a file, and stays there for the rest of the session.\n\nRun /context once in a fresh session. It shows what s loaded ( CLAUDE.md , MCP tool definitions), so you can cut out anything unnecessary.\n\n/compact before you take a break from your keyboard. The prompt cache expires after an hour, and summarizing a conversation is much cheaper while it s still cached.\n\nMaximizing value\n\nUntil pretty recently, the tools you wrote code with were a flat fee (or free). Your editor cost the same whether you fixed one test or fifty that afternoon, so an individual task didn t really have a price of its own. \n\nWith agentic coding tools like Claude Code, it does. The same completed task can also cost different amounts depending on how you use it. \n\nIn one session, Claude reads the test and the file it covers, makes the edit, and is done in a handful of turns. In another, it greps around the repo first, reads a dozen files on its way to the same two, and every one of those turns also drags along everything else that s been read into the conversation since this morning.\n\nIt s the same fix, but you spent a different number of tokens on it, and the whole time the model was also having to think about ten files it didn t need.\n\nBeing efficient with tokens doesn t mean using fewer of them overall. It means making sure the ones you do use go towards the thing you actually asked for.\n\nSo let s look at what decides the price of a token, then what decides how many of them a session sends, and along the way, what that means for how you run a session.\n\nWhat decides the price of a token\n\nYou re billed per token, but what you re actually paying for is inference: the time it ta",
+    "origTitle": "Maximizing the value of your Claude Code sessions",
+    "translated": true
+  },
+  {
+    "id": "ai-by-hand-1786749188259",
+    "title": "手工人工智能",
+    "desc": "文章网址：https://www.byhand.ai/\n评论网址：https://news.ycombinator.com/item?id=49300568\n积分：164\n# 评论: 14",
+    "url": "https://www.byhand.ai/",
+    "source": "Hacker News",
+    "date": "2026-08-14",
+    "pubDate": "Fri, 14 Aug 2026 15:58:59 +0000",
+    "content": "AI by Hand ✍️\n\nMath, Algorithms, Architectures, by hand\n\nBy Prof. Tom Yeh\n\n· Over 73,000 subscribers\n\nSubscribe\n\nBy subscribing, you agree Substack's Terms of Use , and acknowledge its Information Collection Notice and Privacy Policy .\n\nLater\n\nThis site requires JavaScript to run correctly. Please turn on JavaScript or unblock scripts",
+    "origTitle": "AI by Hand",
+    "translated": true
+  },
+  {
+    "id": "google-is-making-private-ai-practical-with-homomorphic-encry-1786749188259",
+    "title": "谷歌正在通过同态加密使私人人工智能变得实用",
+    "desc": "文章网址：https://blog.google/security/how-google-is-making-private-ai-practical-with-homomorphic-encryption/\n评论网址：https://news.ycombinator.com/item?id=49300314\n积分：233\n# 评论：141",
+    "url": "https://blog.google/security/how-google-is-making-private-ai-practical-with-homomorphic-encryption/",
+    "source": "Hacker News",
+    "date": "2026-08-14",
+    "pubDate": "Fri, 14 Aug 2026 15:43:10 +0000",
+    "content": "Security\n\nHow Google is Making Private AI Practical with Homomorphic Encryption\n\nAug 14, 2026\n\n|\n\nx.com\n\nFacebook\n\nLinkedIn\n\nMail\n\nCopy link\n\nJeremy Kun\n\nStaff Software Engineer\n\nShare\n\nx.com\n\nFacebook\n\nLinkedIn\n\nMail\n\nCopy link\n\nToday we're excited to showcase HEIR , the latest powerful tool added to our Private Computing Toolkit. HEIR is an open source compiler that unlocks cryptographically-secure private AI inference.\n\nHomomorphic encryption\n\nAs new benefits emerge with the growth of AI, balancing privacy and security is top of mind. Standard protections like end-to-end encryption present a trade-off: user-data can be protected from data breaches, but then the service provider cannot provide features that depend on the data, such as spam or virus detection. Critical sectors like healthcare and finance are even more averse to these risks, and strict regulations limit data sharing across institutions. Alternative mechanisms to provide the same features, like local processing, are limited by the capabilities of the local device and the sensitivity of the service provider's IP. Shipping proprietary AI to a device risks leaking the model.\n\nA solution to these issues is homomorphic encryption , a rapidly maturing technology that fundamentally alters this trade-off by allowing computations to be performed directly on encrypted data. Servers can process ciphertexts and return encrypted results without exposing any underlying information. For example, a cloud service can provide content recommendations without being able to see the user's features. This is no exaggeration: one of the demos featured in this post does exactly this. But while homomorphic encryption has a nontrivial cost overhead, it shifts the capability/privacy trade-off to a question of cost. And the cost of homomorphic encryption is rapidly decreasing.\n\nGoogle’s history of innovations in privacy technology—from differential privacy and private set membership to private information retrieval and secure enclaves on Google Cloud —has always focused on securing user data. Homomorphic encryption is another powerful tool we're adding to our private computing toolkit. Like private information retrieval, and in contrast to hardware-based solutions, homomorphic encryption's strong security and privacy guarantees are purely cryptographic. However, manually converting an existing program to use homomorphic encryption efficiently requires a team of cryptographers.\n\nAbout HEIR\n\nTo overcome the usability challenges and advance the opportunity homomorphic encryption provides, researchers and engineers at Google built the HEIR compiler project . HEIR (Homomorphic Encryption Intermediate Representation) is an open-source compiler toolchain and development platform for homomorphic encryption. In particular, HEIR can convert pre-trained AI models that operate on unencrypted data to operate on encrypted inputs. Our vision is to make HEIR a one-click solution to enable non-experts to incorporate encrypted",
+    "origTitle": "Google is making private AI practical with homomorphic encryption",
+    "translated": true
+  },
+  {
+    "id": "glm-5-3-frontier-coding-with-emergent-cyber-capabilities-1786749188259",
+    "title": "GLM-5.3：具有新兴网络能力的前沿编码",
+    "desc": "文章网址：https://z.ai/blog/glm-5.3\n评论网址：https://news.ycombinator.com/item?id=49294997\n积分：1016\n# 评论：500",
+    "url": "https://z.ai/blog/glm-5.3",
+    "source": "Hacker News",
+    "date": "2026-08-14",
+    "pubDate": "Fri, 14 Aug 2026 05:19:59 +0000",
+    "content": "",
+    "origTitle": "GLM-5.3: Frontier coding with emergent cyber capabilities",
+    "translated": true
+  },
+  {
     "id": "writer-introduces-new-ai-model-and-upgraded-harness-to-conta-1786663901608",
     "title": "作者引入了新的人工智能模型和升级的工具来控制代币成本",
     "desc": "作为 Z.ai 开源模型 GLM-5.2 的训练后变体，Writer 表示新系统应该以低得多的价格提供部署就绪的功能。",
