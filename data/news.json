@@ -1,5 +1,62 @@
 [
   {
+    "id": "anthropic-s-watermark-text-adulteration-in-claude-is-a-perve-1786921879153",
+    "title": "《克劳德》中人类的“水印”文本掺假是对写作的歪曲",
+    "desc": "文章网址：https://daringfireball.net/2026/08/anthropics_watermark_text_adulteration_in_claude_is_a_perversion_of_writing\n评论网址：https://news.ycombinator.com/item?id=49324087\n积分：53\n# com",
+    "url": "https://daringfireball.net/2026/08/anthropics_watermark_text_adulteration_in_claude_is_a_perversion_of_writing",
+    "source": "Hacker News",
+    "date": "2026-08-16",
+    "pubDate": "Sun, 16 Aug 2026 21:53:43 +0000",
+    "content": "By John Gruber\n\nArchive\n\nThe Talk Show\n\nDithering\n\nProjects\n\nContact\n\nColophon\n\nFeeds / Social\n\nTwitter\n\n-->\nSponsorship\n\nManage GRC Faster with Drata’s Agentic Trust Management Platform\n\nAnthropic’s ‘Watermark’ Text Adulteration in Claude Is a Perversion of Writing\n\nSunday, 16 August 2026\n\nWhen I wrote this week about Anthropic’s announcement that all Claude models, worldwide, would soon begin “watermarking” everything they generate, including text, to comply with this EU regulation , we were left to speculate how this was going to work, because Anthropic offered not even a vague description of how it would work — despite the fact that the title of the announcement was, absurdly and insultingly, “ How Claude Marks AI-Generated Content ”.\n\nMy initial speculation was that maybe they’d hide invisible non-printing Unicode characters in the text. Just spitballing. Turns out that’s not what they’re going to do. What they’re going to do is apply a form of steganography, where the choice of words (or other token output) at inference time will leave fingerprints that can later, maybe, be detected probabilistically.\n\nI initially guessed “invisible characters” not because I didn’t think of the semantic word-choice technique, but because I was a fool who took Anthropic at its word in their description of what they would do. Their original support document claims:\n\nWhen a supported Claude model generates text, it weaves an\nimperceptible watermark directly into the text itself. You won’t\nsee it, and it doesn’t change the meaning, quality, or readability\nof Claude’s response.\n\nThey say “imperceptible” and “doesn’t change the meaning, quality, or readability”. Their words. Not almost imperceptible. Not slightly changes the meaning, quality, or readability. That made sense to me, because that’s absolutely what I want — nay, demand — from any tools I use personally. It’s unacceptable for a tool to sacrifice an iota of clarity, coherence, meaning, quality, etc. for the purpose of embedding hidden clues within the text to suggest its provenance. That’s what I would and will demand. And Anthropic’s (original) support document unambiguously claims that’s what their system will enable. So if that were true, I couldn’t see what was left other than hiding invisible characters within the text.\n\nMy error was believing Anthropic that their system wouldn’t adulterate and corrupt the semantics of the text their models generate. That is in fact exactly what they plan to do. I should have my head examined for believing a single word of a document titled “How Claude Marks AI-Generated Content” that doesn’t explain, at all, how Claude marks (or will mark) AI-generated content.\n\nHow It’s Actually Going to Work\n\nYesterday, on an entirely different website than the original “How Claude marks AI-generated content” article (the one that didn’t explain anything at all about it works), Anthropic published “ How Claude’s Text Watermark Works ”, which does actually explain in layman-acce",
+    "origTitle": "Anthropic's 'Watermark' Text Adulteration in Claude Is a Perversion of Writing",
+    "translated": true
+  },
+  {
+    "id": "nvidia-dramatically-reduces-amount-of-openai-infra-financing-1786921879153",
+    "title": "Nvidia 大幅减少了其可能担保的 OpenAI 基础设施融资金额",
+    "desc": "文章网址：https://www.reuters.com/business/nvidia-scales-back-250-billion-openai-data-center-guarantee-wsj-reports-2026-08-14/\n评论网址：https://news.ycombinator.com/item?id=49323686\n积分：42",
+    "url": "https://www.reuters.com/business/nvidia-scales-back-250-billion-openai-data-center-guarantee-wsj-reports-2026-08-14/",
+    "source": "Hacker News",
+    "date": "2026-08-16",
+    "pubDate": "Sun, 16 Aug 2026 21:07:10 +0000",
+    "origTitle": "Nvidia dramatically reduces amount of OpenAI infra financing it may guarantee",
+    "translated": true
+  },
+  {
+    "id": "anthropic-ipo-valuation-hinges-on-190-200b-2028-revenue-fore-1786921879153",
+    "title": "Anthropic IPO 估值取决于 2028 年 190-200B 美元的收入预测",
+    "desc": "文章网址：https://www.reuters.com/business/anthropic-ipo-valuation-hinges-190-200-billion-2028-revenue-forecast-sources-say-2026-08-15/\n评论网址：https://news.ycombinator.com/item?id=49323620\n磷",
+    "url": "https://www.reuters.com/business/anthropic-ipo-valuation-hinges-190-200-billion-2028-revenue-forecast-sources-say-2026-08-15/",
+    "source": "Hacker News",
+    "date": "2026-08-16",
+    "pubDate": "Sun, 16 Aug 2026 21:00:25 +0000",
+    "origTitle": "Anthropic IPO valuation hinges on $190-200B 2028 revenue forecast",
+    "translated": true
+  },
+  {
+    "id": "stripe-clinches-over-7b-deal-to-buy-ai-firm-openrouter-1786921879153",
+    "title": "Stripe 完成 70 亿美元收购人工智能公司 OpenRouter 的交易",
+    "desc": "文章网址：https://www.bloomberg.com/news/articles/2026-08-16/stripe-nears-deal-to-buy-ai-firm-openrouter-for-over-7-billion\n评论网址：https://news.ycombinator.com/item?id=49323381\n积分：88\n#",
+    "url": "https://www.bloomberg.com/news/articles/2026-08-16/stripe-nears-deal-to-buy-ai-firm-openrouter-for-over-7-billion",
+    "source": "Hacker News",
+    "date": "2026-08-16",
+    "pubDate": "Sun, 16 Aug 2026 20:31:16 +0000",
+    "origTitle": "Stripe Clinches over $7B Deal to Buy AI Firm OpenRouter",
+    "translated": true
+  },
+  {
+    "id": "mathcode-mathematical-coding-agent-1786921879153",
+    "title": "MathCode，数学编码代理",
+    "desc": "文章网址：https://math-ai-org.github.io/mathcode/\n评论网址：https://news.ycombinator.com/item?id=49322330\n积分：46\n# 评论: 13",
+    "url": "https://math-ai-org.github.io/mathcode/",
+    "source": "Hacker News",
+    "date": "2026-08-16",
+    "pubDate": "Sun, 16 Aug 2026 18:17:10 +0000",
+    "content": "Overview\n\nMathCode is a terminal AI coding assistant with a built-in math formalization engine. Give it a math problem in plain language and it will automatically convert it into a Lean 4 theorem and attempt a formal proof with a persistent Lean REPL, reusable theorem and axiom libraries, agentic proving, and an Obsidian knowledge graph.\n\nQuick Start\n\nRequires macOS (arm64) or Linux (x86_64), plus the codex CLI for the default backend.\n\ngit clone https://github.com/math-ai-org/mathcode.git\ncd mathcode\nbash setup.sh\ncodex auth login\nmathcode\nsetup.sh prepares the release checkout, downloads the bundled runtime and Lean toolchain, and installs a user-local mathcode launcher. Try it with:\n\nmathcode -p \"prove that the square of an even number is even\"\nOutputs are written to LeanFormalizations/ . A browser UI is available via ./run webui .\n\nFeatures\n\nPersistent Lean REPL A persistent Lean language server brings compile checks to ~0.4s after a one-time warmup, instead of ~30s.\n\nTheorem Library Every proved theorem is auto-named, stored, and made importable so the prover and planner can reuse it.\n\nAxiom Library Store conversational assumptions as persistent, compile-checked, consistency-reviewed Lean declarations.\n\nLean LSP Integration Searches leansearch.net and Loogle for verified Mathlib lemmas and uses structured LSP diagnostics for repairs.\n\nObsidian Theorem Graph Generates an Obsidian vault that visualizes theorem-to-lemma dependencies as a knowledge graph.\n\nAgent-Mode Proving Each proof becomes an interactive session where the agent writes candidates, reads errors, and recompiles.\n\nTree-of-Subgoals Decomposes complex theorems into independent subgoals and proves them in parallel, then stitches them back.\n\nMulti-Planner Runs multiple planners in parallel for diverse proof strategies; the prover picks the best approach.\n\nCitation\n\nIf you use MathCode in research, please cite:\n\n@misc{mathcode2026,\ntitle = {MathCode: A Frontier Mathematical Coding Agent},\nauthor = {Team Math-AI},\njournal = {math-ai-org.github.io},\nyear = {2026},\nmonth = {April},\nurl = {https://github.com/math-ai-org/mathcode}\n}\nCopy BibTeX\n\nThe math formalization and proving pipeline is based on the AUTOLEAN project.",
+    "origTitle": "MathCode, Mathematical Coding Agent",
+    "translated": true
+  },
+  {
     "id": "show-hn-live-claude-usage-hud-for-a-38-thermalright-trofeo-v-1786835500878",
     "title": "Show HN：Live Claude 使用 HUD 购买价值 38 美元的 Thermalright Trofeo Vision LCD",
     "desc": "文章网址：https://github.com/christensen143/claude-trofeo-hud\n评论网址：https://news.ycombinator.com/item?id=49314594\n积分：10\n# 评论: 1",
