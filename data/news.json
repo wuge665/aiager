@@ -1,5 +1,64 @@
 [
   {
+    "id": "who-owns-the-code-ai-code-no-author-no-copyright-1787094805552",
+    "title": "谁拥有代码？ AI代码==无作者==无版权",
+    "desc": "文章网址：https://whoownsthecode.com/\n评论网址：https://news.ycombinator.com/item?id=49353603\n积分：12\n# 评论: 9",
+    "url": "https://whoownsthecode.com/",
+    "source": "Hacker News",
+    "date": "2026-08-18",
+    "pubDate": "Tue, 18 Aug 2026 22:21:30 +0000",
+    "content": "for founders, engineering leaders, and counsel shipping AI-generated code\n\nWho owns the code ?\n\nAI code\n==\nno author\n==\nno copyright\n\nUnder current U.S. copyright law, purely AI-generated code has no human author, so it cannot be copyrighted and cannot be defended as an asset you truly own.\n\nTake the risk assessment ->\nRead the FAQ\n\nownership.sh\nzsh\n\n1 2 3 4 5 6 7 8\n\n~/startup git:(main) $ whoami --code\nchecking authorship of ./generated ...\n# purely AI output, no human authorship on record\nauthor: none\ncopyright: not eligible\nstatus: unowned, undefendable\n~/startup git:(main) $ assess --my-risk\n\nOur guidance applies to code generated from every AI tool\n\nthe four things teams miss\n\nFour ways AI code puts ownership at risk\n\nOwnership is not a formality you fix later. It is decided by who authored the expressive work, line by line.\n\n01 own_the_output.ts\n\n1 2 3\n\ndoYouOwnTheOutput\n\n// verdict: no Code written entirely by an AI tool has no human author, so under U.S. copyright law it cannot be copyrighted, and you cannot own it.\n\n02 vibe_coding.ts\n\n1 2 3\n\nvibeCodingRealExposure\n\n// the AI did the expressive work When you let the AI make the creative decisions, the code is not human-authored, and code that is not human-authored is not a protectable asset.\n\n03 mixed_codebase.ts\n\n1 2 3\n\nmixedCodebases\n\n// you own only what you author In a codebase that mixes human and AI work, you own the parts a person meaningfully wrote. The AI-generated parts stay unprotected until a human reworks them.\n\n04 open_source.ts\n\n1 2 3\n\nopenSourceIsNotNoCopyright\n\n// a license needs an owner to grant it Open source is not the same as no copyright. A license only holds if someone owns the code, so an open-source license placed on pure AI output has nothing to enforce.\n\nthe case law, as a commit history\n\nFour anchors already merged into the record\n\nThese are not predictions. Each is a recent decision or report that hardened the rule: no human author, no protection.\n\nbranch: us-copyright-law\n\n* |\n\ncommit b7e1f04\nAuthor: Supreme Court of the United States\nDate: Mar 2026\n\nSupreme Court denied cert in Thaler; human-authorship rule stands\n\nThe Court declined to review the D.C. Circuit's ruling, leaving the human authorship requirement as settled U.S. copyright law unless Congress acts.\n\n+ human authorship: settled law\n- purely AI-generated code: still not eligible\n\n* |\n\ncommit a1f0b7c\nAuthor: Thaler v. Perlmutter\nDate: Mar 2025\n\nWorks created entirely by AI are not eligible for copyright\n\nThe court confirmed that only humans can hold copyright protection; a work generated wholly by a machine has no author the law will recognize.\n\n- machine-authored work: protected\n+ machine-authored work: not eligible\n\n* |\n\ncommit 6d24e9a\nAuthor: Thomson Reuters v. Ross\nDate: Feb 2025\n\nFirst decision to reject a fair-use defense for AI training\n\nThe first ruling to reject a fair-use defense for using copyrighted material to train an AI, narrowing a shield many teams assumed they had.\n\n- training on",
+    "origTitle": "Who owns the code? AI code == no author == no copyright",
+    "translated": true
+  },
+  {
+    "id": "glm-5-3-artificial-analysis-benchmarks-1787094805552",
+    "title": "GLM-5.3 人工分析基准",
+    "desc": "文章网址：https://artificialanalysis.ai/models/glm-5-3\n评论网址：https://news.ycombinator.com/item?id=49353407\n积分：15\n# 评论: 4",
+    "url": "https://artificialanalysis.ai/models/glm-5-3",
+    "source": "Hacker News",
+    "date": "2026-08-18",
+    "pubDate": "Tue, 18 Aug 2026 22:06:10 +0000",
+    "content": "Artificial Analysis K\n\nZ AI\n\n• Proprietary model\n\n• Released August 2026\n\nGLM-5.3 (max) Intelligence, Performance Price Analysis\n\nCompare API Provider Benchmarks\n\nModel summary\n\nIntelligence\n\n# 8 / 181\n\n60\n\nArtificial Analysis Intelligence Index\n\n4 out of 4 units for Intelligence.\n\nSpeed\n\nN/A\n\nOutput tokens per second\n\nUnknown out of 4 units for Speed.\n\nCost\n\n# 53 / 181\n\nIn $1.40 Out $4.40 Cache Discount 81%\n\n$0.68\n\nCost per Intelligence Index task\n\n3 out of 4 units for Cost.\n\nVerbosity\n\n# 72 / 181\n\n170M\n\nOutput tokens from Intelligence Index\n\n4 out of 4 units for Verbosity.\n\nComparison Summary\n\nGLM-5.3 (max) is amongst the leading models in intelligence and reasonably priced when comparing to other models of similar price. The model supports text input, outputs text, and has a 1M tokens context window.\n\nGLM-5.3 (max) scores 60 on the Artificial Analysis Intelligence Index, placing it well above average among comparable models (median: 35). When evaluating the Intelligence Index, it generated 170M tokens, which is very verbose in comparison to the median of 72M.\n\nPricing for GLM-5.3 (max) is $1.40 per 1M input tokens (moderately priced, median: $1.75) and $4.40 per 1M output tokens (moderately priced, median: $10.00). In total, it cost $1238.50 to evaluate GLM-5.3 (max) on the Intelligence Index.\n\nTechnical specifications\n\nReasoning Yes This page shows the reasoning version of this model.\n\nA non-reasoning variant may also exist.\n\nInput modality\n\nSupports: text\n\nOutput modality\n\nSupports: text\n\nContext window 1M ~1500 A4 pages of size 12 Arial font\n\n181 models in this class\n\nMetrics are compared against models of the same class:\n\nNon-reasoning models → compared only with other non-reasoning models\n\nReasoning models → compared across both reasoning and non-reasoning\n\nOpen weights models → compared only with other open weights models of the same size class:\n\nTiny: ≤4B parameters\n\nSmall: 4B–40B parameters\n\nMedium: 40B–150B parameters\n\nLarge: 150B parameters\n\nProprietary models → compared across proprietary and open weights models of the same price range, using a blended 3:1 input/output price ratio:\n\n$0.15 per 1M tokens\n\n$0.15–$1 per 1M tokens\n\n$1 per 1M tokens\n\nHighlights\n\nIntelligence\n\nArtificial Analysis Intelligence Index · Higher is better\n\nSpeed\n\nOutput tokens per second · Higher is better\n\nCost per Task\n\nWeighted average cost (USD) per Intelligence Index task · Lower is better\n\nPrompt Options\n\nIntelligence\n\nArtificial Analysis Intelligence Index Updated Agentic Index Updated\n\nArtificial Analysis Intelligence Index\n\nArtificial Analysis Intelligence Index v4.1.1 incorporates 9 evaluations: GDPval-AA v2, 𝜏³-Banking, Terminal-Bench v2.1, SciCode, Humanity s Last Exam, GPQA Diamond, CritPt, AA-Omniscience, AA-LCR\n\n29 of 610 models\n\nNEW\n\nAdd model from specific provider\n\nReasoning models are indicated by a lightbulb icon\n\nArtificial Analysis Intelligence Index\n\nArtificial Analysis Intelligence Index v4.1.1 includes: GDPval-AA v2, 𝜏³-Banking, Termi",
+    "origTitle": "GLM-5.3 Artificial Analysis Benchmarks",
+    "translated": true
+  },
+  {
+    "id": "claude-code-teaching-macos-to-natively-print-to-the-hp-laser-1787094805552",
+    "title": "Claude Code 教 macOS 本机打印到 HP Laser 1008a",
+    "desc": "文章网址：https://cdn.kuber.studio/chat/hp-laser-1008a-driver\n评论网址：https://news.ycombinator.com/item?id=49352806\n积分：81\n# 评论: 52",
+    "url": "https://cdn.kuber.studio/chat/hp-laser-1008a-driver",
+    "source": "Hacker News",
+    "date": "2026-08-18",
+    "pubDate": "Tue, 18 Aug 2026 21:14:21 +0000",
+    "content": "cdn.kuber.studio/chat\n\nClaude Code Opus 4.8 · 1M\n\nWelcome back Kuber!\n\nOpus 4.8 (1M context)\n\nsonnet · opus · max\n\n~/Personal-Projects/hp-laser-1008a-macos\n\nAbout this session\n\n17 Aug 2026 · ~4 hours · one sitting\n\na printer HP never supported on Mac\n\nWhat happened\n\nreverse-engineered the SPL3 raster language\n\nran HP's real codec in a Linux container\n\nlightly redacted · scroll to read →\n\n⚠ rendered transcript · not a live session\n\nTranscript copied",
+    "origTitle": "Claude Code Teaching macOS to Natively Print to the HP Laser 1008a",
+    "translated": true
+  },
+  {
+    "id": "norway-should-buy-openai-1787094805552",
+    "title": "挪威应该收购 OpenAI",
+    "desc": "文章网址：https://www.onethousandmeans.com/p/norway-should-buy-openai\n评论网址：https://news.ycombinator.com/item?id=49351330\n积分：183\n# 评论: 207",
+    "url": "https://www.onethousandmeans.com/p/norway-should-buy-openai",
+    "source": "Hacker News",
+    "date": "2026-08-18",
+    "pubDate": "Tue, 18 Aug 2026 19:30:29 +0000",
+    "content": "Subscribe Sign in\n\nNorway Should Buy OpenAI\n\nThe Long Arc of History Bends Towards Social Democracy\n\nZachary Jones\n\nFeb 05, 2026\n\n7\n\nShare\n\nAI capabilities are advancing at a faster rate than our institutional response. Soon, a transformative technology will crash into the capitalist political economy, presenting risks to humanity’s survival, autonomy, and democratic order. Especially concerning is the possibility that vast amounts of power and wealth are concentrated into the class that owns the AI systems, or uses those systems to override democratic control. Silicon Valley talks flippantly of a ‘Permanent Underclass’ - and they intend for you to belong to it.\n\nUpon the automation of most, and then plausibly all, jobs, we will face an unprecedented crisis of technological unemployment, with gains from a technology trained on the corpus of humanity’s data concentrated into the hands of a small class of shareholders. Large language models are not conjured from nothing. They are trained on vast quantities of text, images, and code scraped from the internet and digitized archives. The models are, in a meaningful sense, derivative works of collective human effort. They are also built on publicly-funded infrastructure: the internet itself, the universities that educated AI researchers, the government grants that supported foundational research, the public datasets that enabled early breakthroughs. DARPA funding seeded neural network research. Public universities trained the PhDs. The data came from all of us. This is a commons being enclosed.\n\nGiven their lack of interest in the welfare of humanity as a whole, the AI companies have resisted pressure from civil society and government to abide by safety standards , even as they recognize potential for catastrophic risks. Clearly, the most transformative technology since agriculture should not be left in private hands. The default trajectory is extreme concentration of benefits but socialized risks.\n\nThus, the Norwegian Government Pension Fund Global ought to purchase OpenAI and manage it for the benefit of the international community.\n\nSubscribe\n\nGPF-G is valued at over $2 Trillion, and OpenAI’s valuation hovers around $800 billion. Formerly, OpenAI was a non-profit , with capped profits and a windfall clause guaranteeing an intelligence explosion would benefit all of humanity. With the approval of the California Attorney General, this commitment has been scrapped, expropriating the non-profit and allowing OpenAI’s transformation into a for-profit corporation. This is an impossibly deep loss for the human community. With the capital of Norwegian Social-Democracy, we can return the lab to public hands. Though Norges Bank Investment Management would have to liquid 40% of its portfolio and violate the GPF-G’s mandate , accelerating AI capabilities in private hands is an emergency that all actors must approach with increasing flexibility towards existing rules and norms.\n\nTo those worried about concentrati",
+    "origTitle": "Norway should buy OpenAI",
+    "translated": true
+  },
+  {
+    "id": "pacing-model-development-in-an-era-of-cyber-critical-capabil-1787094805552",
+    "title": "网络关键能力时代的模型开发节奏",
+    "desc": "文章网址：https://openai.com/index/pacing-model-development-cyber-capability/\n评论网址：https://news.ycombinator.com/item?id=49350031\n积分：58\n# 评论：29",
+    "url": "https://openai.com/index/pacing-model-development-cyber-capabilities/",
+    "source": "Hacker News",
+    "date": "2026-08-18",
+    "pubDate": "Tue, 18 Aug 2026 18:14:59 +0000",
+    "origTitle": "Pacing model development in an era of cyber-critical capabilities",
+    "translated": true
+  },
+  {
     "id": "my-friends-all-hate-ai-i-just-joined-an-ai-startup-1787008433800",
     "title": "我的朋友们都讨厌人工智能；我刚刚加入一家人工智能初创公司",
     "desc": "文章网址：https://www.fast.ai/posts/2026-08-18-returning-to-AI/\n评论网址：https://news.ycombinator.com/item?id=49338139\n积分：6\n# 评论: 0",
