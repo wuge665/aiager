@@ -1,5 +1,64 @@
 [
   {
+    "id": "the-efficient-frontier-of-llm-inference-1788309670133",
+    "title": "The efficient frontier of LLM inference",
+    "desc": "Article URL: https://www.baseten.co/blog/the-efficient-frontier-of-llm-inference/\nComments URL: https://news.ycombinator.com/item?id=49529898\nPoints: 8\n# Comments: 2",
+    "url": "https://www.baseten.co/blog/the-efficient-frontier-of-llm-inference/",
+    "source": "Hacker News",
+    "date": "2026-09-01",
+    "pubDate": "Tue, 01 Sep 2026 23:48:05 +0000",
+    "content": "Try GLM-5.3 today. Frontier intelligence at a fraction of the cost. Here\n\nModel performance\n\nThe efficient frontier of LLM inference\n\nInference techniques either move a deployment along the latency–throughput frontier or push the entire frontier out, creating more efficiency to allocate.\n\nAuthors\n\nPhilip Kiely\n\nLast updated\n\nSeptember 1, 2026\n\nShare\n\nIn the AI industry, we borrowed the term “efficient frontier” from economists. We use it to talk about managing tradeoffs, most often the tradeoff between cost and capabilities for models. A model is a “frontier model” if it offers the highest degree of intelligence at a given cost or size.\n\n✕\n\nAn efficient frontier shows the range of optimal combinations when trading off between two valuable outcomes in a resource-constrained environment.\n\nWe also have efficient frontiers in inference engineering. Most often, this is expressed as a tradeoff between latency and throughput (which determines cost), though we can also exchange quality for throughput (via quantization, distillation, and pruning) or intelligence for speed (in the form of reasoning level).\n\nThere are two types of techniques available to inference engineers:\n\nTechniques which make a tradeoff between two factors to move a deployment along an efficient frontier.\n\nTechniques which push out the entire frontier for a given deployment, creating more overall efficiency which can be allocated to whatever outcome is most beneficial.\n\nBoth types of techniques are valuable.\n\nIt’s useful to be able to target any point along an efficient frontier by making tradeoffs. Giving up per-user speed makes it possible to build high-throughput, low-cost pipelines for batch workloads. Sacrificing throughput to improve speed makes sense when latency-sensitive users have a high willingness to pay.\n\nAnd of course, it’s incredibly useful to push out the entire frontier. Unlocking more efficiency creates gains that can be allocated to lower latency, higher throughput, or a combination of the two.\n\nThis article details which inference engineering techniques let you target a point on the frontier, and which techniques push the entire frontier out. For this article, we’ll assume we’re running an LLM like GLM-5.3 or Kimi K3 for agentic coding with KV cache reuse enabled and optimal KV-aware routing.\n\nTechniques that manage tradeoffs\n\nHitting a certain target in production is often less about discovering some novel approach and more about finding the right set of configurations given the nature of the traffic.\n\n✕\n\nTechniques for managing tradeoffs let you target an outcome along an efficient frontier.\n\nIn practice, the efficient frontier is very jagged. Rather than a smooth, continuous line between outcomes, small changes can have big impacts. These cutoff points are often unintuitive and must be discovered empirically through sweeps.\n\nBatch sizing\n\nThe most obvious tradeoff between latency and throughput comes from batch sizing. A batch is the number of requests that are p",
+    "origTitle": "The efficient frontier of LLM inference",
+    "translated": true
+  },
+  {
+    "id": "improving-our-alignment-and-security-efforts-1788309670133",
+    "title": "Improving our alignment and security efforts",
+    "desc": "Article URL: https://www.anthropic.com/news/improving-alignment-security-efforts\nComments URL: https://news.ycombinator.com/item?id=49529567\nPoints: 8\n# Comments: 2",
+    "url": "https://www.anthropic.com/news/improving-alignment-security-efforts",
+    "source": "Hacker News",
+    "date": "2026-09-01",
+    "pubDate": "Tue, 01 Sep 2026 23:12:45 +0000",
+    "content": "Improving our alignment and security efforts\n\nAug 31, 2026\n\nOn July 30, we reported three incidents in which Claude models gained unauthorized access to real computer systems. The models—intentionally running without cyber safeguards for evaluation purposes—accessed the internet due to a misconfiguration inside a third-party evaluation environment. Separately, on August 4, the UK AI Security Institute reported an incident from its own cybersecurity testing, in which Claude Mythos 5 took a series of unauthorized actions on the live internet. In that case, the model, again intentionally running without cyber safeguards for evaluation purposes, had been deliberately given internet access.\n\nWe are conducting an in-depth analysis of both incidents. We are also planning to work with METR for an independent review. We want to ensure both studies are thorough, and will share more in the coming weeks.\n\nIn the meantime, we’re sharing some of the changes we’ve made over the past month. We believe the incidents reflect a failure of operational security, as well as two alignment issues: motivated reasoning, and willingness to take harmful actions in pursuit of a narrow task (both of which we have described in previous system cards). On security, we describe the improvements we’ve made to our containment and monitoring systems, along with practices that we’ve developed for third-party evaluators. On alignment, we discuss the two issues more in depth; we also believe lasting progress comes not only from understanding what happened in a given incident but from understanding how misalignment arises in the first place, and we share early research in that direction .\n\nIn light of these incidents there has been increasing discussion about pacing the frontier. It is helpful to distinguish between two kinds of pacing. Within a company, pacing means a series of decisions that prioritize safety over speed when the two are in tension. Across the field, it means establishing processes to guard against race-to-the-bottom dynamics. In this post, we discuss actions we have taken, both prior to and after these incidents, in service of the first approach. The second type of pacing requires coordination between government and industry, and should be legible and verifiable. Some of our senior leadership and many of our employees recently signed a letter calling for greater coordination on pacing, and we will say more in the coming weeks about how we intend to contribute to that effort. To be clear about where we stand: we believe the world would benefit if the industry adopted a lawful, verifiable, effective mechanism for coordinated pacing as soon as possible.\n\nSecuring evaluation and training environments \n\nWhile we do not believe these incidents represent operational issues alone, our first priority was to address specific containment and monitoring issues. We took the following actions in response:\n\nPausing and hardening evaluation environments\n\nWe paused external cyber eval",
+    "origTitle": "Improving our alignment and security efforts",
+    "translated": true
+  },
+  {
+    "id": "show-hn-weedout-safari-extension-that-hides-youtube-ai-label-1788309670133",
+    "title": "Show HN: Weedout – Safari extension that hides YouTube AI-labeled videos",
+    "desc": "I'm the developer. I built this because AI-generated conspiracy videos were getting out of control in my own YouTube feed. Weedout is a $1.99 Safari extension for macOS that removes videos YouTube lab",
+    "url": "https://masteranza.github.io/weedout/",
+    "source": "Hacker News",
+    "date": "2026-09-01",
+    "pubDate": "Tue, 01 Sep 2026 22:06:57 +0000",
+    "content": "Videos YouTube labels “Made with AI” — quietly pulled\nfrom your feed , search , related videos and Shorts before you scroll past them.\nNo blocking screens, no drama. The weeds are just gone.\n\nGET WEEDOUT — $1.99 ON THE MAC APP STORE\n\nOne-time purchase · No subscription · macOS 13+\n\nFIELD CAM\n\n12:07\n\nAI 0:58\n\n8:41\n\nAI 0:12\n\n24:59\n\nSimulated. On a real feed a weed is gone in about half a second — cached ones never sprout at all.\n\nWHAT IT DOES\n\nFilters AI-labeled videos out of home, search, related, playlists and Shorts shelves\n\nAuto-skips AI-labeled Shorts in the Shorts player (optional)\n\nDim mode wilts weeds in place instead of removing them, so you can verify before you trust it\n\nNo accounts, no tracking, no data collection — everything runs on your Mac\n\nDetection relies on YouTube’s own “Made with AI” disclosure badge — no guessing,\nno heuristics, no false accusations. Unlabeled slop is out of scope (for now).\n\nSUPPORT\n\nQuestions, bug reports, or a weed that slipped through?\n\nEmail masteranza@gmail.com — include the video link if it’s about detection.",
+    "origTitle": "Show HN: Weedout – Safari extension that hides YouTube AI-labeled videos",
+    "translated": true
+  },
+  {
+    "id": "show-hn-hn-match-maker-matching-who-wants-to-be-hired-with-w-1788309670133",
+    "title": "Show HN: HN Match Maker – Matching \"Who Wants to Be Hired?\" With \"Who's Hiring?\"",
+    "desc": "Hi!Every month the \"Who Wants to Be Hired?\" and \"Who's Hiring?\" Threads come through I would think to myself, \"there should be a match maker for these two threads\".So I had abacus.ai whip one up. The ",
+    "url": "https://hnmatchmaker.com/",
+    "source": "Hacker News",
+    "date": "2026-09-01",
+    "pubDate": "Tue, 01 Sep 2026 20:53:35 +0000",
+    "content": "September 2026 · Hacker News\n\nFind your match on HN\n\nAI-powered matchmaking between “Who is Hiring” job postings and “Who Wants to Be Hired” candidates. Every match is pre-scored and broken down by signals.\n\n0 Jobs\n\n0 Candidates\n\n0 Matches\n\nSeptember 2026\n\nJobs 105 Candidates 130\n\nUncountable\n\nNY, SF, London Toronto\n\nUncountable is hiring full-stack engineers for its web platform, with salaries of $130k-$220k plus equity in NY, SF, London, or Toronto.\n\nfull-stack engineering web platform development\n\n$ 130,000 –$ 220,000\n\nMonumental\n\nAmsterdam mid\n\nMonumental is hiring experienced software engineers in Amsterdam to build robotics software for autonomous building construction.\n\nsoftware engineering React systems design full-stack development robotics experience\n\nFastly\n\nRemote senior\n\nFastly is hiring senior to principal software engineers across edge cloud, security, platform, and networking roles, with onsite preferred and remote candidates considered.\n\nRust C/C++ Go JavaScript TypeScript\n\nSourcegraph\n\nRemote\n\nSourcegraph is hiring remotely for multiple full-time roles across security, engineering, tech lead, agent engineering, product management, and product marketing.\n\nsoftware engineering security engineering AI/agent engineering product management product marketing\n\nQuobyte\n\nBerlin\n\nQuobyte is hiring for multiple full-time onsite roles in Berlin across systems engineering, infrastructure, and customer success for its scalable distributed storage platform.\n\nsystems programming distributed systems kernel development database systems distributed algorithms\n\n$ 50,000 –$ 100,000\n\nexe.dev\n\nSan Francisco Bay Area senior\n\nexe.dev is hiring a full-time Member of Technical Staff for a senior, high-trust cloud infrastructure role in the SF Bay Area.\n\nsystems programming cloud infrastructure virtual machine monitor (VMM) SSH servers load balancing\n\nAmplify Renewables\n\nRemote San Francisco / Seattle mid\n\nAmplify Renewables is hiring a mid-level quantitative researcher for systematic US energy trading, focused on PJM, with hybrid SF/Seattle work and US-based remote possible.\n\nPython numpy matplotlib pandas statistics\n\n$ 200,000 –$ 375,000\n\nPlantingSpace\n\nRemote\n\nPlantingSpace is hiring multiple full-time remote roles building modular probabilistic models for finance and scientific research, with EU time-zone remote work and quarterly meet-ups.\n\nbackend software engineering quantitative modeling Bayesian methods program synthesis analytic learning algorithms\n\nTufalabs\n\nZurich\n\nSelf-funded AI research lab in Zurich hiring for an onsite full-time researcher/engineer with experience in LLM pre-training, post-training, and related infrastructure.\n\nLLM pre-training LLM post-training AI research ML infrastructure RL reasoning\n\n$ 100,000 –$ 200,000\n\nBoom Supersonic\n\nDenver, CO senior\n\nBoom Supersonic is hiring Senior/Staff/Principal Software Engineers onsite in Denver to build AI-first engineering, manufacturing, and supply chain platforms for Superpower, Symphon",
+    "origTitle": "Show HN: HN Match Maker – Matching \"Who Wants to Be Hired?\" With \"Who's Hiring?\"",
+    "translated": true
+  },
+  {
+    "id": "path-to-astra-critical-capabilities-and-frontier-safeguards-1788309670133",
+    "title": "Path to Astra: critical capabilities and frontier safeguards",
+    "desc": "Article URL: https://openai.com/index/path-to-astra/\nComments URL: https://news.ycombinator.com/item?id=49527595\nPoints: 81\n# Comments: 37",
+    "url": "https://openai.com/index/path-to-astra/",
+    "source": "Hacker News",
+    "date": "2026-09-01",
+    "pubDate": "Tue, 01 Sep 2026 20:20:41 +0000",
+    "origTitle": "Path to Astra: critical capabilities and frontier safeguards",
+    "translated": true
+  },
+  {
     "id": "apple-shares-8216-shocking-evidence-8217-against-former-empl-1788226263308",
     "title": "Apple shares shocking evidence against former employee accused of stealing company data for OpenAI",
     "desc": "Apple says it has evidence that a former employee destroyed evidence of data theft after learning he was under investigation.",
@@ -2282,15 +2341,5 @@
     "source": "Hacker News",
     "date": "2026-05-24",
     "content": "OpenAI 向全体用户开放 Sora 视频生成功能，支持 1080p 高清输出、多种风格模板和更精准的文本理解能力。Sora 能够根据文本描述生成长达 60 秒的高清视频，支持多种画面风格和镜头运动。"
-  },
-  {
-    "id": "user-2",
-    "title": "即创（抖音 AI 创作平台）免费开放使用",
-    "desc": "字节跳动旗下 AI 创作平台即创（aic.oceanengine.com）免费开放，支持一键生成短视频、智能配音、自动字幕。",
-    "url": "https://aic.oceanengine.com",
-    "source": "AI 百宝箱",
-    "date": "2026-05-22",
-    "content": "字节跳动旗下 AI 创作平台即创免费开放使用，支持一键生成短视频、智能配音、自动字幕等功能。即创整合了字节系的多项 AI 能力，包括豆包大模型、火山引擎等，为创作者提供从文案到视频的一站式 AI 创作体验。适合新媒体运营和短视频创作者使用。",
-    "userEdited": true
   }
 ]
